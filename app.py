@@ -46,29 +46,15 @@ elif page == "📊 Dashboard Global":
         
         st.markdown("---")
         
-      # --- Section Graphique Camembert (Répartition par Actif) ---
+     # --- Section Graphique Camembert (Répartition par Actif) ---
         st.subheader("🥧 Répartition du Portefeuille par Actif")
         
         if not df_holding.empty and df_holding.shape[1] > 4:
             import plotly.express as px
             
-            noms = df_holding.iloc[:, 0]
-            valeurs_brutes = df_holding.iloc[:, 4]
-            
-            # Nettoyage robuste : suppression des symboles et de TOUS les types d'espaces
-            valeurs_nettoyees = (
-                valeurs_brutes.astype(str)
-                .str.replace('€', '', regex=False)
-                .str.replace(' ', '', regex=False)
-                .str.replace('\xa0', '', regex=False) # Espace insécable Google Sheets
-                .str.replace('\u202f', '', regex=False) # Espace fin insécable
-                .str.replace(',', '.', regex=False)
-            )
-            valeurs_numeriques = pd.to_numeric(valeurs_nettoyees, errors='coerce')
-            
             df_pie = pd.DataFrame({
-                "Actif": noms,
-                "Valeur": valeurs_numeriques
+                "Actif": df_holding.iloc[:, 0],
+                "Valeur": clean_financial_column(df_holding.iloc[:, 4])
             }).dropna(subset=["Actif", "Valeur"])
             
             # Filtrer les valeurs strictement positives
