@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from Utils.loader import load_sheet_data, clean_financial_column
+from utils.loader import load_sheet_data, clean_financial_column
 
 # --- Configuration de la page ---
 st.set_page_config(
@@ -31,13 +31,31 @@ if page == "📊 Dashboard Global":
         
         st.success("Données du portefeuille chargées avec succès !")
         
-        # Intégration de la colonne H (Total Holding)
+        # --- Section KPI ---
+        col1, col2, col3 = st.columns(3)
+        
         if df_holding.shape[1] > 7:
             col_h = clean_financial_column(df_holding.iloc[:, 7])
             total_holding = col_h.sum()
-            st.metric(label="Valeur Totale du Portefeuille (Col H)", value=f"{total_holding:,.2f} €")
+            col1.metric(label="Valeur Totale du Portefeuille", value=f"{total_holding:,.2f} €")
+        else:
+            col1.metric(label="Valeur Totale du Portefeuille", value="N/A")
+            
+        col2.metric(label="Nombre de Lignes", value=len(df_holding))
+        col3.metric(label="Statut Données", value="Synchronisé 🟢")
         
-        # Affichage du tableau brut 'Holding'
+        st.markdown("---")
+        
+        # --- Section Graphique / Répartition ---
+        st.subheader("📈 Répartition du Portefeuille")
+        if not df_holding.empty and df_holding.shape[1] > 7:
+            # Création d'un mini dataframe propre pour le graphique si les colonnes le permettent
+            # (On adapte selon la structure de ta colonne de nom et de valeur)
+            st.bar_chart(df_holding.select_dtypes(include=['float64', 'int64']))
+        else:
+            st.info("Données insuffisantes pour afficher le graphique de répartition.")
+        
+        # Affichage du tableau brut 'Holding' dans un expander
         with st.expander("Afficher le tableau brut 'Holding'"):
             st.dataframe(df_holding)
             
@@ -54,10 +72,8 @@ elif page == "📈 Vue Détaillée par Actif":
         
         st.info("Aperçu de la Watchlist (nettoyée et limitée jusqu'à la colonne J) :")
         
-        # 1. Remplace les cellules vides ou avec des espaces par de vrais NaN
+        # Nettoyage et limitation
         df_donnees = df_donnees.replace(r'^\s*$', pd.NA, regex=True)
-        
-        # 2. Supprime les lignes et colonnes entièrement vides, puis limite à la colonne J (index 9)
         df_donnees_propre = df_donnees.dropna(how='all').dropna(how='all', axis=1)
         df_donnees_limite = df_donnees_propre.iloc[:, :10]
         
