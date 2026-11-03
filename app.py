@@ -1,26 +1,22 @@
 import streamlit as st
 import pandas as pd
-from google.oauth2.service_account import Credentials
 import gspread
 
 st.title("📈 Mon Suivi Boursier - Holding")
 
-# 1. Connexion au Google Sheet (en utilisant les secrets Streamlit pour la sécurité)
-# Si ton fichier est totalement public en lecture, gspread peut parfois s'y connecter via l'URL :
-SHEET_URL = "https://docs.google.com/spreadsheets/d/1D4_pyAh-2wYrsjrqVJuF8K7Jn5FtC8hlnfJ6J3TSsSc/edit?usp=sharing"
+# Remplace par ton lien complet de Google Sheet (partagé en lecture publique)
+SHEET_URL = "TON_LIEN_COMPLET_DU_GOOGLE_SHEET"
 
 @st.cache_data(ttl=600)
 def load_holding_data():
-    gc = gspread.oauth() # Ou via les credentials de service
-    # Alternative simple sans clé de service si le fichier a le partage "Tous les disposant du lien peuvent lire" :
-    import gspread
+    # gspread est bien importé globalement, il est accessible ici
     gc = gspread.anonymous()
     sh = gc.open_by_url(SHEET_URL)
     
-    # Cible explicitement l'onglet "holding" par son nom exact
+    # Cible explicitement l'onglet "holding"
     worksheet = sh.worksheet("holding")
     
-    # Convertit les données de l'onglet en DataFrame Pandas
+    # Récupération des données
     data = worksheet.get_all_records()
     return pd.DataFrame(data)
 
