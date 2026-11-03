@@ -26,18 +26,17 @@ def load_sheet_data(onglet_name: str) -> pd.DataFrame:
     url = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/export?format=csv&gid={gid}"
     return pd.read_csv(url, on_bad_lines='skip')
 
-def clean_financial_column(series: pd.Series) -> pd.Series:
-    """
-    Nettoie une colonne de type monétaire ou numérique textuelle :
-    - Supprime le symbole '€' et les espaces (normaux et insécables).
-    - Remplace les virgules par des points pour la compatibilité décimale.
-    - Convertit le tout en float/numérique (les en-têtes de colonnes deviennent NaN).
-    """
-    col_cleaned = (
+def clean_financial_column(series):
+    """Nettoie une colonne financière (supprime €, espaces, gère les virgules) et la convertit en numérique."""
+    if series is None:
+        return series
+    
+    valeurs_nettoyees = (
         series.astype(str)
-        .str.replace("€", "", regex=False)
-        .str.replace(" ", "", regex=False)
-        .str.replace("\xa0", "", regex=False)
-        .str.replace(",", ".", regex=False)
+        .str.replace('€', '', regex=False)
+        .str.replace(' ', '', regex=False)
+        .str.replace('\xa0', '', regex=False)  # Espace insécable standard
+        .str.replace('\u202f', '', regex=False) # Espace fin insécable
+        .str.replace(',', '.', regex=False)
     )
-    return pd.to_numeric(col_cleaned, errors='coerce')
+    return pd.to_numeric(valeurs_nettoyees, errors='coerce')
