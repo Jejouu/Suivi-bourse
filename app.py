@@ -38,7 +38,7 @@ if page == "📊 Dashboard Global":
             st.metric(label="Valeur Totale du Portefeuille (Col H)", value=f"{total_holding:,.2f} €")
         
         # Affichage temporaire des tableaux en attendant de construire les vues détaillées
-        with st.expander("Afficher le tableau brumeux 'Holding'"):
+        with st.expander("Afficher le tableau brut 'Holding'"):
             st.dataframe(df_holding)
             
     except Exception as e:
@@ -52,7 +52,6 @@ elif page == "📈 Vue Détaillée par Actif":
         
         st.success("Données des actifs chargées avec succès !")
         
-        # Sélecteur d'actif (basé sur la première colonne par exemple)
         st.info("Module des graphiques et indicateurs par actif en cours de construction.")
         st.dataframe(df_valeurs)
         
@@ -69,5 +68,3 @@ elif page == "📝 Journal des Transactions":
         
     except Exception as e:
         st.error(f"Une erreur est survenue sur le journal des transactions : {e}")
-except Exception as e:
-    st.error(f"Erreur de chargement : {e}")
