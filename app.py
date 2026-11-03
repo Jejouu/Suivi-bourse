@@ -30,18 +30,18 @@ if st.sidebar.button("🔄 Actualiser les données"):
 elif page == "📊 Dashboard Global":
     st.header("📊 Dashboard Global du Portefeuille")
     try:
-        # Chargement des onglets nécessaires
+        # 1. Chargement des onglets nécessaires
         df_holding = load_sheet_data("holding")
         df_hist = load_sheet_data("histporte")
         
         st.success("Données du portefeuille chargées avec succès !")
         
-        # Récupération des valeurs via les fonctions modulaires
+        # 2. Récupération des valeurs via les fonctions modulaires
         total_valeur = get_total_portfolio_value(df_holding)
         plus_value_nette = get_net_pnl(df_holding)
         plus_value_latente = get_unrealized_pnl(df_holding)
         
-        # Affichage des KPI
+        # 3. Affichage des KPI
         col1, col2, col3, col4 = st.columns(4)
         col1.metric("Valeur Totale", f"{total_valeur:,.2f} €")
         col2.metric("Plus-Value Nette", f"{plus_value_nette:,.2f} €")
@@ -49,11 +49,8 @@ elif page == "📊 Dashboard Global":
         col4.metric("Statut Données", "Synchronisé 🟢")
         
         st.markdown("---")
-
-    except Exception as e:
-        st.error(f"Une erreur est survenue sur le Dashboard Global : {e}")
         
-     # --- Section Graphique Camembert (Répartition par Actif) ---
+        # 4. Section Graphique Camembert (Répartition par Actif)
         st.subheader("🥧 Répartition du Portefeuille par Actif")
         
         if not df_holding.empty and df_holding.shape[1] > 4:
@@ -84,10 +81,10 @@ elif page == "📊 Dashboard Global":
         else:
             st.info("Colonnes insuffisantes dans l'onglet holding pour afficher la répartition.")
         
-        # Affichage du tableau brut 'Holding' dans un expander
+        # 5. Affichage du tableau brut 'Holding' dans un expander
         with st.expander("Afficher le tableau brut 'Holding'"):
             st.dataframe(df_holding)
-            
+
     except Exception as e:
         st.error(f"Une erreur est survenue sur le Dashboard Global : {e}")
 elif page == "📈 Vue Détaillée par Actif":
