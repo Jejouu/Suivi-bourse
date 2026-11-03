@@ -46,17 +46,30 @@ elif page == "📊 Dashboard Global":
         
         st.markdown("---")
         
-        # --- Section Graphique Camembert (Répartition par Actif) ---
+       # --- Section Graphique Camembert (Répartition par Actif) ---
         st.subheader("🥧 Répartition du Portefeuille par Actif")
         
         if not df_holding.empty and df_holding.shape[1] > 4:
             import plotly.express as px
             
-            # Extraction et nettoyage des colonnes A (Nom) et E (Valeur)
-            # On ignore les lignes vides si le nom ou la valeur est vide
+            # On s'assure d'isoler les colonnes Nom (index 0) et Valeur actuelle (index 4)
+            noms = df_holding.iloc[:, 0]
+            valeurs_brutes = df_holding.iloc[:, 4]
+            
+            # Nettoyage robuste de la colonne financière :
+            # 1. Conversion en string, suppression des espaces, des symboles € et remplacement de ',' par '.'
+            valeurs_nettoyees = (
+                valeurs_brutes.astype(str)
+                .str.replace('€', '', regex=False)
+                .str.replace(' ', '', regex=False)
+                .str.replace('\xa0', '', regex=False) # Espace insécable
+                .str.replace(',', '.', regex=False)
+            )
+            valeurs_numeriques = pd.to_numeric(valeurs_nettoyees, errors='coerce')
+            
             df_pie = pd.DataFrame({
-                "Actif": df_holding.iloc[:, 0],
-                "Valeur": clean_financial_column(df_holding.iloc[:, 4])
+                "Actif": noms,
+                "Valeur": valeurs_numeriques
             }).dropna(subset=["Actif", "Valeur"])
             
             # Filtrer les valeurs strictement positives pour le camembert
@@ -67,7 +80,7 @@ elif page == "📊 Dashboard Global":
                     df_pie, 
                     names="Actif", 
                     values="Valeur", 
-                    hole=0.4, # Donne un style "Donut" très propre
+                    hole=0.4, # Style Donut
                     title=""
                 )
                 fig.update_traces(textposition='inside', textinfo='percent+label')
@@ -75,7 +88,7 @@ elif page == "📊 Dashboard Global":
                 
                 st.plotly_chart(fig, use_container_width=True)
             else:
-                st.warning("Aucune donnée valide trouvée dans les colonnes A et E pour afficher le camembert.")
+                st.warning("Aucune donnée numérique valide trouvée pour afficher le camembert.")
         else:
             st.info("Colonnes insuffisantes dans l'onglet holding pour afficher la répartition.")
         
