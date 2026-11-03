@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from Utils.loader import load_sheet_data, clean_financial_column
+from utils.loader import load_sheet_data, clean_financial_column
 
 # --- Configuration de la page ---
 st.set_page_config(
@@ -52,10 +52,12 @@ elif page == "📈 Vue Détaillée par Actif":
         
         st.success("Données des actifs chargées avec succès !")
         
-        st.info("Aperçu de l'onglet 'Donnees' (filtré jusqu'à la colonne J) :")
+        st.info("Aperçu de la Watchlist (nettoyée et limitée jusqu'à la colonne J) :")
         
-        # Filtrage pour n'afficher que les colonnes de 0 à J (soit les 10 premières colonnes, index 0 à 9)
-        df_donnees_limite = df_donnees.iloc[:, :10]
+        # Suppression des lignes et colonnes entièrement vides, puis restriction aux 10 premières colonnes (jusqu'à J)
+        df_donnees_propre = df_donnees.dropna(how='all').dropna(how='all', axis=1)
+        df_donnees_limite = df_donnees_propre.iloc[:, :10]
+        
         st.dataframe(df_donnees_limite)
         
     except Exception as e:
