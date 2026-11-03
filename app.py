@@ -14,29 +14,39 @@ url_csv = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/export?format=csv&
 
 @st.cache_data(ttl=600)
 def load_data(url):
-    # Charge le CSV en ignorant d'éventuelles lignes mal formatées
     return pd.read_csv(url, on_bad_lines='skip')
 
 try:
     df = load_data(url_csv)
     st.success("Onglet 'holding' chargé avec succès !")
 
-    # --- Calcul du total de la colonne H ---
-    # En Python (index 0) : A=0, B=1, C=2, D=3, E=4, F=5, G=6, H=7
     if df.shape[1] > 7:
-        # iloc[:, 7] prend la 8ème colonne (H). 
-        # pd.to_numeric avec errors='coerce' convertit l'en-tête/texte en NaN, 
-        # ce qui permet de faire la somme uniquement sur les cellules numériques.
-        colonne_h = pd.to_numeric(df.iloc[:, 7], errors='coerce')
+        # Récupération de la colonne H (index 7)
+        col_brute = df.iloc[:, 7]
+        
+        # Nettoyage rigoureux : suppression de '€', des espaces normaux/insécables, et remplacement de la virgule par un point
+        col_nettoyee = (
+            col_brute.astype(str)
+            .str.replace("€", "", regex=False)
+            .str.replace(" ", "", regex=False)
+            .str.replace("\xa0", "", regex=False)
+            .str.replace(",", ".", regex=False)
+        )
+        
+        # Conversion en nombres (l'en-tête texte et les cellules vides deviennent NaN)
+        colonne_h = pd.to_numeric(col_nettoyee, errors='coerce')
         total_h = colonne_h.sum()
 
-        # Affichage du KPI sous forme de carte/métrique
+        # Affichage du total propre
         st.metric(label="Total Holding (Colonne H)", value=f"{total_h:,.2f} €")
     else:
         st.warning("La colonne H n'a pas été trouvée dans le fichier d'origine.")
 
     # Affichage du tableau complet
     st.dataframe(df)
+
+except Exception as e:
+    st.error(f"Erreur de chargement : {e}")
 
 except Exception as e:
     st.error(f"Erreur de chargement : {e}")
