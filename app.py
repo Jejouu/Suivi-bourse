@@ -36,19 +36,22 @@ elif page == "📊 Dashboard Global":
         
         st.success("Données du portefeuille chargées avec succès !")
         
-      # Récupération des valeurs via les fonctions modulaires
-    total_valeur = get_total_portfolio_value(df_holding)
-    plus_value_nette = get_net_pnl(df_holding)
-    plus_value_latente = get_unrealized_pnl(df_holding)
-    
-    # Affichage des KPI
-    col1, col2, col3, col4 = st.columns(4)
-    col1.metric("Valeur Totale", f"{total_valeur:,.2f} €")
-    col2.metric("Plus-Value Nette", f"{plus_value_nette:,.2f} €")
-    col3.metric("Plus-Value Latente", f"{plus_value_latente:,.2f} €")
-    col4.metric("Statut Données", "Synchronisé 🟢")
-    
-    st.markdown("---")
+        # Récupération des valeurs via les fonctions modulaires
+        total_valeur = get_total_portfolio_value(df_holding)
+        plus_value_nette = get_net_pnl(df_holding)
+        plus_value_latente = get_unrealized_pnl(df_holding)
+        
+        # Affichage des KPI
+        col1, col2, col3, col4 = st.columns(4)
+        col1.metric("Valeur Totale", f"{total_valeur:,.2f} €")
+        col2.metric("Plus-Value Nette", f"{plus_value_nette:,.2f} €")
+        col3.metric("Plus-Value Latente", f"{plus_value_latente:,.2f} €")
+        col4.metric("Statut Données", "Synchronisé 🟢")
+        
+        st.markdown("---")
+
+    except Exception as e:
+        st.error(f"Une erreur est survenue sur le Dashboard Global : {e}")
         
      # --- Section Graphique Camembert (Répartition par Actif) ---
         st.subheader("🥧 Répartition du Portefeuille par Actif")
