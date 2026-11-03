@@ -40,3 +40,13 @@ def clean_financial_column(series):
         .str.replace(',', '.', regex=False)
     )
     return pd.to_numeric(valeurs_nettoyees, errors='coerce')
+
+def get_cell_value(sheet_name: str, cell_coordinates: str):
+    """Récupère la valeur brute d'une cellule spécifique dans un onglet donné."""
+    try:
+        # Assure-toi que cette fonction s'adapte à ton client gspread existant
+        sheet = client.open(SPREADSHEET_NAME).worksheet(sheet_name)
+        val = sheet.acell(cell_coordinates).value
+        return val
+    except Exception:
+        return None
