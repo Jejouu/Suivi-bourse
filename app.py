@@ -4,7 +4,7 @@ import pandas as pd
 st.title("Mon Suivi Boursier")
 
 # Lien vers ton Google Sheet (assure-toi qu'il est partagé en lecture publique)
-sheet_url = "https://docs.google.com/spreadsheets/d/1D4_pyAh-2wYrsjrqVJuF8K7Jn5FtC8hlnfJ6J3TSsSc/edit?gid=0#gid=0"
+sheet_url = "https://docs.google.com/spreadsheets/d/1D4_pyAh-2wYrsjrqVJuF8K7Jn5FtC8hlnfJ6J3TSsSc/edit?usp=sharing"
 url_csv = sheet_url.replace('/edit?usp=sharing', '/export?format=csv')
 
 @st.cache_data
