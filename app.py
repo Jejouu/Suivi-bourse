@@ -54,7 +54,10 @@ elif page == "📈 Vue Détaillée par Actif":
         
         st.info("Aperçu de la Watchlist (nettoyée et limitée jusqu'à la colonne J) :")
         
-        # Suppression des lignes et colonnes entièrement vides, puis restriction aux 10 premières colonnes (jusqu'à J)
+        # 1. Remplace les cellules vides ou avec des espaces par de vrais NaN
+        df_donnees = df_donnees.replace(r'^\s*$', pd.NA, regex=True)
+        
+        # 2. Supprime les lignes et colonnes entièrement vides, puis limite à la colonne J (index 9)
         df_donnees_propre = df_donnees.dropna(how='all').dropna(how='all', axis=1)
         df_donnees_limite = df_donnees_propre.iloc[:, :10]
         
