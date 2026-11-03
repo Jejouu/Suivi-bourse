@@ -22,7 +22,7 @@ if st.sidebar.button("🔄 Actualiser les données"):
     st.rerun()
 
 # --- Routage des pages avec isolation des erreurs ---
-if page == "📊 Dashboard Global":
+elif page == "📊 Dashboard Global":
     st.header("📊 Dashboard Global du Portefeuille")
     try:
         # Chargement des onglets nécessaires
@@ -46,14 +46,38 @@ if page == "📊 Dashboard Global":
         
         st.markdown("---")
         
-        # --- Section Graphique / Répartition ---
-        st.subheader("📈 Répartition du Portefeuille")
-        if not df_holding.empty and df_holding.shape[1] > 7:
-            # Création d'un mini dataframe propre pour le graphique si les colonnes le permettent
-            # (On adapte selon la structure de ta colonne de nom et de valeur)
-            st.bar_chart(df_holding.select_dtypes(include=['float64', 'int64']))
+        # --- Section Graphique Camembert (Répartition par Actif) ---
+        st.subheader("🥧 Répartition du Portefeuille par Actif")
+        
+        if not df_holding.empty and df_holding.shape[1] > 4:
+            import plotly.express as px
+            
+            # Extraction et nettoyage des colonnes A (Nom) et E (Valeur)
+            # On ignore les lignes vides si le nom ou la valeur est vide
+            df_pie = pd.DataFrame({
+                "Actif": df_holding.iloc[:, 0],
+                "Valeur": clean_financial_column(df_holding.iloc[:, 4])
+            }).dropna(subset=["Actif", "Valeur"])
+            
+            # Filtrer les valeurs strictement positives pour le camembert
+            df_pie = df_pie[df_pie["Valeur"] > 0]
+            
+            if not df_pie.empty:
+                fig = px.pie(
+                    df_pie, 
+                    names="Actif", 
+                    values="Valeur", 
+                    hole=0.4, # Donne un style "Donut" très propre
+                    title=""
+                )
+                fig.update_traces(textposition='inside', textinfo='percent+label')
+                fig.update_layout(margin=dict(t=0, b=0, l=0, r=0))
+                
+                st.plotly_chart(fig, use_container_width=True)
+            else:
+                st.warning("Aucune donnée valide trouvée dans les colonnes A et E pour afficher le camembert.")
         else:
-            st.info("Données insuffisantes pour afficher le graphique de répartition.")
+            st.info("Colonnes insuffisantes dans l'onglet holding pour afficher la répartition.")
         
         # Affichage du tableau brut 'Holding' dans un expander
         with st.expander("Afficher le tableau brut 'Holding'"):
@@ -61,7 +85,6 @@ if page == "📊 Dashboard Global":
             
     except Exception as e:
         st.error(f"Une erreur est survenue sur le Dashboard Global : {e}")
-
 elif page == "📈 Vue Détaillée par Actif":
     st.header("📈 Vue Détaillée par Actif")
     try:
