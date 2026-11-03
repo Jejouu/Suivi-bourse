@@ -8,7 +8,8 @@ url_csv = "https://docs.google.com/spreadsheets/d/1D4_pyAh-2wYrsjrqVJuF8K7Jn5FtC
 
 @st.cache_data(ttl=600)
 def load_data(url):
-    return pd.read_csv(url)
+    # on_bad_lines='skip' permet d'ignorer les lignes qui n'ont pas le bon nombre de colonnes
+    return pd.read_csv(url, on_bad_lines='skip')
 
 try:
     df = load_data(url_csv)
