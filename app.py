@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 
-st.title("📈 Mon Suivi Boursier - Holding")
+st.title("📈 Mon Suivi Boursier")
 
 # 1. ID de ton Google Sheet
 SHEET_ID = "1D4_pyAh-2wYrsjrqVJuF8K7Jn5FtC8hlnfJ6J3TSsSc"
@@ -15,6 +15,11 @@ url_csv = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/export?format=csv&
 @st.cache_data(ttl=600)
 def load_data(url):
     return pd.read_csv(url, on_bad_lines='skip')
+
+# Bouton d'actualisation pour vider le cache et recharger les données fraîches
+if st.button("🔄 Actualiser les données"):
+    st.cache_data.clear()
+    st.rerun()
 
 try:
     df = load_data(url_csv)
@@ -44,9 +49,6 @@ try:
 
     # Affichage du tableau complet
     st.dataframe(df)
-
-except Exception as e:
-    st.error(f"Erreur de chargement : {e}")
 
 except Exception as e:
     st.error(f"Erreur de chargement : {e}")
