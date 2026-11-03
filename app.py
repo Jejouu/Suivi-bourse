@@ -1,54 +1,73 @@
 import streamlit as st
 import pandas as pd
+from utils.loader import load_sheet_data, clean_financial_column
 
-st.title("📈 Mon Suivi Boursier")
+# --- Configuration de la page ---
+st.set_page_config(
+    page_title="Mon Suivi Boursier",
+    page_icon="📈",
+    layout="wide"
+)
 
-# 1. ID de ton Google Sheet
-SHEET_ID = "1D4_pyAh-2wYrsjrqVJuF8K7Jn5FtC8hlnfJ6J3TSsSc"
+# --- Navigation dans la barre latérale ---
+st.sidebar.title("🧭 Navigation")
+page = st.sidebar.radio(
+    "Choisir une vue :",
+    ["📊 Dashboard Global", "📈 Vue Détaillée par Actif", "📝 Journal des Transactions"]
+)
 
-# 2. GID de ton onglet "holding"
-GID_HOLDING = "575574311"
-
-# Construction de l'URL d'export CSV spécifique à cet onglet
-url_csv = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/export?format=csv&gid={GID_HOLDING}"
-
-@st.cache_data(ttl=600)
-def load_data(url):
-    return pd.read_csv(url, on_bad_lines='skip')
-
-# Bouton d'actualisation pour vider le cache et recharger les données fraîches
-if st.button("🔄 Actualiser les données"):
+# --- Bouton global d'actualisation dans la sidebar ---
+if st.sidebar.button("🔄 Actualiser les données"):
     st.cache_data.clear()
     st.rerun()
 
-try:
-    df = load_data(url_csv)
-    st.success("Onglet 'holding' chargé avec succès !")
-
-    if df.shape[1] > 7:
-        # Récupération de la colonne H (index 7)
-        col_brute = df.iloc[:, 7]
+# --- Routage des pages avec isolation des erreurs ---
+if page == "📊 Dashboard Global":
+    st.header("📊 Dashboard Global du Portefeuille")
+    try:
+        # Chargement des onglets nécessaires
+        df_holding = load_sheet_data("holding")
+        df_hist = load_sheet_data("histporte")
         
-        # Nettoyage rigoureux : suppression de '€', des espaces normaux/insécables, et remplacement de la virgule par un point
-        col_nettoyee = (
-            col_brute.astype(str)
-            .str.replace("€", "", regex=False)
-            .str.replace(" ", "", regex=False)
-            .str.replace("\xa0", "", regex=False)
-            .str.replace(",", ".", regex=False)
-        )
+        st.success("Données du portefeuille chargées avec succès !")
         
-        # Conversion en nombres (l'en-tête texte et les cellules vides deviennent NaN)
-        colonne_h = pd.to_numeric(col_nettoyee, errors='coerce')
-        total_h = colonne_h.sum()
+        # Exemple rapide d'intégration de la colonne H (Total Holding)
+        if df_holding.shape[1] > 7:
+            col_h = clean_financial_column(df_holding.iloc[:, 7])
+            total_holding = col_h.sum()
+            st.metric(label="Valeur Totale du Portefeuille (Col H)", value=f"{total_holding:,.2f} €")
+        
+        # Affichage temporaire des tableaux en attendant de construire les vues détaillées
+        with st.expander("Afficher le tableau brumeux 'Holding'"):
+            st.dataframe(df_holding)
+            
+    except Exception as e:
+        st.error(f"Une erreur est survenue sur le Dashboard Global : {e}")
 
-        # Affichage du total propre
-        st.metric(label="Total Holding (Colonne H)", value=f"{total_h:,.2f} €")
-    else:
-        st.warning("La colonne H n'a pas été trouvée dans le fichier d'origine.")
+elif page == "📈 Vue Détaillée par Actif":
+    st.header("📈 Vue Détaillée par Actif")
+    try:
+        df_valeurs = load_sheet_data("valeurs")
+        df_donnees = load_sheet_data("donnees")
+        
+        st.success("Données des actifs chargées avec succès !")
+        
+        # Sélecteur d'actif (basé sur la première colonne par exemple)
+        st.info("Module des graphiques et indicateurs par actif en cours de construction.")
+        st.dataframe(df_valeurs)
+        
+    except Exception as e:
+        st.error(f"Une erreur est survenue sur la vue détaillée : {e}")
 
-    # Affichage du tableau complet
-    st.dataframe(df)
-
+elif page == "📝 Journal des Transactions":
+    st.header("📝 Journal des Transactions")
+    try:
+        df_trans = load_sheet_data("transaction")
+        
+        st.success("Historique des transactions chargé avec succès !")
+        st.dataframe(df_trans)
+        
+    except Exception as e:
+        st.error(f"Une erreur est survenue sur le journal des transactions : {e}")
 except Exception as e:
     st.error(f"Erreur de chargement : {e}")
