@@ -41,7 +41,7 @@ elif page == "📊 Dashboard Global":
         else:
             col1.metric(label="Valeur Totale du Portefeuille", value="N/A")
             
-         if df_holding.shape[1] > 7:
+        if df_holding.shape[1] > 7:
             col_h = clean_financial_column(df_holding.iloc[:, 7])
             total_holding = col_h.sum()
             col2.metric(label="Plus value latente", value=f"{total_holding:,.2f} €")
