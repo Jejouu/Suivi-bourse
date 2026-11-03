@@ -46,23 +46,22 @@ elif page == "📊 Dashboard Global":
         
         st.markdown("---")
         
-       # --- Section Graphique Camembert (Répartition par Actif) ---
+      # --- Section Graphique Camembert (Répartition par Actif) ---
         st.subheader("🥧 Répartition du Portefeuille par Actif")
         
         if not df_holding.empty and df_holding.shape[1] > 4:
             import plotly.express as px
             
-            # On s'assure d'isoler les colonnes Nom (index 0) et Valeur actuelle (index 4)
             noms = df_holding.iloc[:, 0]
             valeurs_brutes = df_holding.iloc[:, 4]
             
-            # Nettoyage robuste de la colonne financière :
-            # 1. Conversion en string, suppression des espaces, des symboles € et remplacement de ',' par '.'
+            # Nettoyage robuste : suppression des symboles et de TOUS les types d'espaces
             valeurs_nettoyees = (
                 valeurs_brutes.astype(str)
                 .str.replace('€', '', regex=False)
                 .str.replace(' ', '', regex=False)
-                .str.replace('\xa0', '', regex=False) # Espace insécable
+                .str.replace('\xa0', '', regex=False) # Espace insécable Google Sheets
+                .str.replace('\u202f', '', regex=False) # Espace fin insécable
                 .str.replace(',', '.', regex=False)
             )
             valeurs_numeriques = pd.to_numeric(valeurs_nettoyees, errors='coerce')
@@ -72,7 +71,7 @@ elif page == "📊 Dashboard Global":
                 "Valeur": valeurs_numeriques
             }).dropna(subset=["Actif", "Valeur"])
             
-            # Filtrer les valeurs strictement positives pour le camembert
+            # Filtrer les valeurs strictement positives
             df_pie = df_pie[df_pie["Valeur"] > 0]
             
             if not df_pie.empty:
@@ -80,7 +79,7 @@ elif page == "📊 Dashboard Global":
                     df_pie, 
                     names="Actif", 
                     values="Valeur", 
-                    hole=0.4, # Style Donut
+                    hole=0.4, 
                     title=""
                 )
                 fig.update_traces(textposition='inside', textinfo='percent+label')
