@@ -1,6 +1,11 @@
 import streamlit as st
 import pandas as pd
 from Utils.loader import load_sheet_data, clean_financial_column
+from views.portfolio_dash import (
+    get_total_portfolio_value, 
+    get_net_pnl,
+    get_unrealized_pnl
+)
 
 # --- Configuration de la page ---
 st.set_page_config(
@@ -31,26 +36,19 @@ elif page == "📊 Dashboard Global":
         
         st.success("Données du portefeuille chargées avec succès !")
         
-        # --- Section KPI ---
-        col1, col2, col3 = st.columns(3)
-        
-        if df_holding.shape[1] > 4:
-            col_e = clean_financial_column(df_holding.iloc[:, 4])
-            total_holding = col_e.sum()
-            col1.metric(label="Valeur Totale du Portefeuille", value=f"{total_holding:,.2f} €")
-        else:
-            col1.metric(label="Valeur Totale du Portefeuille", value="N/A")
-            
-        if df_holding.shape[1] > 7:
-            col_h = clean_financial_column(df_holding.iloc[:, 7])
-            total_holding = col_h.sum()
-            col2.metric(label="Plus value latente", value=f"+{total_holding:,.2f} €")
-        else:
-            col2.metric(label="Plus value latente", value="N/A")
-            
-        col3.metric(label="Statut Données", value="Synchronisé 🟢")
-        
-        st.markdown("---")
+      # Récupération des valeurs via les fonctions modulaires
+    total_valeur = get_total_portfolio_value(df_holding)
+    plus_value_nette = get_net_pnl(df_holding)
+    plus_value_latente = get_unrealized_pnl(df_holding)
+    
+    # Affichage des KPI
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric("Valeur Totale", f"{total_valeur:,.2f} €")
+    col2.metric("Plus-Value Nette", f"{plus_value_nette:,.2f} €")
+    col3.metric("Plus-Value Latente", f"{plus_value_latente:,.2f} €")
+    col4.metric("Statut Données", "Synchronisé 🟢")
+    
+    st.markdown("---")
         
      # --- Section Graphique Camembert (Répartition par Actif) ---
         st.subheader("🥧 Répartition du Portefeuille par Actif")
