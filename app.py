@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from Utils.loader import load_sheet_data, clean_financial_column
+from utils.loader import load_sheet_data, clean_financial_column
 
 # --- Configuration de la page ---
 st.set_page_config(
@@ -31,13 +31,13 @@ if page == "📊 Dashboard Global":
         
         st.success("Données du portefeuille chargées avec succès !")
         
-        # Exemple rapide d'intégration de la colonne H (Total Holding)
+        # Intégration de la colonne H (Total Holding)
         if df_holding.shape[1] > 7:
             col_h = clean_financial_column(df_holding.iloc[:, 7])
             total_holding = col_h.sum()
             st.metric(label="Valeur Totale du Portefeuille (Col H)", value=f"{total_holding:,.2f} €")
         
-        # Affichage temporaire des tableaux en attendant de construire les vues détaillées
+        # Affichage du tableau brut 'Holding'
         with st.expander("Afficher le tableau brut 'Holding'"):
             st.dataframe(df_holding)
             
@@ -52,8 +52,11 @@ elif page == "📈 Vue Détaillée par Actif":
         
         st.success("Données des actifs chargées avec succès !")
         
-        st.info("Module des graphiques et indicateurs par actif en cours de construction.")
-        st.dataframe(df_valeurs)
+        st.info("Aperçu de l'onglet 'Donnees' (filtré jusqu'à la colonne J) :")
+        
+        # Filtrage pour n'afficher que les colonnes de 0 à J (soit les 10 premières colonnes, index 0 à 9)
+        df_donnees_limite = df_donnees.iloc[:, :10]
+        st.dataframe(df_donnees_limite)
         
     except Exception as e:
         st.error(f"Une erreur est survenue sur la vue détaillée : {e}")
