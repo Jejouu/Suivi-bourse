@@ -34,7 +34,7 @@ elif page == "📊 Dashboard Global":
         # --- Section KPI ---
         col1, col2, col3 = st.columns(3)
         
-        if df_holding.shape[1] > 7:
+        if df_holding.shape[1] > 4:
             col_e = clean_financial_column(df_holding.iloc[:, 4])
             total_holding = col_e.sum()
             col1.metric(label="Valeur Totale du Portefeuille", value=f"{total_holding:,.2f} €")
