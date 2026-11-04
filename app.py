@@ -69,13 +69,13 @@ elif page == "📊 Dashboard Global":
         
         col2.metric(
             "Plus-Value Nette", 
-            f"{plus_value_nette:,.2f} €", 
+            "", 
             delta=format_delta_value(plus_value_nette)
         )
         
         col3.metric(
             "Plus-Value Latente", 
-            f"{plus_value_latente:,.2f} €", 
+            "", 
             delta=format_delta_value(plus_value_latente)
         )
 
