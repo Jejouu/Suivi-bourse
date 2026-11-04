@@ -40,13 +40,18 @@ elif page == "📊 Dashboard Global":
         total_valeur = get_total_portfolio_value(df_holding)
         plus_value_nette = get_net_pnl(df_holding)
         plus_value_latente = get_unrealized_pnl(df_holding)
+        sharpe = get_sharpe_ratio()
+        sortino = get_sortino_ratio()
+        beta = get_beta()
         
         # 3. Affichage des KPI
-        col1, col2, col3, col4 = st.columns(4)
+        col1, col2, col3, col4, col5, col6 = st.columns(6)
         col1.metric("Valeur Totale", f"{total_valeur:,.2f} €")
         col2.metric("Plus-Value Nette", f"{plus_value_nette:,.2f} €")
         col3.metric("Plus-Value Latente", f"{plus_value_latente:,.2f} €")
-        col4.metric("Statut Données", "Synchronisé 🟢")
+        col4.metric("Sharpe", f"{sharpe:.2f}")
+        col5.metric("Sortino", f"{sortino:.2f}")
+        col6.metric("Béta", f"{beta:.2f}")
         
         st.markdown("---")
         
