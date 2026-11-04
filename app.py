@@ -60,9 +60,9 @@ elif page == "📊 Dashboard Global":
         """col4.metric("Sharpe", f"{sharpe:.2f}")
         col5.metric("Sortino", f"{sortino:.2f}")
         col6.metric("Béta", f"{beta:.2f}")"""
-        col4.metric("Sharpe", sharpe)
-        col5.metric("Sortino",sortino)
-        col6.metric("Béta", beta)
+        col4.metric("Sharpe", str(sharpe))
+        col5.metric("Sortino",str(sortino))
+        col6.metric("Béta", str(beta))
         
         st.markdown("---")
         
