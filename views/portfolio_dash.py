@@ -30,8 +30,12 @@ def get_sharpe_ratio() -> float:
     """Récupère le ratio de Sharpe depuis l'onglet 'Valeurs', cellule B4."""
     try:
         val = get_cell_value("Valeurs", "B4")
-        cleaned = clean_financial_column(pd.Series([val])).iloc[0]
-        return float(cleaned)
+        if val is None or val == "":
+            return 0.0
+        # Remplace la virgule par un point si c'est une chaîne de caractères
+        if isinstance(val, str):
+            val = val.replace(",", ".").strip()
+        return float(val)
     except Exception:
         return 0.0
 
