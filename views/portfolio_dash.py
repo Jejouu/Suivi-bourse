@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from Utils.loader import clean_financial_column
+from Utils.loader import clean_financial_column, get_cell_value, load_sheet_data
 
 def get_total_portfolio_value(df_holding: pd.DataFrame) -> float:
     """Retourne la valeur totale du portefeuille."""
@@ -26,37 +26,32 @@ def get_unrealized_pnl(df_holding: pd.DataFrame) -> float:
     plus_values = clean_financial_column(df_holding.iloc[:, 7])
     return float(plus_values.sum())
 
-def get_sharpe_ratio(df_hist: pd.DataFrame, risk_free_rate: float = 0.03) -> float:
-    """
-    Calcule le Ratio de Sharpe du portefeuille à partir de l'historique des rendements.
-    """
-    if df_hist.empty:
+def get_sharpe_ratio() -> float:
+    """Récupère le ratio de Sharpe depuis l'onglet 'Valeurs', cellule B4."""
+    try:
+        val = get_cell_value("Valeurs", "B4")
+        cleaned = clean_financial_column(pd.Series([val])).iloc[0]
+        return float(cleaned)
+    except Exception:
         return 0.0
-    # Logique de calcul basée sur les rendements journaliers/mensuels
-    # rendements = df_hist['Valeur'].pct_change().dropna()
-    # excess_returns = rendements - (risk_free_rate / 252)
-    # return (excess_returns.mean() / excess_returns.std()) * np.sqrt(252)
-    return 0.0
 
-def get_sortino_ratio(df_hist: pd.DataFrame, risk_free_rate: float = 0.03) -> float:
-    """
-    Calcule le Ratio de Sortino (ne prend en compte que la volatilité négative).
-    """
-    if df_hist.empty:
+def get_sortino_ratio() -> float:
+    """Récupère le ratio de Sortino depuis l'onglet 'Valeurs', cellule B5."""
+    try:
+        val = get_cell_value("Valeurs", "B5")
+        cleaned = clean_financial_column(pd.Series([val])).iloc[0]
+        return float(cleaned)
+    except Exception:
         return 0.0
-    # rendements = df_hist['Valeur'].pct_change().dropna()
-    # negative_returns = rendements[rendements < 0]
-    # downside_std = negative_returns.std() * np.sqrt(252)
-    # return (rendements.mean() * 252 - risk_free_rate) / downside_std if downside_std != 0 else 0.0
-    return 0.0
 
-def get_beta(df_hist: pd.DataFrame, df_benchmark: pd.DataFrame) -> float:
-    """Calcule le Béta par rapport à un indice de référence (ex: S&P 500 / MSCI World)."""
-    if df_hist.empty or df_benchmark.empty:
+def get_beta() -> float:
+    """Récupère le Béta depuis l'onglet 'Valeurs', cellule B6."""
+    try:
+        val = get_cell_value("Valeurs", "B6")
+        cleaned = clean_financial_column(pd.Series([val])).iloc[0]
+        return float(cleaned)
+    except Exception:
         return 0.0
-    # Covariance(Portefeuille, Indice) / Variance(Indice)
-    return 1.0
-
 
 # ==========================================
 # 📅 HISTORIQUE & ÉVOLUTION TEMPORELLE
