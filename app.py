@@ -1,6 +1,11 @@
 import streamlit as st
 import pandas as pd
-from Utils.loader import load_sheet_data, clean_financial_column
+from Utils.loader import (
+    load_sheet_data,
+    clean_financial_column,
+    clean_str_to_float,
+    get_cell_value
+)
 from views.portfolio_dash import (
     get_total_portfolio_value, 
     get_net_pnl,
@@ -43,16 +48,16 @@ elif page == "📊 Dashboard Global":
         total_valeur = get_total_portfolio_value(df_holding)
         plus_value_nette = get_net_pnl(df_holding)
         plus_value_latente = get_unrealized_pnl(df_holding)
-        sharpe = get_sharpe_ratio()
-        sortino = get_sortino_ratio()
-        beta = get_beta()
+        sharpe = clean_str_to_float(get_cell_value("Valeurs", "B4"))
+        sortino = clean_str_to_float(get_cell_value("Valeurs", "B5"))
+        beta = clean_str_to_float(get_cell_value("Valeurs", "B6"))
         
         # 3. Affichage des KPI
         col1, col2, col3, col4, col5, col6 = st.columns(6)
         col1.metric("Valeur Totale", f"{total_valeur:,.2f} €")
         col2.metric("Plus-Value Nette", f"{plus_value_nette:,.2f} €")
         col3.metric("Plus-Value Latente", f"{plus_value_latente:,.2f} €")
-        col4.metric("Sharpe", get_sharpe_ratio())
+        col4.metric("Sharpe", f"{sharpe:.2f}")
         col5.metric("Sortino", f"{sortino:.2f}")
         col6.metric("Béta", f"{beta:.2f}")
         
