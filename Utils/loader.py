@@ -50,3 +50,19 @@ def get_cell_value(sheet_name: str, cell_coordinates: str):
         return val
     except Exception:
         return None
+
+def clean_str_to_float(val) -> float:
+    """Convertit proprement une chaîne ou un nombre en float en gérant les virgules et les espaces."""
+    if val is None:
+        return 0.0
+    if isinstance(val, (int, float)):
+        return float(val)
+    
+    try:
+        # Nettoyage : conversion en string, suppression des espaces, remplacement de la virgule par un point
+        val_str = str(val).replace("\u202f", "").replace(" ", "").replace(",", ".").strip()
+        if val_str == "" or val_str.lower() == "nan":
+            return 0.0
+        return float(val_str)
+    except Exception:
+        return 0.0
