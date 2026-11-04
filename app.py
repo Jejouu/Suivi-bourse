@@ -4,7 +4,10 @@ from Utils.loader import load_sheet_data, clean_financial_column
 from views.portfolio_dash import (
     get_total_portfolio_value, 
     get_net_pnl,
-    get_unrealized_pnl
+    get_unrealized_pnl,
+    get_sharpe_ratio,
+    get_sortino_ratio,
+    get_beta
 )
 
 # --- Configuration de la page ---
