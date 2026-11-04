@@ -55,9 +55,29 @@ elif page == "📊 Dashboard Global":
        # --- 1ère Ligne : Indicateurs Financiers ---
         st.subheader("💶 Valeur du porte-feuille")
         col1, col2, col3 = st.columns(3)
+       # Fonction utilitaire pour formater la valeur avec le signe + ou -
+        def format_delta_value(val):
+            if val > 0:
+                return f"+{val:,.2f} €"
+            elif val < 0:
+                return f"{val:,.2f} €"  # Le négatif s'affiche tout seul avec son "-"
+            else:
+                return f"0.00 €"
+
+        # Affichage avec delta pour la coloration automatique vert/rouge
         col1.metric("Valeur Totale", f"{total_valeur:,.2f} €")
-        col2.metric("Plus-Value Nette", f"{plus_value_nette:,.2f} €")
-        col3.metric("Plus-Value Latente", f"{plus_value_latente:,.2f} €")
+        
+        col2.metric(
+            "Plus-Value Nette", 
+            f"{plus_value_nette:,.2f} €", 
+            delta=format_delta_value(plus_value_nette)
+        )
+        
+        col3.metric(
+            "Plus-Value Latente", 
+            f"{plus_value_latente:,.2f} €", 
+            delta=format_delta_value(plus_value_latente)
+        )
 
         st.markdown("---")
 
