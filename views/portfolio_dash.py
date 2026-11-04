@@ -29,8 +29,8 @@ def get_unrealized_pnl(df_holding: pd.DataFrame) -> float:
 def get_sharpe_ratio() -> float:
     """Récupère le ratio de Sharpe depuis l'onglet 'Valeurs', cellule B4."""
     try:
-        cleaned = clean_financial_column(pd.Series([val])).iloc[0]
         val = get_cell_value("Valeurs", "B4")
+        cleaned = clean_financial_column(pd.Series([val])).iloc[0]
         return float(cleaned)
     except Exception:
         return 0.0
