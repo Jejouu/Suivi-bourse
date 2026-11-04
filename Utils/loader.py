@@ -42,11 +42,37 @@ def clean_financial_column(series):
     return pd.to_numeric(valeurs_nettoyees, errors='coerce')
 
 def get_cell_value(sheet_name: str, cell_coordinates: str):
-    """Récupère la valeur brute d'une cellule spécifique dans un onglet donné."""
+    """
+    Récupère la valeur brute d'une cellule spécifique (ex: 'B4') 
+    dans un onglet donné via l'export CSV et le DataFrame pandas.
+    """
     try:
-        # Assure-toi que cette fonction s'adapte à ton client gspread existant
-        sheet = client.open(SPREADSHEET_NAME).worksheet(sheet_name)
-        val = sheet.acell(cell_coordinates).value
+        # 1. Chargement du DataFrame de l'onglet demandé via son nom (dans GIDS)
+        df = load_sheet_data(sheet_name)
+        if df.empty:
+            return None
+
+        # 2. Séparation de la lettre de colonne et du numéro de ligne (ex: 'B4' -> col 'B', row 4)
+        import re
+        match = re.match(r"([A-Za-z]+)([0-9]+)", cell_coordinates)
+        if not match:
+            return None
+        
+        col_letter, row_num = match.groups()
+        
+        # 3. Conversion de la lettre de colonne en index (A=0, B=1, C=2...)
+        col_idx = 0
+        for char in col_letter.upper():
+            col_idx = col_idx * 26 + (ord(char) - ord('A'))
+            
+        # 4. Conversion de la ligne Excel/Sheet en index pandas (Ligne 4 Excel = index 2 en DataFrame CSV sans entête)
+        # Remarque : La première ligne du CSV devient l'en-tête (header), donc la ligne Excel B4 correspond à l'index df.iloc[2, 1]
+        row_idx = int(row_num) - 2 
+
+        if row_idx < 0 or row_idx >= len(df) or col_idx >= df.shape[1]:
+            return None
+
+        val = df.iloc[row_idx, col_idx]
         return val
     except Exception:
         return None
