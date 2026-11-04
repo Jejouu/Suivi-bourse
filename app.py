@@ -48,9 +48,9 @@ elif page == "📊 Dashboard Global":
         total_valeur = get_total_portfolio_value(df_holding)
         plus_value_nette = get_net_pnl(df_holding)
         plus_value_latente = get_unrealized_pnl(df_holding)
-        sharpe = (get_cell_value("Valeurs", "B4"))
-        sortino = (get_cell_value("Valeurs", "B5"))
-        beta = (get_cell_value("Valeurs", "B6"))
+        sharpe = (get_cell_value("valeurs", "B4"))
+        sortino = (get_cell_value("valeurs", "B5"))
+        beta = (get_cell_value("valeurs", "B6"))
         
         # 3. Affichage des KPI
         col1, col2, col3, col4, col5, col6 = st.columns(6)
