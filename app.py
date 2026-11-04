@@ -52,15 +52,21 @@ elif page == "📊 Dashboard Global":
         sortino = clean_str_to_float(get_cell_value("valeurs", "B5"))
         beta = clean_str_to_float(get_cell_value("valeurs", "B6"))
         
-        # 3. Affichage des KPI
-        col1, col2, col3, col4, col5, col6 = st.columns(6)
+       # --- 1ère Ligne : Indicateurs Financiers ---
+        col1, col2, col3 = st.columns(3)
         col1.metric("Valeur Totale", f"{total_valeur:,.2f} €")
         col2.metric("Plus-Value Nette", f"{plus_value_nette:,.2f} €")
         col3.metric("Plus-Value Latente", f"{plus_value_latente:,.2f} €")
+
+        st.markdown("---")
+
+        # --- 2ème Ligne : Titre et Indicateurs de Risque ---
+        st.subheader("🔍 Analyse")
+        col4, col5, col6 = st.columns(3)
         col4.metric("Sharpe", f"{sharpe:.2f}")
         col5.metric("Sortino", f"{sortino:.2f}")
         col6.metric("Béta", f"{beta:.2f}")
-        
+
         st.markdown("---")
         
         # 4. Section Graphique Camembert (Répartition par Actif)
