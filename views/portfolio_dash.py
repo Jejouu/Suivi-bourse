@@ -26,18 +26,12 @@ def get_unrealized_pnl(df_holding: pd.DataFrame) -> float:
     plus_values = clean_financial_column(df_holding.iloc[:, 7])
     return float(plus_values.sum())
 
-def get_sharpe_ratio() -> float:
-    """Récupère le ratio de Sharpe (B4) depuis l'onglet 'Valeurs'."""
+def get_sharpe_ratio_raw() -> str:
     try:
-        df = load_sheet_data("Valeurs")
-        val = df.iloc[3, 1]  # Ligne 4, Colonne B
-        if pd.isna(val) or val == "":
-            return 0.0
-        if isinstance(val, str):
-            val = val.replace(",", ".").strip()
-        return float(val)
+        val = get_cell_value("Valeurs", "B4")
+        return str(val) if val is not None else "N/A"
     except Exception:
-        return 0.0
+        return "N/A"
 
 def get_sortino_ratio() -> float:
     """Récupère le ratio de Sortino (B5) depuis l'onglet 'Valeurs'."""
