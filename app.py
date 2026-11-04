@@ -55,29 +55,24 @@ elif page == "📊 Dashboard Global":
        # --- 1ère Ligne : Indicateurs Financiers ---
         st.subheader("💶 Valeur du porte-feuille")
         col1, col2, col3 = st.columns(3)
-       # Fonction utilitaire pour formater la valeur avec le signe + ou -
-        def format_delta_value(val):
-            if val > 0:
-                return f"+{val:,.2f} €"
-            elif val < 0:
-                return f"{val:,.2f} €"  # Le négatif s'affiche tout seul avec son "-"
-            else:
-                return f"0.00 €"
+      # Fonction pour afficher un grand chiffre coloré selon sa valeur
+def metric_colored(label, value_str, val_numeric):
+    color = "#00FF7F" if val_numeric >= 0 else "#FF4B4B" # Vert ou Rouge
+    st.markdown(f"""
+        <div style="font-size: 14px; color: rgb(163, 168, 184); margin-bottom: 2px;">{label}</div>
+        <div style="font-size: 2.25rem; font-weight: 600; color: {color};">{value_str}</div>
+    """, unsafe_allow_html=True)
 
-        # Affichage avec delta pour la coloration automatique vert/rouge
-        col1.metric("Valeur Totale", f"{total_valeur:,.2f} €")
-        
-        col2.metric(
-            "Plus-Value Nette", 
-            "", 
-            delta=format_delta_value(plus_value_nette)
-        )
-        
-        col3.metric(
-            "Plus-Value Latente", 
-            "", 
-            delta=format_delta_value(plus_value_latente)
-        )
+# Utilisation dans tes colonnes :
+col1, col2, col3 = st.columns(3)
+
+col1.metric("Valeur Totale", f"{total_valeur:,.2f} €")
+
+with col2:
+    metric_colored("Plus-Value Nette", f"{plus_value_nette:+,.2f} €", plus_value_nette)
+
+with col3:
+    metric_colored("Plus-Value Latente", f"{plus_value_latente:+,.2f} €", plus_value_latente)
 
         st.markdown("---")
 
