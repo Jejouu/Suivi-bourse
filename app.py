@@ -15,6 +15,13 @@ from views.portfolio_dash import (
     get_beta
 )
 
+def metric_colored(label, value_str, val_numeric):
+    color = "#00FF7F" if val_numeric >= 0 else "#FF4B4B" # Vert ou Rouge
+    st.markdown(f"""
+        <div style="font-size: 14px; color: rgb(163, 168, 184); margin-bottom: 2px;">{label}</div>
+        <div style="font-size: 2.25rem; font-weight: 600; color: {color};">{value_str}</div>
+    """, unsafe_allow_html=True)
+
 # --- Configuration de la page ---
 st.set_page_config(
     page_title="Mon Suivi Boursier",
@@ -52,27 +59,17 @@ elif page == "📊 Dashboard Global":
         sortino = clean_str_to_float(get_cell_value("valeurs", "B5"))
         beta = clean_str_to_float(get_cell_value("valeurs", "B6"))
         
-       # --- 1ère Ligne : Indicateurs Financiers ---
-        st.subheader("💶 Valeur du porte-feuille")
+        # --- 1ère Ligne : Indicateurs Financiers ---
+        st.subheader("💶 Valeur du portefeuille")
         col1, col2, col3 = st.columns(3)
-      # Fonction pour afficher un grand chiffre coloré selon sa valeur
-    def metric_colored(label, value_str, val_numeric):
-        color = "#00FF7F" if val_numeric >= 0 else "#FF4B4B" # Vert ou Rouge
-        st.markdown(f"""
-            <div style="font-size: 14px; color: rgb(163, 168, 184); margin-bottom: 2px;">{label}</div>
-            <div style="font-size: 2.25rem; font-weight: 600; color: {color};">{value_str}</div>
-        """, unsafe_allow_html=True)
+        
+        col1.metric("Valeur Totale", f"{total_valeur:,.2f} €")
+        
+        with col2:
+            metric_colored("Plus-Value Nette", f"{plus_value_nette:+,.2f} €", plus_value_nette)
 
-    # Utilisation dans tes colonnes :
-    col1, col2, col3 = st.columns(3)
-
-    col1.metric("Valeur Totale", f"{total_valeur:,.2f} €")
-
-    with col2:
-        metric_colored("Plus-Value Nette", f"{plus_value_nette:+,.2f} €", plus_value_nette)
-
-    with col3:
-        metric_colored("Plus-Value Latente", f"{plus_value_latente:+,.2f} €", plus_value_latente)
+        with col3:
+            metric_colored("Plus-Value Latente", f"{plus_value_latente:+,.2f} €", plus_value_latente)
 
         st.markdown("---")
 
