@@ -26,7 +26,7 @@ def get_unrealized_pnl(df_holding: pd.DataFrame) -> float:
     plus_values = clean_financial_column(df_holding.iloc[:, 7])
     return float(plus_values.sum())
 
-def get_sharpe_ratio_raw() -> str:
+def get_sharpe_ratio() -> str:
     try:
         val = get_cell_value("Valeurs", "B4")
         return str(val) if val is not None else "N/A"
