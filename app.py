@@ -50,6 +50,10 @@ elif page == "📊 Dashboard Global":
         df_hist = load_sheet_data("histporte")
         
         st.success("Données du portefeuille chargées avec succès !")
+
+        # 5. Affichage du tableau brut 'Holding' dans un expander
+        with st.expander("Afficher le tableau brut 'Holding'"):
+            st.dataframe(df_holding)
         
         # 2. Récupération des valeurs via les fonctions modulaires
         total_valeur = get_total_portfolio_value(df_holding)
@@ -112,10 +116,6 @@ elif page == "📊 Dashboard Global":
                 st.warning("Aucune donnée numérique valide trouvée pour afficher le camembert.")
         else:
             st.info("Colonnes insuffisantes dans l'onglet holding pour afficher la répartition.")
-        
-        # 5. Affichage du tableau brut 'Holding' dans un expander
-        with st.expander("Afficher le tableau brut 'Holding'"):
-            st.dataframe(df_holding)
 
     except Exception as e:
         st.error(f"Une erreur est survenue sur le Dashboard Global : {e}")
