@@ -27,12 +27,12 @@ def get_unrealized_pnl(df_holding: pd.DataFrame) -> float:
     return float(plus_values.sum())
 
 def get_sharpe_ratio() -> float:
-    """Récupère le ratio de Sharpe depuis l'onglet 'Valeurs', cellule B4."""
+    """Récupère le ratio de Sharpe (B4) depuis l'onglet 'Valeurs'."""
     try:
-        val = get_cell_value("Valeurs", "B4")
-        if val is None or val == "":
+        df = load_sheet_data("Valeurs")
+        val = df.iloc[3, 1]  # Ligne 4, Colonne B
+        if pd.isna(val) or val == "":
             return 0.0
-        # Remplace la virgule par un point si c'est une chaîne de caractères
         if isinstance(val, str):
             val = val.replace(",", ".").strip()
         return float(val)
@@ -40,20 +40,28 @@ def get_sharpe_ratio() -> float:
         return 0.0
 
 def get_sortino_ratio() -> float:
-    """Récupère le ratio de Sortino depuis l'onglet 'Valeurs', cellule B5."""
+    """Récupère le ratio de Sortino (B5) depuis l'onglet 'Valeurs'."""
     try:
-        val = get_cell_value("Valeurs", "B5")
-        cleaned = clean_financial_column(pd.Series([val])).iloc[0]
-        return float(cleaned)
+        df = load_sheet_data("Valeurs")
+        val = df.iloc[4, 1]  # Ligne 5, Colonne B
+        if pd.isna(val) or val == "":
+            return 0.0
+        if isinstance(val, str):
+            val = val.replace(",", ".").strip()
+        return float(val)
     except Exception:
         return 0.0
 
 def get_beta() -> float:
-    """Récupère le Béta depuis l'onglet 'Valeurs', cellule B6."""
+    """Récupère le Béta (B6) depuis l'onglet 'Valeurs'."""
     try:
-        val = get_cell_value("Valeurs", "B6")
-        cleaned = clean_financial_column(pd.Series([val])).iloc[0]
-        return float(cleaned)
+        df = load_sheet_data("Valeurs")
+        val = df.iloc[5, 1]  # Ligne 6, Colonne B
+        if pd.isna(val) or val == "":
+            return 0.0
+        if isinstance(val, str):
+            val = val.replace(",", ".").strip()
+        return float(val)
     except Exception:
         return 0.0
 
