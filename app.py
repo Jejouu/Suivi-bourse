@@ -53,6 +53,7 @@ elif page == "📊 Dashboard Global":
         beta = clean_str_to_float(get_cell_value("valeurs", "B6"))
         
        # --- 1ère Ligne : Indicateurs Financiers ---
+        st.subheader("💶 Valeur du porte-feuille")
         col1, col2, col3 = st.columns(3)
         col1.metric("Valeur Totale", f"{total_valeur:,.2f} €")
         col2.metric("Plus-Value Nette", f"{plus_value_nette:,.2f} €")
