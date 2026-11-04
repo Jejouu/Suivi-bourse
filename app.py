@@ -57,9 +57,12 @@ elif page == "📊 Dashboard Global":
         col1.metric("Valeur Totale", f"{total_valeur:,.2f} €")
         col2.metric("Plus-Value Nette", f"{plus_value_nette:,.2f} €")
         col3.metric("Plus-Value Latente", f"{plus_value_latente:,.2f} €")
-        col4.metric("Sharpe", f"{sharpe:.2f}")
+        """col4.metric("Sharpe", f"{sharpe:.2f}")
         col5.metric("Sortino", f"{sortino:.2f}")
-        col6.metric("Béta", f"{beta:.2f}")
+        col6.metric("Béta", f"{beta:.2f}")"""
+        col4.metric("Sharpe", sharpe)
+        col5.metric("Sortino",{sortino})
+        col6.metric("Béta", beta)
         
         st.markdown("---")
         
