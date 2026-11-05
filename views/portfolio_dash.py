@@ -60,15 +60,21 @@ def get_beta() -> float:
     except Exception:
         return 0.0
 
-def render_ratio_slider(label, value, min_val=-1.0, max_val=3.0):
-    """Affiche un ratio avec une barre de progression visuelle de type curseur."""
-    # Calcul du pourcentage pour positionner le curseur (borné entre 0 et 100)
+def render_ratio_slider(label, value, min_val=-1.0, max_val=3.0, ratio_type="sharpe"):
+    """Affiche un ratio avec sa jauge personnalisée sans texte d'appréciation."""
     percent = max(0.0, min(100.0, ((value - min_val) / (max_val - min_val)) * 100))
     
+    # Choix du dégradé selon le type de ratio
+    if ratio_type in ["sharpe", "sortino"]:
+        gradient = "linear-gradient(to right, #ff4b4b, #ffa500, #ffeb3b, #00FF7F)"
+    else:  # Bêta (Bleu -> Vert -> Jaune -> Orange -> Rouge)
+        gradient = "linear-gradient(to right, #00bfff, #00FF7F, #ffeb3b, #ffa500, #ff4b4b)"
+
     st.markdown(f"""
-        <div style="font-size: 14px; color: rgb(163, 168, 184); margin-bottom: 2px;">{label}</div>
-        <div style="font-size: 2.25rem; font-weight: 600; color: #FFFFFF; margin-bottom: 8px;">{value:.2f}</div>
-        <div style="position: relative; width: 100%; height: 10px; background: linear-gradient(to right, #ff4b4b, #ffa500, #ffeb3b, #00FF7F); border-radius: 5px; margin-bottom: 5px;">
+        <div style="font-size: 14px; color: rgb(163, 168, 184); margin-bottom: 4px;">
+            <b>{label}</b> : <span style="color: #FFFFFF;">{value:.2f}</span>
+        </div>
+        <div style="position: relative; width: 100%; height: 10px; background: {gradient}; border-radius: 5px; margin-bottom: 4px;">
             <div style="position: absolute; top: -5px; left: calc({percent}% - 8px); width: 18px; height: 18px; background-color: #f0f2f6; border: 2px solid #31333F; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.3);"></div>
         </div>
         <div style="display: flex; justify-content: space-between; font-size: 11px; color: rgb(128, 128, 128);">
