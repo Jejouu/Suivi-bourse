@@ -12,7 +12,7 @@ from views.portfolio_dash import (
     get_unrealized_pnl,
     get_sharpe_ratio,
     get_sortino_ratio,
-    get_beta
+    get_beta,
     render_ratio_slider
 )
 
