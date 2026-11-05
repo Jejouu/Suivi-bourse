@@ -114,7 +114,8 @@ elif page == "📊 Dashboard Global":
             valeur_formatee = f"{signe_pnl}{plus_value_nette:,.2f} € / {signe_pct}{pourcentage_pnl:.2f} %"
             metric_colored(
                 label="Plus-Value Nette",
-                value=valeur_formatee
+                value_str=valeur_formatee,
+                val_numeric=plus_value_nette 
             )
 
         with col3:
