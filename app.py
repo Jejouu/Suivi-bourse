@@ -83,13 +83,13 @@ elif page == "📊 Dashboard Global":
         col4, col5, col6 = st.columns(3)
         
         with col4:
-            render_ratio_slider("Sharpe", sharpe, min_val=-1.0, max_val=3.0)
+            render_ratio_slider("Ratio de Sharpe", sharpe, min_val=-1.0, max_val=3.0, ratio_type="sharpe")
             
         with col5:
-            render_ratio_slider("Sortino", sortino, min_val=-1.0, max_val=5.0)
+            render_ratio_slider("Ratio de Sortino", sortino, min_val=0.0, max_val=5.0, ratio_type="sortino")
             
         with col6:
-            render_ratio_slider("Béta", beta, min_val=-1.0, max_val=2.0)
+            render_ratio_slider("Bêta (S&P 500)", beta, min_val=-1.0, max_val=2.0, ratio_type="beta")
 
         st.markdown("---")
         
