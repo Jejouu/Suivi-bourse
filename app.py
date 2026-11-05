@@ -209,9 +209,9 @@ elif page == "📊 Dashboard Global":
             "couleurs": ["#F3B530", "#00FF7F", "#4169E1"],  # Couleurs personnalisées pour tes 3 parts
             "trou": 0.4,                                     # Taille du trou central (effet donut)
             "marge_haut": 50,
-            "marge_bas": 20,
-            "marge_gauche": 50,
-            "marge_droite": 50
+            "marge_bas": 30,
+            "marge_gauche": 60,
+            "marge_droite": 60
         }
         
         with col_Rep:
