@@ -155,7 +155,7 @@ elif page == "📊 Dashboard Global":
                 st.info("Colonnes insuffisantes pour accéder à la colonne J.")
 
         config_graphique_latente = {
-            "largeur_barre": 0.2,
+            "largeur_barre": 0.15,
             "taille_police_texte": 14,
             "taille_police_ticker": 14,
             "couleur_ticker": "#F3B530",
