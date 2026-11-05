@@ -106,7 +106,10 @@ elif page == "📊 Dashboard Global":
         st.subheader("💶 Valeur du portefeuille")
         col1, col2, col3 = st.columns(3)
         
-        col1.metric("Valeur Totale", f"{total_valeur:,.2f} €")
+        col1.markdown(f"""
+            <div style="font-size: 14px; color: #FFFFFF; font-weight: 500; margin-bottom: 2px;">Valeur Totale</div>
+            <div style="font-size: 2.25rem; font-weight: 600; color: #FFFFFF;">{total_valeur:,.2f} €</div>
+        """, unsafe_allow_html=True)
         
         with col2:
             signe_pnl = "+" if plus_value_nette >  0 else ""
