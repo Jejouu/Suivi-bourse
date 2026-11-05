@@ -132,8 +132,8 @@ elif page == "📊 Dashboard Global":
         # --- Configuration globale du graphique ---
         config_graphique_pv = {
             "largeur_barre": 0.15,
-            "taille_police_texte": 16,
-            "taille_police_ticker": 16,
+            "taille_police_texte": 14,
+            "taille_police_ticker": 14,
             "couleur_ticker": "#F3B530",
             "couleur_positif": "#00FF7F",
             "couleur_negatif": "#ff4b4b",
