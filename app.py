@@ -136,8 +136,12 @@ elif page == "📊 Dashboard Global":
                 }).dropna(subset=["Actif", "PV_Jour"])
                 
                 if not df_pv_jour.empty:
-                    # Formatage explicite du texte pour inclure le symbole €
                     df_pv_jour["Texte_Affiche"] = df_pv_jour["PV_Jour"].apply(lambda x: f"{x:,.2f} €")
+                    
+                    # Définition de la couleur selon la valeur (Vert > 0, Rouge < 0, Gris == 0)
+                    df_pv_jour["Couleur"] = df_pv_jour["PV_Jour"].apply(
+                        lambda x: "#00FF7F" if x > 0 else ("#ff4b4b" if x < 0 else "#808080")
+                    )
                     
                     fig_pv = px.bar(
                         df_pv_jour,
@@ -148,18 +152,18 @@ elif page == "📊 Dashboard Global":
                     )
                     
                     fig_pv.update_traces(
-                        marker_color="#808080",
-                        textfont=dict(size=20, color="white"),
+                        marker_color=df_pv_jour["Couleur"],  # Application des couleurs dynamiques
+                        textfont=dict(size=16, color="white"),
                         textposition="outside",
                         textangle=0,
-                        width=0.2,
-                        cliponaxis=False  # Déplacé ici
+                        width=0.15,
+                        cliponaxis=False
                     )
                     
                     fig_pv.update_layout(
                         margin=dict(t=50, b=20, l=10, r=10),
                         xaxis_title="",
-                        yaxis_title="",
+                        yaxis_title="€",
                         plot_bgcolor="rgba(0,0,0,0)",
                         paper_bgcolor="rgba(0,0,0,0)",
                         font=dict(color="white")
