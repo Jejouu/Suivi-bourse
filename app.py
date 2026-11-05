@@ -96,7 +96,7 @@ elif page == "📊 Dashboard Global":
         pourcentage_pnl = (plus_value_nette / total_col_g * 100) if total_col_g != 0 else 0.0
         
         plus_value_latente = get_unrealized_pnl(df_holding)
-        pourcentage_pnl = (plus_value_latente / total_col_g * 100) if total_col_g != 0 else 0.0
+        pourcentage_lat = (plus_value_latente / total_col_g * 100) if total_col_g != 0 else 0.0
         
         sharpe = clean_str_to_float(get_cell_value("valeurs", "B4"))
         sortino = clean_str_to_float(get_cell_value("valeurs", "B5"))
@@ -119,7 +119,13 @@ elif page == "📊 Dashboard Global":
             )
 
         with col3:
-            metric_colored("Plus-Value Latente", f"{plus_value_latente:+,.2f} €", plus_value_latente)
+            signe_pnl = "+" if plus_value_latente >  0 else ""
+            signe_pct = "+" if pourcentage_lat > 0 else ""
+            valeur_formatee_Lat = f"{signe_pnl}{plus_value_latente:,.2f} € / {signe_pct}{pourcentage_lat:.2f} %"
+            metric_colored(
+                label="Plus-Value Latnte",
+                value_str=valeur_formatee_Lat,
+                val_numeric=plus_value_latente
 
         st.markdown("---")
 
