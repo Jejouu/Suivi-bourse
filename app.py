@@ -152,7 +152,7 @@ elif page == "📊 Dashboard Global":
                         textfont=dict(size=20, color="white"),
                         textposition="outside",
                         textangle=0,
-                        width=0.1,
+                        width=0.2,
                         cliponaxis=False  # Déplacé ici
                     )
                     
