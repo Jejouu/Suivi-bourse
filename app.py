@@ -150,13 +150,13 @@ elif page == "📊 Dashboard Global":
                         marker_color="#808080",
                         textfont_color="white",
                         textangle=0,
-                        width=0.4 
+                        width=0.2 
                     )
                     
                     fig_pv.update_layout(
                         margin=dict(t=20, b=20, l=10, r=10),
                         xaxis_title="",
-                        yaxis_title="€",
+                        yaxis_title="",
                         plot_bgcolor="rgba(0,0,0,0)",
                         paper_bgcolor="rgba(0,0,0,0)",
                         font=dict(color="white")
