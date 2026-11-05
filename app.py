@@ -120,6 +120,53 @@ elif page == "📊 Dashboard Global":
             render_ratio_slider("Bêta (S&P 500)", beta, min_val=-1.0, max_val=2.0, ratio_type="beta")
 
         st.markdown("---")
+
+        # --- Section Graphique : Plus-Value du Jour par Actif ---
+        st.subheader("📈 +/- Value du jour par actif")
+        
+        if not df_holding.empty and df_holding.shape[1] >= 10:  # Vérifie que la colonne J existe (index 9)
+            import plotly.express as px
+            
+            # Préparation du DataFrame pour le graphique
+            df_pv_jour = pd.DataFrame({
+                "Actif": df_holding.iloc[:, 0],  # Colonne A : Tickers/Noms
+                "PV_Jour": clean_financial_column(df_holding.iloc[:, 9])  # Colonne J : Plus-value du jour
+            }).dropna(subset=["Actif", "PV_Jour"])
+            
+            if not df_pv_jour.empty:
+                # Ajout d'une colonne de couleur conditionnelle (Vert si >= 0, Rouge si < 0)
+                df_pv_jour["Couleur"] = df_pv_jour["PV_Jour"].apply(lambda x: "#00FF7F" if x >= 0 else "#ff4b4b")
+                
+                # Création du graphique en barres
+                fig_pv = px.bar(
+                    df_pv_jour,
+                    x="Actif",
+                    y="PV_Jour",
+                    title="",
+                    text_auto=".2f"  # Affiche la valeur sur les barres
+                )
+                
+                # Personnalisation des couleurs et du design sombre pour s'accorder avec ton thème
+                fig_pv.update_traces(
+                    marker_color=df_pv_jour["Couleur"],
+                    textfont_color="white",
+                    textangle=0
+                )
+                
+                fig_pv.update_layout(
+                    margin=dict(t=20, b=20, l=20, r=20),
+                    xaxis_title="",
+                    yaxis_title="€",
+                    plot_bgcolor="rgba(0,0,0,0)",
+                    paper_bgcolor="rgba(0,0,0,0)",
+                    font=dict(color="white")
+                )
+                
+                st.plotly_chart(fig_pv, use_container_width=True)
+            else:
+                st.warning("Aucune donnée valide trouvée dans la colonne J pour la plus-value du jour.")
+        else:
+            st.info("L'onglet holding ne contient pas assez de colonnes pour accéder à la colonne J.")
         
         # 4. Section Graphique Camembert (Répartition par Actif)
         st.subheader("🥧 Répartition du Portefeuille par Actif")
