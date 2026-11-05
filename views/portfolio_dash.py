@@ -85,3 +85,10 @@ def render_ratio_slider(label, value, min_val=-1.0, max_val=3.0, ratio_type="sha
             <span>{max_val}</span>
         </div>
     """, unsafe_allow_html=True)
+
+def metric_colored(label, value_str, val_numeric):
+    color = "#00FF7F" if val_numeric >= 0 else "#FF4B4B" # Vert ou Rouge
+    st.markdown(f"""
+        <div style="font-size: 14px; color: rgb(163, 168, 184); margin-bottom: 2px;">{label}</div>
+        <div style="font-size: 2.25rem; font-weight: 600; color: {color};">{value_str}</div>
+    """, unsafe_allow_html=True)
