@@ -13,6 +13,7 @@ from views.portfolio_dash import (
     get_sharpe_ratio,
     get_sortino_ratio,
     get_beta
+    render_ratio_slider
 )
 
 def metric_colored(label, value_str, val_numeric):
@@ -78,11 +79,17 @@ elif page == "📊 Dashboard Global":
         st.markdown("---")
 
         # --- 2ème Ligne : Titre et Indicateurs de Risque ---
-        st.subheader("🔍 Analyse")
+       st.subheader("🔍 Analyse")
         col4, col5, col6 = st.columns(3)
-        col4.metric("Sharpe", f"{sharpe:.2f}")
-        col5.metric("Sortino", f"{sortino:.2f}")
-        col6.metric("Béta", f"{beta:.2f}")
+        
+        with col4:
+            render_ratio_slider("Sharpe", sharpe, min_val=-1.0, max_val=3.0)
+            
+        with col5:
+            render_ratio_slider("Sortino", sortino, min_val=-1.0, max_val=5.0)
+            
+        with col6:
+            render_ratio_slider("Béta", beta, min_val=-1.0, max_val=2.0)
 
         st.markdown("---")
         
