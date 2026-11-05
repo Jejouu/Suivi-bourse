@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import streamlit as st
 from Utils.loader import clean_financial_column, get_cell_value, load_sheet_data
 
 def get_total_portfolio_value(df_holding: pd.DataFrame) -> float:
