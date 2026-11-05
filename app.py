@@ -48,9 +48,6 @@ def check_password():
 if not check_password():
     st.stop()
 
-# Tout ton code normal commence ici (dashboard, onglets, etc.)
-st.success("Bienvenue sur ton tableau de bord !")
-
 # --- Configuration de la page ---
 st.set_page_config(
     page_title="Mon Suivi Boursier",
