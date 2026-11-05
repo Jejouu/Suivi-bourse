@@ -163,6 +163,10 @@ elif page == "📊 Dashboard Global":
                     fig_pv.update_layout(
                         margin=dict(t=50, b=20, l=10, r=10),
                         xaxis_title="",
+                        xaxis=dict(
+                            color="#FF8C00",  # Couleur des chiffres de l'axe (Orange)
+                            showgrid=True,    # Garder ou masquer les lignes horizontales
+                            gridcolor="rgba(255, 255, 255, 0.1)"
                         yaxis_title="€",
                         plot_bgcolor="rgba(0,0,0,0)",
                         paper_bgcolor="rgba(0,0,0,0)",
