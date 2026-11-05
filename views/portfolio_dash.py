@@ -142,3 +142,64 @@ def tracer_graphique_pv(df_pv_jour, config):
     )
     
     st.plotly_chart(fig_pv, use_container_width=True)
+
+def tracer_graphique_latente(df_latente, config):
+    """
+    Génère et affiche le graphique horizontal des plus-values latentes.
+    """
+    if df_latente.empty:
+        st.warning("Aucune donnée valide trouvée pour la plus-value latente.")
+        return
+
+    # Formatage du texte affiché au bout des barres (ex: +35,06 €)
+    df_latente["Texte_Affiche"] = df_latente["PV_Latente"].apply(lambda x: f"{x:+,.2f} €")
+    
+    # Mise en gras des tickers pour l'axe Y
+    df_latente["Actif_Gras"] = df_latente["Actif"].apply(lambda x: f"<b>{x}</b>")
+    
+    # Application des couleurs dynamiques (Vert > 0, Rouge < 0)
+    df_latente["Couleur"] = df_latente["PV_Latente"].apply(
+        lambda x: config["couleur_positif"] if x > 0 else (config["couleur_negatif"] if x < 0 else config["couleur_neutre"])
+    )
+    
+    # Création du graphique à barres horizontales
+    fig_latente = px.bar(
+        df_latente,
+        x="PV_Latente",
+        y="Actif_Gras",
+        orientation="h",
+        text="Texte_Affiche",
+        title=""
+    )
+    
+    # Paramétrage des barres et du texte à l'extérieur
+    fig_latente.update_traces(
+        marker_color=df_latente["Couleur"],
+        textfont=dict(size=config["taille_police_texte"], color="white"),
+        textposition="outside",  # Place le texte au bout de la barre
+        width=config["largeur_barre"],
+        cliponaxis=False
+    )
+    
+    # Mise en page (Layout)
+    fig_latente.update_layout(
+        margin=dict(t=config["marge_haut"], b=config["marge_bas"], l=config["marge_gauche"], r=config["marge_droite"]),
+        xaxis_title="",
+        yaxis_title="",
+        yaxis=dict(
+            tickfont=dict(color=config["couleur_ticker"], size=config["taille_police_ticker"]),
+            showgrid=False,
+            autorange="reversed"  # Pour afficher le premier actif en haut
+        ),
+        xaxis=dict(
+            showgrid=True,
+            gridcolor="rgba(255, 255, 255, 0.1)",
+            zeroline=True,
+            zerolinecolor="rgba(255, 255, 255, 0.3)"
+        ),
+        plot_bgcolor="rgba(0,0,0,0)",
+        paper_bgcolor="rgba(0,0,0,0)",
+        font=dict(color="white")
+    )
+    
+    st.plotly_chart(fig_latente, use_container_width=True)
