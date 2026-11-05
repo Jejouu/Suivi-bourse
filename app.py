@@ -111,7 +111,7 @@ elif page == "📊 Dashboard Global":
 
         # --- 2ème Ligne : Titre et Indicateurs de Risque ---
         st.subheader("🔍 Analyse")
-        col4, col5, col6 = st.columns(3)
+        col4, col5, col6 = st.columns([ 0.7, 0.7, 0.7])
         
         with col4:
             render_ratio_slider("Ratio de Sharpe", sharpe, min_val=-1.0, max_val=3.0, ratio_type="sharpe")
