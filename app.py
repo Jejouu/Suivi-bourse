@@ -111,7 +111,7 @@ elif page == "📊 Dashboard Global":
 
         # --- 2ème Ligne : Titre et Indicateurs de Risque ---
         st.subheader("🔍 Analyse")
-        col4, col5, col6 = st.columns([ 0.5, 0.5, 0.5])
+        col4, col5, col6 = st.columns([ 1, 1, 1])
         
         with col4:
             render_ratio_slider("Ratio de Sharpe", sharpe, min_val=-1.0, max_val=3.0, ratio_type="sharpe")
@@ -185,10 +185,10 @@ elif page == "📊 Dashboard Global":
             "titre": "🥧 Répartition des actifs",
             "couleurs": ["#F3B530", "#00FF7F", "#4169E1"],  # Couleurs personnalisées pour tes 3 parts
             "trou": 0.4,                                     # Taille du trou central (effet donut)
-            "marge_haut": 0,
+            "marge_haut": 50,
             "marge_bas": 0,
-            "marge_gauche": 0,
-            "marge_droite": 0
+            "marge_gauche": 30,
+            "marge_droite": 30
         }
         
         with col_Rep:
