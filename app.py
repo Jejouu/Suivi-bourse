@@ -131,6 +131,7 @@ elif page == "📊 Dashboard Global":
         
         # --- Configuration globale du graphique ---
         config_graphique_pv = {
+            "titre": "📈 Plus-Value du jour",
             "largeur_barre": 0.15,
             "taille_police_texte": 14,
             "taille_police_ticker": 14,
@@ -155,6 +156,7 @@ elif page == "📊 Dashboard Global":
                 st.info("Colonnes insuffisantes pour accéder à la colonne J.")
 
         config_graphique_latente = {
+            "titre": "📊 Plus-Value Latente",
             "largeur_barre": 0.15,
             "taille_police_texte": 14,
             "taille_police_ticker": 14,
@@ -180,6 +182,7 @@ elif page == "📊 Dashboard Global":
                 st.warning("Colonnes insuffisantes pour accéder à la colonne H.")
 
         config_graphique_pie = {
+            "titre": "🥧 Répartition des actifs",
             "couleurs": ["#F3B530", "#00FF7F", "#4169E1"],  # Couleurs personnalisées pour tes 3 parts
             "trou": 0.4,                                     # Taille du trou central (effet donut)
             "marge_haut": 0,
