@@ -164,7 +164,7 @@ elif page == "📊 Dashboard Global":
             "couleur_positif": "#00B0F0",
             "couleur_negatif": "#00B0F0",
             "couleur_neutre": "#808080",
-            "marge_haut": 30,
+            "marge_haut": 40,
             "marge_bas": 20,
             "marge_gauche": 10,
             "marge_droite": 50
