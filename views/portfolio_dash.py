@@ -80,7 +80,7 @@ def render_ratio_slider(label, value, min_val=-1.0, max_val=3.0, ratio_type="sha
         <div style="position: relative; width: 100%; height: 10px; background: {gradient}; border-radius: 5px; margin-bottom: 4px;">
             <div style="position: absolute; top: -5px; left: calc({percent}% - 8px); width: 18px; height: 18px; background-color: #f0f2f6; border: 2px solid #31333F; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.3);"></div>
         </div>
-        <div style="display: flex; justify-content: space-between; font-size: 11px; color: rgb(128, 128, 128);">
+        <div style="display: flex; justify-content: space-between; font-size: 14px; color: rgb(128, 128, 128);">
             <span>{min_val}</span>
             <span>{max_val}</span>
         </div>
