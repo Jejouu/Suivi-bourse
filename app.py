@@ -107,7 +107,7 @@ elif page == "📊 Dashboard Global":
         col1, col2, col3 = st.columns(3)
         
         col1.markdown(f"""
-            <div style="font-size: 14px; color: #FFFFFF; font-weight: 500; margin-bottom: 2px;">Valeur Totale</div>
+            <div style="font-size: 22px; color: #FFFFFF; font-weight: 500; margin-bottom: 2px;">Valeur Totale</div>
             <div style="font-size: 2.25rem; font-weight: 600; color: #FFFFFF;">{total_valeur:,.2f} €</div>
         """, unsafe_allow_html=True)
         
