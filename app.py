@@ -153,7 +153,7 @@ elif page == "📊 Dashboard Global":
                         textfont=dict(size=16, color="white"),  # Taille du texte augmentée (14px)
                         textposition="outside",                # Place le texte au-dessus de la barre
                         textangle=0,
-                        width=0.3 
+                        width=0.2 
                     )
                     
                     fig_pv.update_layout(
