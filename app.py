@@ -16,6 +16,40 @@ from views.portfolio_dash import (
     render_ratio_slider
 )
 
+import streamlit as st
+
+def check_password():
+    """Vérifie si le code d'accès est correct."""
+    # Tu peux changer le code ici ou le stocker dans st.secrets["PASSWORD"]
+    CODE_SECRET = "1234"  
+
+    if "password_correct" not in st.session_state:
+        st.session_state["password_correct"] = False
+
+    if st.session_state["password_correct"]:
+        return True
+
+    # Interface de saisie du code
+    st.header("🔒 Accès restreint")
+    password = st.text_input("Veuillez entrer le code d'accès :", type="password")
+    
+    if st.button("Valider"):
+        if password == CODE_SECRET:
+            st.session_state["password_correct"] = True
+            st.rerun()
+        else:
+            st.error("Code incorrect.")
+            
+    return False
+
+# --- APPLICATION PRINCIPALE ---
+# Si le code n'est pas validé, on stoppe l'exécution de la suite de la page
+if not check_password():
+    st.stop()
+
+# Tout ton code normal commence ici (dashboard, onglets, etc.)
+st.success("Bienvenue sur ton tableau de bord !")
+
 def metric_colored(label, value_str, val_numeric):
     color = "#00FF7F" if val_numeric >= 0 else "#FF4B4B" # Vert ou Rouge
     st.markdown(f"""
