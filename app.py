@@ -177,7 +177,16 @@ elif page == "📊 Dashboard Global":
                 tracer_graphique_latente(df_latente, config_graphique_latente)
             else:
                 st.warning("Colonnes insuffisantes pour accéder à la colonne H.")
-            
+
+        config_graphique_pie = {
+            "couleurs": ["#F3B530", "#00FF7F", "#4169E1"],  # Couleurs personnalisées pour tes 3 parts
+            "trou": 0.3,                                     # Taille du trou central (effet donut)
+            "marge_haut": 0,
+            "marge_bas": 0,
+            "marge_gauche": 0,
+            "marge_droite": 0
+        }
+        
         with col_Rep:
             if not df_holding.empty and df_holding.shape[1] > 4:
                 import plotly.express as px
@@ -190,25 +199,14 @@ elif page == "📊 Dashboard Global":
                 # Filtrer les valeurs strictement positives
                 df_pie = df_pie[df_pie["Valeur"] > 0]
                 
-                if not df_pie.empty:
-                    fig = px.pie(
-                        df_pie, 
-                        names="Actif", 
-                        values="Valeur", 
-                        hole=0.4, 
-                        title=""
-                    )
-                    fig.update_traces(textposition='inside', textinfo='percent+label')
-                    fig.update_layout(margin=dict(t=0, b=0, l=0, r=0))
-                    
-                    st.plotly_chart(fig, use_container_width=True)
-                else:
-                    st.warning("Aucune donnée numérique valide trouvée pour afficher le camembert.")
+                # Appel de la fonction centralisée
+                tracer_graphique_pie(df_pie, config_graphique_pie)
             else:
                 st.info("Colonnes insuffisantes dans l'onglet holding pour afficher la répartition.")
-
+    
     except Exception as e:
         st.error(f"Une erreur est survenue sur le Dashboard Global : {e}")
+    
 elif page == "📈 Vue Détaillée par Actif":
     st.header("📈 Vue Détaillée par Actif")
     try:
