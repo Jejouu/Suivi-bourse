@@ -129,7 +129,12 @@ def tracer_graphique_pv(df_pv_jour, config):
     
     # Application de la mise en page (Layout)
     fig_pv.update_layout(
-        title=dict(text=config["titre"], font=dict(size=18, color="white")),
+        title=dict(
+            text=config["titre"], 
+            font=dict(size=18, color="white"),
+            x=0.5,              # Positionne le titre au milieu (0.5)
+            xanchor='center'    # Ancre le centre du texte sur cette position
+        ),
         margin=dict(t=config["marge_haut"], b=config["marge_bas"], l=10, r=10),
         xaxis_title="",
         xaxis=dict(
@@ -184,7 +189,12 @@ def tracer_graphique_latente(df_latente, config):
     
     # Mise en page (Layout)
     fig_latente.update_layout(
-        title=dict(text=config["titre"], font=dict(size=18, color="white")),
+        title=dict(
+            text=config["titre"], 
+            font=dict(size=18, color="white"),
+            x=0.5,              # Positionne le titre au milieu (0.5)
+            xanchor='center'    # Ancre le centre du texte sur cette position
+        ),
         margin=dict(t=config["marge_haut"], b=config["marge_bas"], l=config["marge_gauche"], r=config["marge_droite"]),
         xaxis_title="",
         yaxis_title="",
@@ -231,7 +241,12 @@ def tracer_graphique_pie(df_pie, config):
     
     # Mise en page transparente et adaptée au mode sombre
     fig.update_layout(
-        title=dict(text=config["titre"], font=dict(size=18, color="white")),
+        title=dict(
+            text=config["titre"], 
+            font=dict(size=18, color="white"),
+            x=0.5,              # Positionne le titre au milieu (0.5)
+            xanchor='center'    # Ancre le centre du texte sur cette position
+        ),
         margin=dict(
             t=config["marge_haut"], 
             b=config["marge_bas"], 
