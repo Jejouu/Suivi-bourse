@@ -84,7 +84,7 @@ elif page == "📊 Dashboard Global":
         st.success("Données du portefeuille chargées avec succès !")
 
         # 5. Affichage du tableau brut 'Holding' dans un expander
-        with st.expander("Afficher le tableau brut 'Holding'"):
+        with st.expander("Holding"):
             st.dataframe(df_holding)
         
         # 2. Récupération des valeurs via les fonctions modulaires
