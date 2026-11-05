@@ -167,7 +167,7 @@ elif page == "📊 Dashboard Global":
             "marge_droite": 50
         }
         
-       with col_vide:
+        with col_vide:
             if not df_holding.empty and df_holding.shape[1] >= 8:
                 df_latente = pd.DataFrame({
                     "Actif": df_holding.iloc[:, 0],
