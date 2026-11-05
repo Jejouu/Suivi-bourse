@@ -157,7 +157,7 @@ elif page == "📊 Dashboard Global":
 
         config_graphique_latente = {
             "titre": "📊 Plus-Value Latente",
-            "largeur_barre": 0.15,
+            "largeur_barre": 0.25,
             "taille_police_texte": 14,
             "taille_police_ticker": 14,
             "couleur_ticker": "#F3B530",
