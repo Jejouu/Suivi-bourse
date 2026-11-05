@@ -15,7 +15,8 @@ from views.portfolio_dash import (
     get_beta,
     render_ratio_slider,
     metric_colored,
-    tracer_graphique_pv
+    tracer_graphique_pv,
+    tracer_graphique_latente
 )
 
 import streamlit as st
@@ -151,9 +152,33 @@ elif page == "📊 Dashboard Global":
                 tracer_graphique_pv(df_pv_jour, config_graphique_pv)
             else:
                 st.info("Colonnes insuffisantes pour accéder à la colonne J.")
+
+        config_graphique_latente = {
+            "largeur_barre": 0.4,
+            "taille_police_texte": 14,
+            "taille_police_ticker": 14,
+            "couleur_ticker": "#F3B530",
+            "couleur_positif": "#00FF7F",
+            "couleur_negatif": "#FF4B4B",
+            "couleur_neutre": "#808080",
+            "marge_haut": 30,
+            "marge_bas": 20,
+            "marge_gauche": 10,
+            "marge_droite": 50
+        }
         
         with col_vide:
-            st.info("Espace réservé pour le prochain graphique (2/3)")
+            if not df_holding.empty:
+                # Extraction propre par nom de colonne (Désignation = Col A, Plus-value latente = Colonne H environ)
+                df_latente = pd.DataFrame({
+                    "Actif": df_holding["Désignation"],
+                    "PV_Latente": clean_financial_column(df_holding["+/- value latente"])
+                }).dropna(subset=["Actif", "PV_Latente"])
+                
+                tracer_graphique_latente(df_latente, config_graphique_latente)
+            else:
+                st.info("Données du portefeuille non disponibles.")
+            
         
         # 4. Section Graphique Camembert (Répartition par Actif)
         st.subheader("🥧 Répartition du Portefeuille par Actif")
