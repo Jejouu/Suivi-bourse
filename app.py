@@ -126,7 +126,7 @@ elif page == "📊 Dashboard Global":
       # --- Section Graphique : Plus-Value du Jour par Actif (1/3 de la largeur) ---
         st.subheader("📈 +/- Value du jour par actif")
         
-        col_graphe, col_vide = st.columns([1, 2])
+        col_PL_jour, col_PL_Lat, col_Rep = st.columns([ 1, 2, 1])
         
         # --- Configuration globale du graphique ---
         config_graphique_pv = {
@@ -141,7 +141,7 @@ elif page == "📊 Dashboard Global":
             "marge_bas": 20
         }
 
-        with col_graphe:
+        with col_PL_jour:
             if not df_holding.empty and df_holding.shape[1] >= 10:
                 df_pv_jour = pd.DataFrame({
                     "Actif": df_holding.iloc[:, 0],
@@ -167,7 +167,7 @@ elif page == "📊 Dashboard Global":
             "marge_droite": 50
         }
         
-        with col_vide:
+        with col_PL_Lat:
             if not df_holding.empty and df_holding.shape[1] >= 8:
                 df_latente = pd.DataFrame({
                     "Actif": df_holding.iloc[:, 0],
@@ -178,37 +178,34 @@ elif page == "📊 Dashboard Global":
             else:
                 st.warning("Colonnes insuffisantes pour accéder à la colonne H.")
             
-        
-        # 4. Section Graphique Camembert (Répartition par Actif)
-        st.subheader("🥧 Répartition du Portefeuille par Actif")
-        
-        if not df_holding.empty and df_holding.shape[1] > 4:
-            import plotly.express as px
-            
-            df_pie = pd.DataFrame({
-                "Actif": df_holding.iloc[:, 0],
-                "Valeur": clean_financial_column(df_holding.iloc[:, 4])
-            }).dropna(subset=["Actif", "Valeur"])
-            
-            # Filtrer les valeurs strictement positives
-            df_pie = df_pie[df_pie["Valeur"] > 0]
-            
-            if not df_pie.empty:
-                fig = px.pie(
-                    df_pie, 
-                    names="Actif", 
-                    values="Valeur", 
-                    hole=0.4, 
-                    title=""
-                )
-                fig.update_traces(textposition='inside', textinfo='percent+label')
-                fig.update_layout(margin=dict(t=0, b=0, l=0, r=0))
+        with col_PL_Rep:
+            if not df_holding.empty and df_holding.shape[1] > 4:
+                import plotly.express as px
                 
-                st.plotly_chart(fig, use_container_width=True)
+                df_pie = pd.DataFrame({
+                    "Actif": df_holding.iloc[:, 0],
+                    "Valeur": clean_financial_column(df_holding.iloc[:, 4])
+                }).dropna(subset=["Actif", "Valeur"])
+                
+                # Filtrer les valeurs strictement positives
+                df_pie = df_pie[df_pie["Valeur"] > 0]
+                
+                if not df_pie.empty:
+                    fig = px.pie(
+                        df_pie, 
+                        names="Actif", 
+                        values="Valeur", 
+                        hole=0.4, 
+                        title=""
+                    )
+                    fig.update_traces(textposition='inside', textinfo='percent+label')
+                    fig.update_layout(margin=dict(t=0, b=0, l=0, r=0))
+                    
+                    st.plotly_chart(fig, use_container_width=True)
+                else:
+                    st.warning("Aucune donnée numérique valide trouvée pour afficher le camembert.")
             else:
-                st.warning("Aucune donnée numérique valide trouvée pour afficher le camembert.")
-        else:
-            st.info("Colonnes insuffisantes dans l'onglet holding pour afficher la répartition.")
+                st.info("Colonnes insuffisantes dans l'onglet holding pour afficher la répartition.")
 
     except Exception as e:
         st.error(f"Une erreur est survenue sur le Dashboard Global : {e}")
