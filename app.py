@@ -121,10 +121,9 @@ elif page == "📊 Dashboard Global":
 
         st.markdown("---")
 
-       # --- Section Graphique : Plus-Value du Jour par Actif (1/3 de la largeur) ---
+      # --- Section Graphique : Plus-Value du Jour par Actif (1/3 de la largeur) ---
         st.subheader("📈 +/- Value du jour par actif")
         
-        # Création de deux colonnes : 1/3 pour ce graphique, 2/3 pour le futur graphique
         col_graphe, col_vide = st.columns([1, 2])
         
         with col_graphe:
@@ -137,24 +136,28 @@ elif page == "📊 Dashboard Global":
                 }).dropna(subset=["Actif", "PV_Jour"])
                 
                 if not df_pv_jour.empty:
+                    # Formatage explicite du texte pour inclure le symbole €
+                    df_pv_jour["Texte_Affiche"] = df_pv_jour["PV_Jour"].apply(lambda x: f"{x:,.2f} €")
+                    
                     fig_pv = px.bar(
                         df_pv_jour,
                         x="Actif",
                         y="PV_Jour",
-                        title="",
-                        text_auto=".2f"
+                        text="Texte_Affiche",
+                        title=""
                     )
                     
-                    # Barres en gris, plus fines (width=0.4)
+                    # Personnalisation : barres grises fines, texte au-dessus et plus grand
                     fig_pv.update_traces(
                         marker_color="#808080",
-                        textfont_color="white",
+                        textfont=dict(size=16, color="white"),  # Taille du texte augmentée (14px)
+                        textposition="outside",                # Place le texte au-dessus de la barre
                         textangle=0,
-                        width=0.2 
+                        width=0.3 
                     )
                     
                     fig_pv.update_layout(
-                        margin=dict(t=20, b=20, l=10, r=10),
+                        margin=dict(t=30, b=20, l=10, r=10),  # Marge haute un peu plus large pour laisser de la place au texte
                         xaxis_title="",
                         yaxis_title="",
                         plot_bgcolor="rgba(0,0,0,0)",
@@ -169,7 +172,6 @@ elif page == "📊 Dashboard Global":
                 st.info("Colonnes insuffisantes pour accéder à la colonne J.")
                 
         with col_vide:
-            # Espace réservé pour ton prochain graphique sur les 2/3 restants
             st.info("Espace réservé pour le prochain graphique (2/3)")
         
         # 4. Section Graphique Camembert (Répartition par Actif)
