@@ -1,4 +1,5 @@
 import pandas as pd
+import plotly.express as px
 import numpy as np
 import streamlit as st
 from Utils.loader import clean_financial_column, get_cell_value, load_sheet_data
@@ -92,3 +93,57 @@ def metric_colored(label, value_str, val_numeric):
         <div style="font-size: 14px; color: #FFFFFF; font-weight: 500; margin-bottom: 2px;">{label}</div>
         <div style="font-size: 2.25rem; font-weight: 600; color: {color};">{value_str}</div>
     """, unsafe_allow_html=True)
+
+def tracer_graphique_pv(df_pv_jour, config):
+    """
+    Génère et affiche le graphique de P&L journalier selon la configuration fournie.
+    """
+    if df_pv_jour.empty:
+        st.warning("Aucune donnée valide trouvée dans la colonne J.")
+        return
+
+    # Formatage du texte affiché au-dessus des barres
+    df_pv_jour["Texte_Affiche"] = df_pv_jour["PV_Jour"].apply(lambda x: f"{x:,.2f} €")
+    
+    # Mise en gras des tickers pour l'axe X
+    df_pv_jour["Actif_Gras"] = df_pv_jour["Actif"].apply(lambda x: f"<b>{x}</b>")
+    
+    # Application des couleurs dynamiques selon la configuration
+    df_pv_jour["Couleur"] = df_pv_jour["PV_Jour"].apply(
+        lambda x: config["couleur_positif"] if x > 0 else (config["couleur_negatif"] if x < 0 else config["couleur_neutre"])
+    )
+    
+    # Création de la figure Plotly
+    fig_pv = px.bar(
+        df_pv_jour,
+        x="Actif_Gras",
+        y="PV_Jour",
+        text="Texte_Affiche",
+        title=""
+    )
+    
+    # Application des paramètres visuels des barres
+    fig_pv.update_traces(
+        marker_color=df_pv_jour["Couleur"],
+        textfont=dict(size=config["taille_police_texte"], color="white"),
+        textposition="outside",
+        textangle=0,
+        width=config["largeur_barre"],
+        cliponaxis=False
+    )
+    
+    # Application de la mise en page (Layout)
+    fig_pv.update_layout(
+        margin=dict(t=config["marge_haut"], b=config["marge_bas"], l=10, r=10),
+        xaxis_title="",
+        xaxis=dict(
+            tickfont=dict(color=config["couleur_ticker"], size=config["taille_police_ticker"]),
+            showgrid=False,
+        ),
+        yaxis_title="",
+        plot_bgcolor="rgba(0,0,0,0)",
+        paper_bgcolor="rgba(0,0,0,0)",
+        font=dict(color="white")
+    )
+    
+    st.plotly_chart(fig_pv, use_container_width=True)
