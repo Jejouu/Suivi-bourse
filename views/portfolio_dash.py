@@ -71,7 +71,7 @@ def render_ratio_slider(label, value, min_val=-1.0, max_val=3.0, ratio_type="sha
         gradient = "linear-gradient(to right, #00bfff, #00FF7F, #ffeb3b, #ffa500, #ff4b4b)"
 
     st.markdown(f"""
-        <div style="font-size: 18px; color: rgb(163, 168, 184); margin-bottom: 4px;">
+        <div style="font-size: 20px; color: rgb(163, 168, 184); margin-bottom: 4px;">
             <b>{label}</b> : <span style="color: #FFFFFF;">{value:.2f}</span>
         </div>
         <div style="position: relative; width: 100%; height: 10px; background: {gradient}; border-radius: 5px; margin-bottom: 4px;">
