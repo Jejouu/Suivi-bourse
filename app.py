@@ -127,7 +127,7 @@ elif page == "📊 Dashboard Global":
       # --- Section Graphique : Plus-Value du Jour par Actif (1/3 de la largeur) ---
         st.subheader("🧩 Répartition des actifs")
         
-        col_PL_jour, col_Rep, col_PL_Lat = st.columns([ 1, 1, 3])
+        col_PL_jour, col_Rep, col_PL_Lat = st.columns([ 0.5, 1.5, 2])
         
         # --- Configuration globale du graphique ---
         config_graphique_pv = {
