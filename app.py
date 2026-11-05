@@ -149,17 +149,17 @@ elif page == "📊 Dashboard Global":
                     
                     fig_pv.update_traces(
                         marker_color="#808080",
-                        textfont=dict(size=16, color="white"),
+                        textfont=dict(size=20, color="white"),
                         textposition="outside",
                         textangle=0,
-                        width=0.15,
+                        width=0.1,
                         cliponaxis=False  # Déplacé ici
                     )
                     
                     fig_pv.update_layout(
                         margin=dict(t=50, b=20, l=10, r=10),
                         xaxis_title="",
-                        yaxis_title="€",
+                        yaxis_title="",
                         plot_bgcolor="rgba(0,0,0,0)",
                         paper_bgcolor="rgba(0,0,0,0)",
                         font=dict(color="white")
