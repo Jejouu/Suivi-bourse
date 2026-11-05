@@ -78,7 +78,7 @@ elif page == "📊 Dashboard Global":
         df_holding = load_sheet_data("holding")
         df_hist = load_sheet_data("histporte")
         
-        st.success("Données du portefeuille chargées avec succès !",200)
+        st.success("Données du portefeuille chargées avec succès !")
 
         # 5. Affichage du tableau brut 'Holding' dans un expander
         with st.expander("Afficher le tableau brut 'Holding'"):
