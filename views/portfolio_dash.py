@@ -141,7 +141,7 @@ def tracer_graphique_pv(df_pv_jour, config):
         font=dict(color="white")
     )
     
-    st.plotly_chart(fig_pv, use_container_width=True)
+    st.plotly_chart(fig_pv, width="stretch")
 
 def tracer_graphique_latente(df_latente, config):
     """
@@ -202,4 +202,4 @@ def tracer_graphique_latente(df_latente, config):
         font=dict(color="white")
     )
     
-    st.plotly_chart(fig_latente, use_container_width=True)
+    st.plotly_chart(fig_latente, width="stretch")
