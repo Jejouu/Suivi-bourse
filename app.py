@@ -16,7 +16,8 @@ from views.portfolio_dash import (
     render_ratio_slider,
     metric_colored,
     tracer_graphique_pv,
-    tracer_graphique_latente
+    tracer_graphique_latente,
+    tracer_graphique_pie
 )
 
 import streamlit as st
