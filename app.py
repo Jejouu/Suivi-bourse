@@ -167,17 +167,16 @@ elif page == "📊 Dashboard Global":
             "marge_droite": 50
         }
         
-        with col_vide:
-            if not df_holding.empty:
-                # Extraction propre par nom de colonne (Désignation = Col A, Plus-value latente = Colonne H environ)
+       with col_vide:
+            if not df_holding.empty and df_holding.shape[1] >= 8:
                 df_latente = pd.DataFrame({
-                    "Actif": df_holding["Désignation"],
-                    "PV_Latente": clean_financial_column(df_holding["+/- value latente"])
+                    "Actif": df_holding.iloc[:, 0],
+                    "PV_Latente": clean_financial_column(df_holding.iloc[:, 7])  # Colonne H (index 7)
                 }).dropna(subset=["Actif", "PV_Latente"])
                 
                 tracer_graphique_latente(df_latente, config_graphique_latente)
             else:
-                st.info("Données du portefeuille non disponibles.")
+                st.warning("Colonnes insuffisantes pour accéder à la colonne H.")
             
         
         # 4. Section Graphique Camembert (Répartition par Actif)
