@@ -118,18 +118,13 @@ def tracer_graphique_pv(df_pv_jour, config):
         df_pv_jour,
         x="Actif_Gras",
         y="PV_Jour",
-        text="Texte_Affiche",
         title=""
     )
     
     # Application des paramètres visuels des barres
     fig_pv.update_traces(
         marker_color=df_pv_jour["Couleur"],
-        textfont=dict(size=config["taille_police_texte"], color="white"),
-        textposition="outside",
-        textangle=0,
         width=config["largeur_barre"],
-        cliponaxis=False
     )
     
     # Application de la mise en page (Layout)
