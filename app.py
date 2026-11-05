@@ -13,7 +13,8 @@ from views.portfolio_dash import (
     get_sharpe_ratio,
     get_sortino_ratio,
     get_beta,
-    render_ratio_slider
+    render_ratio_slider,
+    metric_colored
 )
 
 import streamlit as st
@@ -49,13 +50,6 @@ if not check_password():
 
 # Tout ton code normal commence ici (dashboard, onglets, etc.)
 st.success("Bienvenue sur ton tableau de bord !")
-
-def metric_colored(label, value_str, val_numeric):
-    color = "#00FF7F" if val_numeric >= 0 else "#FF4B4B" # Vert ou Rouge
-    st.markdown(f"""
-        <div style="font-size: 14px; color: rgb(163, 168, 184); margin-bottom: 2px;">{label}</div>
-        <div style="font-size: 2.25rem; font-weight: 600; color: {color};">{value_str}</div>
-    """, unsafe_allow_html=True)
 
 # --- Configuration de la page ---
 st.set_page_config(
