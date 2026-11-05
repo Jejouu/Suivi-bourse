@@ -181,7 +181,7 @@ elif page == "📊 Dashboard Global":
 
         config_graphique_pie = {
             "couleurs": ["#F3B530", "#00FF7F", "#4169E1"],  # Couleurs personnalisées pour tes 3 parts
-            "trou": 0.3,                                     # Taille du trou central (effet donut)
+            "trou": 0.4,                                     # Taille du trou central (effet donut)
             "marge_haut": 0,
             "marge_bas": 0,
             "marge_gauche": 0,
