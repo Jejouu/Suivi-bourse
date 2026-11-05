@@ -178,7 +178,7 @@ elif page == "📊 Dashboard Global":
             else:
                 st.warning("Colonnes insuffisantes pour accéder à la colonne H.")
             
-        with col_PL_Rep:
+        with col_Rep:
             if not df_holding.empty and df_holding.shape[1] > 4:
                 import plotly.express as px
                 
