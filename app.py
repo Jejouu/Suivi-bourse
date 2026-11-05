@@ -14,7 +14,8 @@ from views.portfolio_dash import (
     get_sortino_ratio,
     get_beta,
     render_ratio_slider,
-    metric_colored
+    metric_colored,
+    tracer_graphique_pv
 )
 
 import streamlit as st
@@ -126,62 +127,31 @@ elif page == "📊 Dashboard Global":
         
         col_graphe, col_vide = st.columns([1, 2])
         
+        # --- Configuration globale du graphique ---
+        config_graphique_pv = {
+            "largeur_barre": 0.15,
+            "taille_police_texte": 16,
+            "taille_police_ticker": 16,
+            "couleur_ticker": "#F3B530",
+            "couleur_positif": "#00FF7F",
+            "couleur_negatif": "#ff4b4b",
+            "couleur_neutre": "#808080",
+            "marge_haut": 50,
+            "marge_bas": 20
+        }
+
         with col_graphe:
             if not df_holding.empty and df_holding.shape[1] >= 10:
-                import plotly.express as px
-                
                 df_pv_jour = pd.DataFrame({
                     "Actif": df_holding.iloc[:, 0],
                     "PV_Jour": clean_financial_column(df_holding.iloc[:, 9])
                 }).dropna(subset=["Actif", "PV_Jour"])
-                
-                if not df_pv_jour.empty:
-                    df_pv_jour["Texte_Affiche"] = df_pv_jour["PV_Jour"].apply(lambda x: f"{x:,.2f} €")
-                    
-                    # Mise en gras des tickers pour l'axe X
-                    df_pv_jour["Actif_Gras"] = df_pv_jour["Actif"].apply(lambda x: f"<b>{x}</b>")
-                    
-                    # Définition de la couleur selon la valeur (Vert > 0, Rouge < 0, Gris == 0)
-                    df_pv_jour["Couleur"] = df_pv_jour["PV_Jour"].apply(
-                        lambda x: "#00FF7F" if x > 0 else ("#ff4b4b" if x < 0 else "#808080")
-                    )
-                    
-                    fig_pv = px.bar(
-                        df_pv_jour,
-                        x="Actif_Gras",  # Utilisation de la colonne en gras
-                        y="PV_Jour",
-                        text="Texte_Affiche",
-                        title=""
-                    )
-                    
-                    fig_pv.update_traces(
-                        marker_color=df_pv_jour["Couleur"],  # Application des couleurs dynamiques
-                        textfont=dict(size=16, color="white"),
-                        textposition="outside",
-                        textangle=0,
-                        width=0.15,
-                        cliponaxis=False
-                    )
-                    
-                    fig_pv.update_layout(
-                        margin=dict(t=50, b=20, l=10, r=10),
-                        xaxis_title="",
-                        xaxis=dict(
-                            tickfont=dict(color="#F3B530", size=16),  # Tickers en orange et taille 12
-                            showgrid=False,
-                        ),
-                        yaxis_title="",
-                        plot_bgcolor="rgba(0,0,0,0)",
-                        paper_bgcolor="rgba(0,0,0,0)",
-                        font=dict(color="white")
-                    )
-                    
-                    st.plotly_chart(fig_pv, use_container_width=True)
-                else:
-                    st.warning("Aucune donnée valide trouvée dans la colonne J.")
+        
+                # Appel de la fonction centralisée avec la config
+                tracer_graphique_pv(df_pv_jour, config_graphique_pv)
             else:
                 st.info("Colonnes insuffisantes pour accéder à la colonne J.")
-                
+        
         with col_vide:
             st.info("Espace réservé pour le prochain graphique (2/3)")
         
