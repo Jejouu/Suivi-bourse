@@ -138,6 +138,9 @@ elif page == "📊 Dashboard Global":
                 if not df_pv_jour.empty:
                     df_pv_jour["Texte_Affiche"] = df_pv_jour["PV_Jour"].apply(lambda x: f"{x:,.2f} €")
                     
+                    # Mise en gras des tickers pour l'axe X
+                    df_pv_jour["Actif_Gras"] = df_pv_jour["Actif"].apply(lambda x: f"<b>{x}</b>")
+                    
                     # Définition de la couleur selon la valeur (Vert > 0, Rouge < 0, Gris == 0)
                     df_pv_jour["Couleur"] = df_pv_jour["PV_Jour"].apply(
                         lambda x: "#00FF7F" if x > 0 else ("#ff4b4b" if x < 0 else "#808080")
@@ -145,7 +148,7 @@ elif page == "📊 Dashboard Global":
                     
                     fig_pv = px.bar(
                         df_pv_jour,
-                        x="Actif",
+                        x="Actif_Gras",  # Utilisation de la colonne en gras
                         y="PV_Jour",
                         text="Texte_Affiche",
                         title=""
@@ -164,8 +167,8 @@ elif page == "📊 Dashboard Global":
                         margin=dict(t=50, b=20, l=10, r=10),
                         xaxis_title="",
                         xaxis=dict(
-                            tickfont=dict(color="#FF8C00", size=12),  # Couleur des chiffres de l'axe (Orange)
-                            showgrid=False,    # Garder ou masquer les lignes
+                            tickfont=dict(color="#FF8C00", size=12),  # Tickers en orange et taille 12
+                            showgrid=False,
                         ),
                         yaxis_title="",
                         plot_bgcolor="rgba(0,0,0,0)",
