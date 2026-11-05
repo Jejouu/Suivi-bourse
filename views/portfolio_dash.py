@@ -66,7 +66,7 @@ def render_ratio_slider(label, value, min_val=-1.0, max_val=3.0, ratio_type="sha
     
     # Choix du dégradé selon le type de ratio
     if ratio_type in ["sharpe", "sortino"]:
-        gradient = "linear-gradient(to right, #ff4b4b, #ffa500, #ffeb3b, #00FF7F)"
+        gradient = "linear-gradient(to right, #ff4b4b, #ffa500, #ffeb3b, #00FF7F, #00FF7F, #00FF7F)"
     else:  # Bêta (Bleu -> Orange -> Jaune -> Vert -> Orange -> Rouge)
         gradient = "linear-gradient(to right, #00bfff, #ffa500, #ffeb3b,#00FF7F, #ffa500, #ff4b4b)"
 
