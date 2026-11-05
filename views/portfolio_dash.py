@@ -203,3 +203,41 @@ def tracer_graphique_latente(df_latente, config):
     )
     
     st.plotly_chart(fig_latente, width="stretch")
+
+def tracer_graphique_pie(df_pie, config):
+    """
+    Génère et affiche le diagramme circulaire du portefeuille.
+    """
+    if df_pie.empty:
+        st.warning("Aucune donnée numérique valide trouvée pour afficher le camembert.")
+        return
+        
+    fig = px.pie(
+        df_pie, 
+        names="Actif", 
+        values="Valeur", 
+        hole=config["trou"], 
+        title=""
+    )
+    
+    # Application des couleurs personnalisées et du texte
+    fig.update_traces(
+        textposition='inside', 
+        textinfo='percent+label',
+        marker=dict(colors=config["couleurs"])
+    )
+    
+    # Mise en page transparente et adaptée au mode sombre
+    fig.update_layout(
+        margin=dict(
+            t=config["marge_haut"], 
+            b=config["marge_bas"], 
+            l=config["marge_gauche"], 
+            r=config["marge_droite"]
+        ),
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        font=dict(color="white")
+    )
+    
+    st.plotly_chart(fig, width="stretch")
