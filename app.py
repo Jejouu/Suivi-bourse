@@ -167,7 +167,7 @@ elif page == "📊 Dashboard Global":
                         margin=dict(t=50, b=20, l=10, r=10),
                         xaxis_title="",
                         xaxis=dict(
-                            tickfont=dict(color="#FF8C00", size=12),  # Tickers en orange et taille 12
+                            tickfont=dict(color="#F3B530", size=16),  # Tickers en orange et taille 12
                             showgrid=False,
                         ),
                         yaxis_title="",
