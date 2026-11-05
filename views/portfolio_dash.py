@@ -255,7 +255,7 @@ def tracer_graphique_pie(df_pie, config):
         ),
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
-        font=dict(color="white")
+        font=dict(color="white"),
         showlegend=False
     )
     
