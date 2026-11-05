@@ -164,10 +164,10 @@ elif page == "📊 Dashboard Global":
                         margin=dict(t=50, b=20, l=10, r=10),
                         xaxis_title="",
                         xaxis=dict(
-                            color="#FF8C00",  # Couleur des chiffres de l'axe (Orange)
+                            tickfont=dict(color="#FF8C00", size=12),  # Couleur des chiffres de l'axe (Orange)
                             showgrid=False,    # Garder ou masquer les lignes
                         ),
-                        yaxis_title="€",
+                        yaxis_title="",
                         plot_bgcolor="rgba(0,0,0,0)",
                         paper_bgcolor="rgba(0,0,0,0)",
                         font=dict(color="white")
