@@ -126,7 +126,7 @@ elif page == "📊 Dashboard Global":
                 label="Plus-Value Latnte",
                 value_str=valeur_formatee_Lat,
                 val_numeric=plus_value_latente
-
+            )
         st.markdown("---")
 
         # --- 2ème Ligne : Titre et Indicateurs de Risque ---
