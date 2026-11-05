@@ -89,8 +89,15 @@ elif page == "📊 Dashboard Global":
         
         # 2. Récupération des valeurs via les fonctions modulaires
         total_valeur = get_total_portfolio_value(df_holding)
+
+        total_col_g = clean_financial_column(df_holding.iloc[:, 6]).sum()
+        
         plus_value_nette = get_net_pnl(df_holding)
+        pourcentage_pnl = (plus_value_nette / total_col_g * 100) if total_col_g != 0 else 0.0
+        
         plus_value_latente = get_unrealized_pnl(df_holding)
+        pourcentage_pnl = (plus_value_latente / total_col_g * 100) if total_col_g != 0 else 0.0
+        
         sharpe = clean_str_to_float(get_cell_value("valeurs", "B4"))
         sortino = clean_str_to_float(get_cell_value("valeurs", "B5"))
         beta = clean_str_to_float(get_cell_value("valeurs", "B6"))
@@ -102,7 +109,13 @@ elif page == "📊 Dashboard Global":
         col1.metric("Valeur Totale", f"{total_valeur:,.2f} €")
         
         with col2:
-            metric_colored("Plus-Value Nette", f"{plus_value_nette:+,.2f} €", plus_value_nette)
+            signe_pnl = "+" if plus_value_nette >  0 else ""
+            signe_pct = "+" if pourcentage_pnl > 0 else ""
+            valeur_formatee = f"{signe_pnl}{plus_value_nette:,.2f} € / {signe_pct}{pourcentage_pnl:.2f} %"
+            metric_colored(
+                label="Plus-Value Nette",
+                value=valeur_formatee
+            )
 
         with col3:
             metric_colored("Plus-Value Latente", f"{plus_value_latente:+,.2f} €", plus_value_latente)
