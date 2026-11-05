@@ -59,31 +59,19 @@ def get_beta() -> float:
     except Exception:
         return 0.0
 
-# ==========================================
-# 📅 HISTORIQUE & ÉVOLUTION TEMPORELLE
-# ==========================================
-
-def get_portfolio_performance(df_hist: pd.DataFrame, period: str = "1M") -> pd.DataFrame:
-    """
-    Filtre l'historique du portefeuille selon la période souhaitée 
-    ('1M', '3M', '6M', '1Y', 'ALL') pour alimenter le graphique dynamique.
-    """
-    if df_hist.empty or "Date" not in df_hist.columns:
-        return df_hist
+def render_ratio_slider(label, value, min_val=-1.0, max_val=3.0):
+    """Affiche un ratio avec une barre de progression visuelle de type curseur."""
+    # Calcul du pourcentage pour positionner le curseur (borné entre 0 et 100)
+    percent = max(0.0, min(100.0, ((value - min_val) / (max_val - min_val)) * 100))
     
-    df = df_hist.copy()
-    df['Date'] = pd.to_datetime(df['Date'])
-    df = df.sort_values('Date')
-    
-    date_max = df['Date'].max()
-    
-    periods_map = {
-        "1M": date_max - pd.DateOffset(months=1),
-        "3M": date_max - pd.DateOffset(months=3),
-        "6M": date_max - pd.DateOffset(months=6),
-        "1Y": date_max - pd.DateOffset(years=1),
-        "ALL": df['Date'].min()
-    }
-    
-    start_date = periods_map.get(period, df['Date'].min())
-    return df[df['Date'] >= start_date]
+    st.markdown(f"""
+        <div style="font-size: 14px; color: rgb(163, 168, 184); margin-bottom: 2px;">{label}</div>
+        <div style="font-size: 2.25rem; font-weight: 600; color: #FFFFFF; margin-bottom: 8px;">{value:.2f}</div>
+        <div style="position: relative; width: 100%; height: 10px; background: linear-gradient(to right, #ff4b4b, #ffa500, #ffeb3b, #00FF7F); border-radius: 5px; margin-bottom: 5px;">
+            <div style="position: absolute; top: -5px; left: calc({percent}% - 8px); width: 18px; height: 18px; background-color: #f0f2f6; border: 2px solid #31333F; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.3);"></div>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 11px; color: rgb(128, 128, 128);">
+            <span>{min_val}</span>
+            <span>{max_val}</span>
+        </div>
+    """, unsafe_allow_html=True)
