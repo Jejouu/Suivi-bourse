@@ -147,17 +147,18 @@ elif page == "📊 Dashboard Global":
                         title=""
                     )
                     
-                    # Personnalisation : barres grises fines, texte au-dessus et plus grand
+                    # Barres plus fines et texte agrandi au-dessus
                     fig_pv.update_traces(
                         marker_color="#808080",
-                        textfont=dict(size=16, color="white"),  # Taille du texte augmentée (14px)
-                        textposition="outside",                # Place le texte au-dessus de la barre
+                        textfont=dict(size=16, color="white"),  # Taille du texte augmentée (16px)
+                        textposition="outside",                # Positionné au-dessus de la barre
                         textangle=0,
-                        width=0.2 
+                        width=0.15                             # Épaisseur des barres réduite
                     )
                     
                     fig_pv.update_layout(
-                        margin=dict(t=30, b=20, l=10, r=10),  # Marge haute un peu plus large pour laisser de la place au texte
+                        cliponaxis=False,                      # Empêche le texte de se faire couper en haut
+                        margin=dict(t=50, b=20, l=10, r=10),   # Marge haute élargie pour laisser de la place au texte
                         xaxis_title="",
                         yaxis_title="",
                         plot_bgcolor="rgba(0,0,0,0)",
