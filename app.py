@@ -79,7 +79,7 @@ elif page == "📊 Dashboard Global":
         st.markdown("---")
 
         # --- 2ème Ligne : Titre et Indicateurs de Risque ---
-       st.subheader("🔍 Analyse")
+        st.subheader("🔍 Analyse")
         col4, col5, col6 = st.columns(3)
         
         with col4:
