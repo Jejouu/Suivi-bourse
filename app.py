@@ -121,52 +121,56 @@ elif page == "📊 Dashboard Global":
 
         st.markdown("---")
 
-        # --- Section Graphique : Plus-Value du Jour par Actif ---
+       # --- Section Graphique : Plus-Value du Jour par Actif (1/3 de la largeur) ---
         st.subheader("📈 +/- Value du jour par actif")
         
-        if not df_holding.empty and df_holding.shape[1] >= 10:  # Vérifie que la colonne J existe (index 9)
-            import plotly.express as px
-            
-            # Préparation du DataFrame pour le graphique
-            df_pv_jour = pd.DataFrame({
-                "Actif": df_holding.iloc[:, 0],  # Colonne A : Tickers/Noms
-                "PV_Jour": clean_financial_column(df_holding.iloc[:, 9])  # Colonne J : Plus-value du jour
-            }).dropna(subset=["Actif", "PV_Jour"])
-            
-            if not df_pv_jour.empty:
-                # Ajout d'une colonne de couleur conditionnelle (Vert si >= 0, Rouge si < 0)
-                df_pv_jour["Couleur"] = df_pv_jour["PV_Jour"].apply(lambda x: "#00FF7F" if x >= 0 else "#ff4b4b")
+        # Création de deux colonnes : 1/3 pour ce graphique, 2/3 pour le futur graphique
+        col_graphe, col_vide = st.columns([1, 2])
+        
+        with col_graphe:
+            if not df_holding.empty and df_holding.shape[1] >= 10:
+                import plotly.express as px
                 
-                # Création du graphique en barres
-                fig_pv = px.bar(
-                    df_pv_jour,
-                    x="Actif",
-                    y="PV_Jour",
-                    title="",
-                    text_auto=".2f"  # Affiche la valeur sur les barres
-                )
+                df_pv_jour = pd.DataFrame({
+                    "Actif": df_holding.iloc[:, 0],
+                    "PV_Jour": clean_financial_column(df_holding.iloc[:, 9])
+                }).dropna(subset=["Actif", "PV_Jour"])
                 
-                # Personnalisation des couleurs et du design sombre pour s'accorder avec ton thème
-                fig_pv.update_traces(
-                    marker_color=df_pv_jour["Couleur"],
-                    textfont_color="white",
-                    textangle=0
-                )
-                
-                fig_pv.update_layout(
-                    margin=dict(t=20, b=20, l=20, r=20),
-                    xaxis_title="",
-                    yaxis_title="€",
-                    plot_bgcolor="rgba(0,0,0,0)",
-                    paper_bgcolor="rgba(0,0,0,0)",
-                    font=dict(color="white")
-                )
-                
-                st.plotly_chart(fig_pv, use_container_width=True)
+                if not df_pv_jour.empty:
+                    fig_pv = px.bar(
+                        df_pv_jour,
+                        x="Actif",
+                        y="PV_Jour",
+                        title="",
+                        text_auto=".2f"
+                    )
+                    
+                    # Barres en gris, plus fines (width=0.4)
+                    fig_pv.update_traces(
+                        marker_color="#808080",
+                        textfont_color="white",
+                        textangle=0,
+                        width=0.4 
+                    )
+                    
+                    fig_pv.update_layout(
+                        margin=dict(t=20, b=20, l=10, r=10),
+                        xaxis_title="",
+                        yaxis_title="€",
+                        plot_bgcolor="rgba(0,0,0,0)",
+                        paper_bgcolor="rgba(0,0,0,0)",
+                        font=dict(color="white")
+                    )
+                    
+                    st.plotly_chart(fig_pv, use_container_width=True)
+                else:
+                    st.warning("Aucune donnée valide trouvée dans la colonne J.")
             else:
-                st.warning("Aucune donnée valide trouvée dans la colonne J pour la plus-value du jour.")
-        else:
-            st.info("L'onglet holding ne contient pas assez de colonnes pour accéder à la colonne J.")
+                st.info("Colonnes insuffisantes pour accéder à la colonne J.")
+                
+        with col_vide:
+            # Espace réservé pour ton prochain graphique sur les 2/3 restants
+            st.info("Espace réservé pour le prochain graphique (2/3)")
         
         # 4. Section Graphique Camembert (Répartition par Actif)
         st.subheader("🥧 Répartition du Portefeuille par Actif")
