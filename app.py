@@ -255,22 +255,40 @@ elif page == "📈 Vue Détaillée par Actif":
             st.rerun()
     
     st.markdown("""
-    <style>
-    button[aria-label="Semaine"] {
-        border: 2px solid #00D2FF !important;
-        border-radius: 20px !important;
-        color: #00D2FF !important;
-        background-color: transparent !important;
-    }
-    
-    button[aria-label="S&P 500"] {
-        border: 2px solid #FFA500 !important;
-        border-radius: 20px !important;
-        color: #FFA500 !important;
-        background-color: transparent !important;
-    }
-    </style>
-    """, unsafe_allow_html=True)
+<style>
+/* --- Boutons de Durée (Bleu) --- */
+button[aria-label="Durée: Semaine"],
+button[aria-label="Durée: Mois"],
+button[aria-label="Durée: Trimestre"],
+button[aria-label="Durée: Semestre"],
+button[aria-label="Durée: Au 1er J"],
+button[aria-label="Durée: Année"] {
+    border: 2px solid #00D2FF !important;
+    border-radius: 20px !important;
+    background-color: transparent !important;
+    color: #00D2FF !important;
+}
+button[aria-label^="Durée:"] p {
+    color: #00D2FF !important;
+}
+
+/* --- Boutons d'Actifs (Orange) --- */
+button[aria-label="Actif: S&P 500"],
+button[aria-label="Actif: CAC 40"],
+button[aria-label="Actif: VINCI"],
+button[aria-label="Actif: SP5C"],
+button[aria-label="Actif: AEME"],
+button[aria-label="Actif: IWDA"] {
+    border: 2px solid #FFA500 !important;
+    border-radius: 20px !important;
+    background-color: transparent !important;
+    color: #FFA500 !important;
+}
+button[aria-label^="Actif:"] p {
+    color: #FFA500 !important;
+}
+</style>
+""", unsafe_allow_html=True)
 
     try:
         df_holding = load_sheet_data("holding")
