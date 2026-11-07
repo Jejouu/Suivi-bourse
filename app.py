@@ -286,7 +286,7 @@ elif page == "📈 Vue Détaillée par Actif":
             st.session_state.selected_asset = a
     
     # Affichage du graphique avec l'état actuel
-    df_filtre = get_asset_data(df_holding, st.session_state.selected_asset, st.session_state.selected_duree)
+    df_filtre = get_asset_data(df_donnees, st.session_state.selected_asset, st.session_state.selected_duree)
     fig_ev = tracer_graphique_evolution(df_filtre, st.session_state.selected_asset, st.session_state.selected_duree)
     st.plotly_chart(fig_ev, use_container_width=True)
 
