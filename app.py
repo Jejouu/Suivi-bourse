@@ -267,7 +267,7 @@ elif page == "📈 Vue Détaillée par Actif":
     # Initialisation de l'état
     if "selected_asset" not in st.session_state:
         st.session_state.selected_asset = "S&P 500"
-    if "selected_duree" not in st.session_st:  # ou st.session_state.selected_duree
+    if "selected_duree" not in st.session_state:
         st.session_state.selected_duree = "Mois"
     
     # Ligne des 6 boutons de durée
