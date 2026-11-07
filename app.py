@@ -256,8 +256,9 @@ elif page == "📈 Vue Détaillée par Actif":
         df_donnees = df_donnees.replace(r'^\s*$', pd.NA, regex=True)
         df_donnees_propre = df_donnees.dropna(how='all').dropna(how='all', axis=1)
         df_donnees_limite = df_donnees_propre.iloc[:, :10]
-        
-        st.dataframe(df_donnees_limite)
+
+        with st.expander("Watchlist"):
+            st.dataframe(df_donnees_limite)
         
     except Exception as e:
         st.error(f"Une erreur est survenue sur la vue détaillée : {e}")
