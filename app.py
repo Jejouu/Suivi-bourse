@@ -307,8 +307,8 @@ elif page == "📈 Vue Détaillée par Actif":
         pct = (diff / val_initiale) * 100 if val_initiale != 0 else 0
             
         m1, m2 = st.columns(2)
-        m1.metric(label="Variation absolue","", delta=f"{diff:+.2f}")
-        m2.metric(label="Pourcentage","", delta=f"{pct:+.2f}%")
+        m1.metric(label="Variation absolue", value=f"{val_finale:,.2f}", delta=f"{diff:+.2f}")
+        m2.metric(label="Pourcentage", value=f"{val_finale:,.2f}", delta=f"{pct:+.2f}%")
     else:
         st.warning("Données insuffisantes pour afficher les métriques.")
 
