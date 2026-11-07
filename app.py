@@ -74,10 +74,14 @@ if st.sidebar.button("🔄 Actualiser les données"):
 
 # --- Routage des pages avec isolation des erreurs ---
 elif page == "📊 Dashboard Global":
-    st.header("📊 Dashboard Global du Portefeuille")
-    if st.button("🔄 Actualiser les données"):
-        st.cache_data.clear()
-        st.rerun()
+    col1, col2, col3 = st.columns(2)
+    
+    col1.st.header("📊 Dashboard Global du Portefeuille")
+
+    with col2:
+        if st.button("🔄 Actualiser les données"):
+            st.cache_data.clear()
+            st.rerun()
     try:
         # 1. Chargement des onglets nécessaires
         df_holding = load_sheet_data("holding")
