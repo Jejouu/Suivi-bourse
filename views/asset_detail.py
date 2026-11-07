@@ -48,25 +48,27 @@ def tracer_graphique_evolution(df_subset, asset_name, duree):
         
         couleur_ligne = '#00FF7F' if is_positive else '#FF4B4B'
         
-        # Opacité forte près de la courbe (0,35) s'estompant totalement vers le bas (0,0)
-        color_top = 'rgba(0, 255, 127, 0.35)' if is_positive else 'rgba(255, 75, 75, 0.35)'
-        color_bottom = 'rgba(0, 255, 127, 0.0)' if is_positive else 'rgba(255, 75, 75, 0.0)'
-        
+        # Bornes avec -10 % sur le minimum
         val_min = df_subset['Close'].min()
+        val_max = df_subset['Close'].max()
         y_min = val_min * 0.90
+        y_max = val_max * 1.02
+        
+        # Couleur de remplissage semi-transparente
+        fill_color = 'rgba(0, 255, 127, 0.25)' if is_positive else 'rgba(255, 75, 75, 0.25)'
     else:
         couleur_ligne = '#00FF7F'
-        color_top = 'rgba(0, 255, 127, 0.35)'
-        color_bottom = 'rgba(0, 255, 127, 0.0)'
         y_min = 0
-
+        y_max = 1
+        fill_color = 'rgba(0, 255, 127, 0.25)'
+    
     fig.add_trace(go.Scatter(
         x=df_subset['Date'],
         y=df_subset['Close'],
         mode='lines',
         line=dict(color=couleur_ligne, width=2, shape='spline'),
         fill='tozeroy',
-        fillcolor=color_top,
+        fillcolor=fill_color,
         hoverinfo='x+y'
     ))
     
@@ -81,11 +83,14 @@ def tracer_graphique_evolution(df_subset, asset_name, duree):
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
         font=dict(color="white"),
-        xaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.1)'),
+        xaxis=dict(
+            showgrid=True, 
+            gridcolor='rgba(255,255,255,0.1)'
+        ),
         yaxis=dict(
             showgrid=True, 
             gridcolor='rgba(255,255,255,0.1)',
-            range=[y_min, None]
+            range=[y_min, y_max]
         ),
         showlegend=False,
         height=350
