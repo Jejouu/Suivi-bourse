@@ -5,14 +5,14 @@ def get_asset_data(df, asset_name, duree):
     # Mapping des colonnes (Date, Valeur) selon l'asset
     mapping_colonnes = {
         "S&P 500": (11, 12) if duree in ["Semaine", "Mois"] else (25, 26),   # M / N ou AA / AB
-        "CAC 40":  (14, 15) if duree in ["Semaine", "Mois"] else (28, 29),   # O / P ou AC / AD
-        "VINCI":   (16, 17) if duree in ["Semaine", "Mois"] else (30, 31),   # Q / R ou AE / AF
-        "SP5C":    (18, 19) if duree in ["Semaine", "Mois"] else (32, 33),   # S / T ou AG / AH
-        "AEME":    (20, 21) if duree in ["Semaine", "Mois"] else (34, 35),   # U / V ou AI / AJ
-        "IWDA":    (22, 23) if duree in ["Semaine", "Mois"] else (36, 37)    # W / X ou AK / AL
+        "CAC 40":  (13, 14) if duree in ["Semaine", "Mois"] else (27, 28),   # O / P ou AC / AD
+        "VINCI":   (15, 16) if duree in ["Semaine", "Mois"] else (29, 30),   # Q / R ou AE / AF
+        "SP5C":    (17, 18) if duree in ["Semaine", "Mois"] else (31, 32),   # S / T ou AG / AH
+        "AEME":    (19, 20) if duree in ["Semaine", "Mois"] else (33, 34),   # U / V ou AI / AJ
+        "IWDA":    (21, 22) if duree in ["Semaine", "Mois"] else (35, 36)    # W / X ou AK / AL
     }
     
-    col_date, col_val = mapping_colonnes.get(asset_name, (12, 13))
+    col_date, col_val = mapping_colonnes.get(asset_name, (11, 12))
     
     # Définition de la plage de lignes selon la durée
     fin_ligne = 24 if duree in ["Semaine", "Mois"] else 105
