@@ -51,10 +51,8 @@ def tracer_graphique_evolution(df_subset, asset_name, duree):
         # Calcul du min pour positionner la borne inférieure de l'axe Y à -10%
         val_min = df_subset['Close'].min()
         val_max = df_subset['Close'].max()
-        marge_min = val_min + 0.01 * val_min
-        marge_max = val_max + 0.01 * val_max
-        y_min = val_min - marge_min
-        y_max = val_max + marge_max
+        y_min = val_min * 0.90
+        y_max = val_max * 1.01
         
         # Dégradé vertical propre (opaque en haut, transparent en bas)
         colorscale = [
