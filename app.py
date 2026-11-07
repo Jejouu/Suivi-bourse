@@ -281,7 +281,6 @@ elif page == "📈 Vue Détaillée par Actif":
         fig_ev = tracer_graphique_evolution(df_filtre, st.session_state.selected_asset, st.session_state.selected_duree)
         st.plotly_chart(fig_ev, use_container_width=True)
     
-        st.markdown("### Durée")
         cols_duree = st.columns(6)
         durees = ["Semaine", "Mois", "Trimestre", "Semestre", "Au 1er J", "Année"]
         for i, d in enumerate(durees):
