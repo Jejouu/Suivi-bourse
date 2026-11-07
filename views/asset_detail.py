@@ -41,21 +41,18 @@ def get_asset_data(df, asset_name, duree):
 def tracer_graphique_evolution(df_subset, asset_name, duree):
     fig = go.Figure()
     
-    # Détermination de la couleur selon la variation (première vs dernière valeur)
     if not df_subset.empty:
         premiere_valeur = df_subset['Close'].iloc[0]
         derniere_valeur = df_subset['Close'].iloc[-1]
-        
-        # Vert si ça monte ou stable, Rouge si ça baisse
         couleur_courbe = '#00FF7F' if derniere_valeur >= premiere_valeur else '#FF4B4B'
     else:
-        couleur_courbe = '#00FF7F'  # Valeur par défaut si vide
+        couleur_courbe = '#00FF7F'
     
     fig.add_trace(go.Scatter(
         x=df_subset['Date'],
         y=df_subset['Close'],
         mode='lines',
-        line=dict(color=couleur_courbe, width=2),
+        line=dict(color=couleur_courbe, width=2, shape='spline'),  # Ajout de shape='spline'
         hoverinfo='x+y'
     ))
     
