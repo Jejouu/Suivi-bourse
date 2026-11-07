@@ -1,4 +1,4 @@
-
+import plotly.graph_objects as go
 
 
 def get_asset_data(df, asset_name, duree):
