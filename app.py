@@ -248,34 +248,33 @@ elif page == "📈 Vue Détaillée par Actif":
     
     st.markdown("""
     <style>
-    /* --- 1. BOUTONS DE DURÉE (Bleu) --- */
-    div[data-testid="column"] div[data-testid="column"] button {
+    /* 1. TOUS les boutons de la zone Durée (en bas) : Bleu */
+    div[data-testid="column"] div[data-testid="column"] .stButton > button {
         border: 2px solid #00D2FF !important;
         border-radius: 20px !important;
         background-color: transparent !important;
         color: #00D2FF !important;
     }
-    div[data-testid="column"] div[data-testid="column"] button p {
+    div[data-testid="column"] div[data-testid="column"] .stButton > button * {
         color: #00D2FF !important;
     }
-    /* Durée active (fond transparent à 0.35) */
-    div[data-testid="column"] div[data-testid="column"] button[kind="primary"] {
-        background-color: rgba(0, 210, 255, 0.35) !important;
+    /* Optionnel : fond légèrement bleuté si tu cliques dessus */
+    div[data-testid="column"] div[data-testid="column"] .stButton > button:active {
+        background-color: rgba(0, 210, 255, 0.2) !important;
     }
     
-    /* --- 2. BOUTONS D'ACTIFS (Orange) --- */
-    div[data-testid="column"]:last-child button {
+    /* 2. TOUS les boutons de la zone Actifs (à droite) : Orange */
+    div[data-testid="column"]:last-child .stButton > button {
         border: 2px solid #FFA500 !important;
         border-radius: 20px !important;
         background-color: transparent !important;
         color: #FFA500 !important;
     }
-    div[data-testid="column"]:last-child button p {
+    div[data-testid="column"]:last-child .stButton > button * {
         color: #FFA500 !important;
     }
-    /* Actif sélectionné (fond transparent à 0.35) */
-    div[data-testid="column"]:last-child button[kind="primary"] {
-        background-color: rgba(255, 165, 0, 0.35) !important;
+    div[data-testid="column"]:last-child .stButton > button:active {
+        background-color: rgba(255, 165, 0, 0.2) !important;
     }
     </style>
     """, unsafe_allow_html=True)
