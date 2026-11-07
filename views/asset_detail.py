@@ -4,7 +4,7 @@ import pandas as pd
 def get_asset_data(df, asset_name, duree):
     # Mapping des colonnes (Date, Valeur) selon l'asset
     mapping_colonnes = {
-        "S&P 500": (12, 13) if duree in ["Semaine", "Mois"] else (26, 27),   # M / N ou AA / AB
+        "S&P 500": (11, 12) if duree in ["Semaine", "Mois"] else (25, 26),   # M / N ou AA / AB
         "CAC 40":  (14, 15) if duree in ["Semaine", "Mois"] else (28, 29),   # O / P ou AC / AD
         "VINCI":   (16, 17) if duree in ["Semaine", "Mois"] else (30, 31),   # Q / R ou AE / AF
         "SP5C":    (18, 19) if duree in ["Semaine", "Mois"] else (32, 33),   # S / T ou AG / AH
