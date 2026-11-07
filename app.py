@@ -280,7 +280,7 @@ elif page == "📈 Vue Détaillée par Actif":
         df_filtre = get_asset_data(df_donnees, st.session_state.selected_asset, st.session_state.selected_duree)
         fig_ev = tracer_graphique_evolution(df_filtre, st.session_state.selected_asset, st.session_state.selected_duree)
         st.plotly_chart(fig_ev, use_container_width=True)
-    
+        
         cols_duree = st.columns(6)
         durees = ["Semaine", "Mois", "Trimestre", "Semestre", "Au 1er J", "Année"]
         for i, d in enumerate(durees):
@@ -288,24 +288,29 @@ elif page == "📈 Vue Détaillée par Actif":
             if cols_duree[i].button(d, key=f"btn_dur_{d}", type=btn_type, use_container_width=True):
                 st.session_state.selected_duree = d
                 st.rerun()
-        
-        with col_assets:
-            assets = ["S&P 500", "CAC 40", "VINCI", "SP5C", "AEME", "IWDA"]
-            for a in assets:
-                btn_type_ast = "primary" if st.session_state.selected_asset == a else "secondary"
-                if st.button(a, key=f"btn_ast_{a}", type=btn_type_ast, use_container_width=True):
-                    st.session_state.selected_asset = a
-                    st.rerun()
-
-    val_initiale = df_filtre['Valeur'].iloc[0]
-    val_finale = df_filtre['Valeur'].iloc[-1]
-        
-    diff = val_finale - val_initiale
-    pct = (diff / val_initiale) * 100 if val_initiale != 0 else 0
-        
-    m1, m2 = st.columns(2)
-    m1.metric(label="Variation absolue", value=f"{val_finale:,.2f}", delta=f"{diff:+.2f}")
-    m2.metric(label="Pourcentage", value=f"{val_finale:,.2f}", delta=f"{pct:+.2f}%")
+    
+    with col_assets:
+        assets = ["S&P 500", "CAC 40", "VINCI", "SP5C", "AEME", "IWDA"]
+        for a in assets:
+            btn_type_ast = "primary" if st.session_state.selected_asset == a else "secondary"
+            if st.button(a, key=f"btn_ast_{a}", type=btn_type_ast, use_container_width=True):
+                st.session_state.selected_asset = a
+                st.rerun()
+    
+    col_valeur = 'Valeur' if 'Valeur' in df_filtre.columns else df_filtre.select_dtypes(include='number').columns[-1]
+    
+    if not df_filtre.empty and col_valeur in df_filtre.columns:
+        val_initiale = df_filtre[col_valeur].iloc[0]
+        val_finale = df_filtre[col_valeur].iloc[-1]
+            
+        diff = val_finale - val_initiale
+        pct = (diff / val_initiale) * 100 if val_initiale != 0 else 0
+            
+        m1, m2 = st.columns(2)
+        m1.metric(label="Variation absolue", value=f"{val_finale:,.2f}", delta=f"{diff:+.2f}")
+        m2.metric(label="Pourcentage", value=f"{val_finale:,.2f}", delta=f"{pct:+.2f}%")
+    else:
+        st.warning("Données insuffisantes pour afficher les métriques.")
 
 elif page == "📝 Journal des Transactions":
     st.header("📝 Journal des Transactions")
