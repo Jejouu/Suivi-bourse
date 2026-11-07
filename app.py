@@ -328,13 +328,13 @@ elif page == "📈 Vue Détaillée par Actif":
         .metric-title {{
             color: #FFFFFF;
             font-weight: bold;
-            font-size: 16px;
+            font-size: 14px;
             margin-bottom: 8px;
         }}
         .metric-value {{
             color: {color};
             font-weight: bold;
-            font-size: 24px;
+            font-size: 20px;
         }}
         </style>
     
