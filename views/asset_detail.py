@@ -48,29 +48,25 @@ def tracer_graphique_evolution(df_subset, asset_name, duree):
         
         couleur_ligne = '#00FF7F' if is_positive else '#FF4B4B'
         
-        # Calcul du min pour positionner la borne inférieure de l'axe Y à -10%
-        val_min = df_subset['Close'].min()
-        val_max = df_subset['Close'].max()
-        y_min = val_min * 0.98
-        y_max = val_max * 1.02
+        # Opacité forte près de la courbe (0,35) s'estompant totalement vers le bas (0,0)
+        color_top = 'rgba(0, 255, 127, 0.35)' if is_positive else 'rgba(255, 75, 75, 0.35)'
+        color_bottom = 'rgba(0, 255, 127, 0.0)' if is_positive else 'rgba(255, 75, 75, 0.0)'
         
-        # Dégradé vertical propre (opaque en haut, transparent en bas)
-        colorscale = [
-            [0.0, 'rgba(0, 0, 0, 0)'], 
-            [1.0, 'rgba(0, 255, 127, 0.35)'] if is_positive else [1.0, 'rgba(255, 75, 75, 0.35)']
-        ]
+        val_min = df_subset['Close'].min()
+        y_min = val_min * 0.90
     else:
         couleur_ligne = '#00FF7F'
+        color_top = 'rgba(0, 255, 127, 0.35)'
+        color_bottom = 'rgba(0, 255, 127, 0.0)'
         y_min = 0
-        colorscale = [[0.0, 'rgba(0,0,0,0)'], [1.0, 'rgba(0, 255, 127, 0.35)']]
-    
+
     fig.add_trace(go.Scatter(
         x=df_subset['Date'],
         y=df_subset['Close'],
         mode='lines',
         line=dict(color=couleur_ligne, width=2, shape='spline'),
         fill='tozeroy',
-        fillcolor=colorscale[1][1],
+        fillcolor=color_top,
         hoverinfo='x+y'
     ))
     
@@ -85,14 +81,11 @@ def tracer_graphique_evolution(df_subset, asset_name, duree):
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
         font=dict(color="white"),
-        xaxis=dict(
-            showgrid=True, 
-            gridcolor='rgba(255,255,255,0.1)'
-        ),
+        xaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.1)'),
         yaxis=dict(
             showgrid=True, 
             gridcolor='rgba(255,255,255,0.1)',
-            range=[y_min, y_max] 
+            range=[y_min, None]
         ),
         showlegend=False,
         height=350
