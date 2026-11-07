@@ -24,8 +24,6 @@ from views.asset_detail import (
     tracer_graphique_evolution
 )
 
-import streamlit as st
-
 def check_password():
     """Vérifie si le code d'accès est correct."""
     # Tu peux changer le code ici ou le stocker dans st.secrets["PASSWORD"]
