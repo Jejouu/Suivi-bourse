@@ -246,7 +246,7 @@ elif page == "📈 Vue Détaillée par Actif":
     
     st.markdown("""
     <style>
-    /* Boutons de durée inactifs (secondary) : contour et écriture bleus */
+    /* Boutons de durée inactifs : contour et texte bleus */
     div[data-testid="column"] div[data-testid="column"] button[kind="secondary"] {
         border: 2px solid #00D2FF !important;
         border-radius: 20px !important;
@@ -257,7 +257,7 @@ elif page == "📈 Vue Détaillée par Actif":
         color: #00D2FF !important;
     }
     
-    /* Bouton de durée actif (primary) : contour, écriture bleus et fond transparent à 0.35 */
+    /* Bouton de durée actif : contour bleu, texte bleu et fond transparent à 0.35 */
     div[data-testid="column"] div[data-testid="column"] button[kind="primary"] {
         border: 2px solid #00D2FF !important;
         border-radius: 20px !important;
