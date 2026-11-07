@@ -278,14 +278,6 @@ elif page == "📈 Vue Détaillée par Actif":
     if "selected_duree" not in st.session_state:
         st.session_state.selected_duree = "Mois"
     
-    # Ligne des 6 boutons de durée
-    st.markdown("### Durée")
-    cols_duree = st.columns(6)
-    durees = ["Semaine", "Mois", "Trimestre", "Semestre", "Au 1er J", "Année"]
-    for i, d in enumerate(durees):
-        if cols_duree[i].button(d, key=f"btn_dur_{d}"):
-            st.session_state.selected_duree = d
-    
     # Disposition principale : Graphique et colonnes d'actifs à droite
     col_graph, col_assets = tracer_col_droite = st.columns([4, 1])
     
