@@ -319,7 +319,7 @@ elif page == "📈 Vue Détaillée par Actif":
         }}
         .metric-card {{
             background-color: #2E3239;
-            border: 5px solid #383C4A;
+            border: 3.5px solid #747474;
             border-radius: 15px;
             padding: 15px 20px;
             flex: 0 0 20%;
