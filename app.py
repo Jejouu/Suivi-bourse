@@ -247,24 +247,22 @@ elif page == "📈 Vue Détaillée par Actif":
     st.markdown("""
     <style>
     /* Boutons de durée (colonne de gauche) : Bleu */
-    div[data-testid="column"]:nth-of-type(1) button {
+    div[data-testid="stHorizontalBlock"] > div:nth-child(1) .stButton > button {
         border: 2px solid #00D2FF !important;
         border-radius: 20px !important;
-        color: #00D2FF !important;
         background-color: transparent !important;
     }
-    div[data-testid="column"]:nth-of-type(1) button p {
+    div[data-testid="stHorizontalBlock"] > div:nth-child(1) .stButton > button p {
         color: #00D2FF !important;
     }
     
     /* Boutons d'actifs (colonne de droite) : Orange */
-    div[data-testid="column"]:nth-of-type(2) button {
+    div[data-testid="stHorizontalBlock"] > div:nth-child(2) .stButton > button {
         border: 2px solid #FFA500 !important;
         border-radius: 20px !important;
-        color: #FFA500 !important;
         background-color: transparent !important;
     }
-    div[data-testid="column"]:nth-of-type(2) button p {
+    div[data-testid="stHorizontalBlock"] > div:nth-child(2) .stButton > button p {
         color: #FFA500 !important;
     }
     </style>
