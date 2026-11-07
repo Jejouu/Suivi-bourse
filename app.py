@@ -243,56 +243,53 @@ elif page == "📊 Dashboard Global":
     
 elif page == "📈 Vue Détaillée par Actif":
     st.header("📈 Vue Détaillée par Actif")
+    
     st.markdown("""
     <style>
-    /* Style des boutons Durée (bleu) */
+    /* Boutons Durée (bordure bleue) */
+    div.stButton > button[kind="secondary"] {
+        border-radius: 20px !important;
+    }
+    /* Style global des boutons pour forcer les bordures arrondies */
     div[data-testid="column"] button {
         border-radius: 20px !important;
     }
     </style>
     """, unsafe_allow_html=True)
+
     try:
         df_holding = load_sheet_data("holding")
         df_valeurs = load_sheet_data("valeurs")
         df_donnees = load_sheet_data("donnees")
         
-        st.success("Données des actifs chargées avec succès !")
-        
-        st.info("Aperçu de la Watchlist (nettoyée et limitée jusqu'à la colonne J) :")
-        
-        # Nettoyage et limitation
         df_donnees = df_donnees.replace(r'^\s*$', pd.NA, regex=True)
         df_donnees_propre = df_donnees.dropna(how='all').dropna(how='all', axis=1)
         df_donnees_limite = df_donnees_propre.iloc[:, :10]
 
         with st.expander("Watchlist"):
             st.dataframe(df_donnees_limite)
-        
+            
     except Exception as e:
         st.error(f"Une erreur est survenue sur la vue détaillée : {e}")
-        
 
-    # Initialisation de l'état
     if "selected_asset" not in st.session_state:
         st.session_state.selected_asset = "S&P 500"
     if "selected_duree" not in st.session_state:
         st.session_state.selected_duree = "Mois"
     
-    # Disposition principale : Graphique et colonnes d'actifs à droite
-    col_graph, col_assets = tracer_col_droite = st.columns([4, 0.5])
+    col_graph, col_assets = st.columns([4, 0.5])
     
     with col_graph:
         df_filtre = get_asset_data(df_donnees, st.session_state.selected_asset, st.session_state.selected_duree)
         fig_ev = tracer_graphique_evolution(df_filtre, st.session_state.selected_asset, st.session_state.selected_duree)
         st.plotly_chart(fig_ev, use_container_width=True)
     
-        # 6 boutons de durée sous le graphique
         st.markdown("### Durée")
         cols_duree = st.columns(6)
         durees = ["Semaine", "Mois", "Trimestre", "Semestre", "Au 1er J", "Année"]
         for i, d in enumerate(durees):
-            # Utilisation de st.markdown avec du CSS personnalisé pour obtenir l'effet bordure bleue
-            if cols_duree[i].button(d, key=f"btn_dur_{d}use_container_width=True"):
+            # Correction de la clé du bouton
+            if cols_duree[i].button(d, key=f"btn_dur_{d}", use_container_width=True):
                 st.session_state.selected_duree = d
                 st.rerun()
 
