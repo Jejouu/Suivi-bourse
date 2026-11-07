@@ -246,9 +246,18 @@ elif page == "📈 Vue Détaillée par Actif":
     
     st.markdown("""
     <style>
-    .stButton > button {
+    /* Style des boutons Durée (bleu) */
+    div[data-testid="column"]:nth-of-type(1) .stButton > button {
         border: 2px solid #00D2FF !important;
         border-radius: 20px !important;
+        color: #00D2FF !important;
+    }
+    
+    /* Style des boutons Actifs (orange) */
+    div[data-testid="column"]:nth-of-type(2) .stButton > button {
+        border: 2px solid #FFA500 !important;
+        border-radius: 20px !important;
+        color: #FFA500 !important;
     }
     </style>
     """, unsafe_allow_html=True)
