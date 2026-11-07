@@ -155,6 +155,7 @@ elif page == "📊 Dashboard Global":
         # --- Configuration globale du graphique ---
         config_graphique_pv = {
             "titre": "📈 Plus-Value du jour",
+            "hauteur": 300,
             "largeur_barre": 0.25,
             "taille_police_texte": 14,
             "taille_police_ticker": 14,
@@ -180,6 +181,8 @@ elif page == "📊 Dashboard Global":
 
         config_graphique_latente = {
             "titre": "📊 Plus-Value Latente",
+            "hauteur": 300,
+            "bargap": 0.4,
             "largeur_barre": 0.2,
             "taille_police_texte": 14,
             "taille_police_ticker": 14,
@@ -206,6 +209,8 @@ elif page == "📊 Dashboard Global":
 
         config_graphique_pie = {
             "titre": "🥧 Répartition des actifs",
+            "hauteur": 350,
+            "largeur": 350,
             "couleurs": ["#F3B530", "#00FF7F", "#4169E1"],  # Couleurs personnalisées pour tes 3 parts
             "trou": 0.4,                                     # Taille du trou central (effet donut)
             "marge_haut": 50,
