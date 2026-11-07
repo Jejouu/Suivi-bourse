@@ -246,28 +246,37 @@ elif page == "📈 Vue Détaillée par Actif":
     
     st.markdown("""
     <style>
-    /* Forcer tous les boutons de la colonne de durée en bleu, même en état actif/focus */
+    /* Durées (colonne 1) : Forcer le bleu sur tous les états */
     div[data-testid="stHorizontalBlock"] > div:nth-child(1) .stButton > button,
     div[data-testid="stHorizontalBlock"] > div:nth-child(1) .stButton > button:focus,
     div[data-testid="stHorizontalBlock"] > div:nth-child(1) .stButton > button:active,
-    div[data-testid="stHorizontalBlock"] > div:nth-child(1) .stButton > button[data-baseweb="button"] {
+    div[data-testid="stHorizontalBlock"] > div:nth-child(1) .stButton > button[kind="primary"],
+    div[data-testid="stHorizontalBlock"] > div:nth-child(1) .stButton > button[kind="secondary"] {
         border: 2px solid #00D2FF !important;
         border-radius: 20px !important;
         background-color: transparent !important;
         color: #00D2FF !important;
     }
-    div[data-testid="stHorizontalBlock"] > div:nth-child(1) .stButton > button * {
+    div[data-testid="stHorizontalBlock"] > div:nth-child(1) .stButton > button *,
+    div[data-testid="stHorizontalBlock"] > div:nth-child(1) .stButton > button p,
+    div[data-testid="stHorizontalBlock"] > div:nth-child(1) .stButton > button span {
         color: #00D2FF !important;
     }
     
-    /* Boutons d'actifs (colonne de droite) : Orange */
-    div[data-testid="stHorizontalBlock"] > div:nth-child(2) .stButton > button {
+    /* Actifs (colonne 2) : Forcer l'orange sur tous les états */
+    div[data-testid="stHorizontalBlock"] > div:nth-child(2) .stButton > button,
+    div[data-testid="stHorizontalBlock"] > div:nth-child(2) .stButton > button:focus,
+    div[data-testid="stHorizontalBlock"] > div:nth-child(2) .stButton > button:active,
+    div[data-testid="stHorizontalBlock"] > div:nth-child(2) .stButton > button[kind="primary"],
+    div[data-testid="stHorizontalBlock"] > div:nth-child(2) .stButton > button[kind="secondary"] {
         border: 2px solid #FFA500 !important;
         border-radius: 20px !important;
         background-color: transparent !important;
         color: #FFA500 !important;
     }
-    div[data-testid="stHorizontalBlock"] > div:nth-child(2) .stButton > button * {
+    div[data-testid="stHorizontalBlock"] > div:nth-child(2) .stButton > button *,
+    div[data-testid="stHorizontalBlock"] > div:nth-child(2) .stButton > button p,
+    div[data-testid="stHorizontalBlock"] > div:nth-child(2) .stButton > button span {
         color: #FFA500 !important;
     }
     </style>
