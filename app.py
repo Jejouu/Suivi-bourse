@@ -244,6 +244,7 @@ elif page == "📊 Dashboard Global":
 elif page == "📈 Vue Détaillée par Actif":
     st.header("📈 Vue Détaillée par Actif")
     try:
+        df_holding = load_sheet_data("holding")
         df_valeurs = load_sheet_data("valeurs")
         df_donnees = load_sheet_data("donnees")
         
