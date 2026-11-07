@@ -315,7 +315,7 @@ elif page == "📈 Vue Détaillée par Actif":
         .metric-container {{
             display: flex;
             gap: 15px;
-            margin-top: 15px;
+            margin-top: 10px;
         }}
         .metric-card {{
             background-color: #2E3239;
@@ -329,7 +329,7 @@ elif page == "📈 Vue Détaillée par Actif":
             color: #FFFFFF;
             font-weight: bold;
             font-size: 14px;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
         }}
         .metric-value {{
             color: {color};
