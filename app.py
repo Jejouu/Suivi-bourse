@@ -279,7 +279,7 @@ elif page == "📈 Vue Détaillée par Actif":
         st.session_state.selected_duree = "Mois"
     
     # Disposition principale : Graphique et colonnes d'actifs à droite
-    col_graph, col_assets = tracer_col_droite = st.columns([4, 1])
+    col_graph, col_assets = tracer_col_droite = st.columns([4, 0.5])
     
     with col_graph:
         df_filtre = get_asset_data(df_donnees, st.session_state.selected_asset, st.session_state.selected_duree)
