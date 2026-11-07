@@ -19,6 +19,10 @@ from views.portfolio_dash import (
     tracer_graphique_latente,
     tracer_graphique_pie
 )
+from views.asset_detail import (
+    get_asset_data,
+    tracer_graphique_evolution
+)
 
 import streamlit as st
 
@@ -258,6 +262,34 @@ elif page == "📈 Vue Détaillée par Actif":
         
     except Exception as e:
         st.error(f"Une erreur est survenue sur la vue détaillée : {e}")
+        
+
+    # Initialisation de l'état
+    if "selected_asset" not in st.session_state:
+        st.session_state.selected_asset = "S&P 500"
+    if "selected_duree" not in st.session_st:  # ou st.session_state.selected_duree
+        st.session_state.selected_duree = "Mois"
+    
+    # Ligne des 6 boutons de durée
+    st.markdown("### Durée")
+    cols_duree = st.columns(6)
+    durees = ["Semaine", "Mois", "Trimestre", "Semestre", "Au 1er J", "Année"]
+    for i, d in enumerate(durees):
+        if cols_duree[i].button(d, key=f"btn_dur_{d}"):
+            st.session_state.selected_duree = d
+    
+    # Ligne des 6 boutons d'assets
+    st.markdown("### Asset")
+    cols_asset = st.columns(6)
+    assets = ["S&P 500", "CAC 40", "VINCI", "SP5C", "AEME", "IWDA"]
+    for i, a in enumerate(assets):
+        if cols_asset[i].button(a, key=f"btn_ast_{a}"):
+            st.session_state.selected_asset = a
+    
+    # Affichage du graphique avec l'état actuel
+    df_filtre = get_asset_data(df_holding, st.session_state.selected_asset, st.session_state.selected_duree)
+    fig_ev = tracer_graphique_evolution(df_filtre, st.session_state.selected_asset, st.session_state.selected_duree)
+    st.plotly_chart(fig_ev, use_container_width=True)
 
 elif page == "📝 Journal des Transactions":
     st.header("📝 Journal des Transactions")
