@@ -94,7 +94,7 @@ def tracer_graphique_evolution(df_subset, asset_name, duree):
         yaxis=dict(
             showgrid=True, 
             gridcolor='rgba(255,255,255,0.1)',
-            range=[y_min, None] 
+            range=[y_min, y_max] 
         ),
         showlegend=False,
         height=350
