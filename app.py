@@ -256,26 +256,20 @@ elif page == "📈 Vue Détaillée par Actif":
     
     st.markdown("""
     <style>
-    /* 1. Boutons de durée (colonne de gauche) : Bleu */
-    div[data-testid="column"] div[data-testid="column"] button {
+    /* Exemple pour un bouton de durée : Semaine */
+    button[aria-label="Semaine"] {
         border: 2px solid #00D2FF !important;
         border-radius: 20px !important;
+        color: #00D2FF !important;
         background-color: transparent !important;
-        color: #00D2FF !important;
-    }
-    div[data-testid="column"] div[data-testid="column"] button p {
-        color: #00D2FF !important;
     }
     
-    /* 2. Boutons d'actifs (colonne de droite) : Orange */
-    div[data-testid="column"]:last-child button {
+    /* Exemple pour un actif : S&P 500 */
+    button[aria-label="S&P 500"] {
         border: 2px solid #FFA500 !important;
         border-radius: 20px !important;
+        color: #FFA500 !important;
         background-color: transparent !important;
-        color: #FFA500 !important;
-    }
-    div[data-testid="column"]:last-child button p {
-        color: #FFA500 !important;
     }
     </style>
     """, unsafe_allow_html=True)
