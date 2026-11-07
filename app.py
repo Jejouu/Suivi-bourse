@@ -291,7 +291,7 @@ elif page == "📈 Vue Détaillée par Actif":
     if "selected_asset" not in st.session_state:
         st.session_state.selected_asset = "S&P 500"
     if "selected_duree" not in st.session_state:
-        st.session_state.selected_duree = "Mois"
+        st.session_state.selected_duree = "Semaine"
     
     col_graph, col_assets = st.columns([4, 0.5])
     
