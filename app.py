@@ -256,7 +256,6 @@ elif page == "📈 Vue Détaillée par Actif":
     
     st.markdown("""
     <style>
-    /* Exemple pour un bouton de durée : Semaine */
     button[aria-label="Semaine"] {
         border: 2px solid #00D2FF !important;
         border-radius: 20px !important;
@@ -264,7 +263,6 @@ elif page == "📈 Vue Détaillée par Actif":
         background-color: transparent !important;
     }
     
-    /* Exemple pour un actif : S&P 500 */
     button[aria-label="S&P 500"] {
         border: 2px solid #FFA500 !important;
         border-radius: 20px !important;
