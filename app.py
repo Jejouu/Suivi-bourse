@@ -289,7 +289,6 @@ elif page == "📈 Vue Détaillée par Actif":
     # Affichage du graphique avec l'état actuel
     df_filtre = get_asset_data(df_donnees, st.session_state.selected_asset, st.session_state.selected_duree)
     fig_ev = tracer_graphique_evolution(df_filtre, st.session_state.selected_asset, st.session_state.selected_duree)
-    """st.write("Aperçu de df_filtre :", df_filtre)"""
     st.plotly_chart(fig_ev, use_container_width=True)
 
 elif page == "📝 Journal des Transactions":
