@@ -248,33 +248,16 @@ elif page == "📈 Vue Détaillée par Actif":
     
     st.markdown("""
     <style>
-    /* 1. TOUS les boutons de la zone Durée (en bas) : Bleu */
-    div[data-testid="column"] div[data-testid="column"] .stButton > button {
+    /* 1. Cible unique pour les boutons de la colonne de gauche (Durée) */
+    div[data-testid="column"] div[data-testid="column"] button {
         border: 2px solid #00D2FF !important;
-        border-radius: 20px !important;
-        background-color: transparent !important;
         color: #00D2FF !important;
-    }
-    div[data-testid="column"] div[data-testid="column"] .stButton > button * {
-        color: #00D2FF !important;
-    }
-    /* Optionnel : fond légèrement bleuté si tu cliques dessus */
-    div[data-testid="column"] div[data-testid="column"] .stButton > button:active {
-        background-color: rgba(0, 210, 255, 0.2) !important;
     }
     
-    /* 2. TOUS les boutons de la zone Actifs (à droite) : Orange */
-    div[data-testid="column"]:last-child .stButton > button {
+    /* 2. Cible unique pour les boutons de la colonne de droite (Actifs) */
+    div[data-testid="column"]:last-child button {
         border: 2px solid #FFA500 !important;
-        border-radius: 20px !important;
-        background-color: transparent !important;
         color: #FFA500 !important;
-    }
-    div[data-testid="column"]:last-child .stButton > button * {
-        color: #FFA500 !important;
-    }
-    div[data-testid="column"]:last-child .stButton > button:active {
-        background-color: rgba(255, 165, 0, 0.2) !important;
     }
     </style>
     """, unsafe_allow_html=True)
