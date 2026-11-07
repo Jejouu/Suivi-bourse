@@ -1,5 +1,5 @@
 import plotly.graph_objects as go
-
+import pandas as pd
 
 def get_asset_data(df, asset_name, duree):
     # Mapping des colonnes (Date, Valeur) selon l'asset
