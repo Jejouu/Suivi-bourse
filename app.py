@@ -248,15 +248,25 @@ elif page == "📈 Vue Détaillée par Actif":
     
     st.markdown("""
     <style>
-    /* 1. Cible unique pour les boutons de la colonne de gauche (Durée) */
+    /* 1. Boutons de durée (colonne de gauche) : Bleu */
     div[data-testid="column"] div[data-testid="column"] button {
         border: 2px solid #00D2FF !important;
+        border-radius: 20px !important;
+        background-color: transparent !important;
+        color: #00D2FF !important;
+    }
+    div[data-testid="column"] div[data-testid="column"] button p {
         color: #00D2FF !important;
     }
     
-    /* 2. Cible unique pour les boutons de la colonne de droite (Actifs) */
+    /* 2. Boutons d'actifs (colonne de droite) : Orange */
     div[data-testid="column"]:last-child button {
         border: 2px solid #FFA500 !important;
+        border-radius: 20px !important;
+        background-color: transparent !important;
+        color: #FFA500 !important;
+    }
+    div[data-testid="column"]:last-child button p {
         color: #FFA500 !important;
     }
     </style>
