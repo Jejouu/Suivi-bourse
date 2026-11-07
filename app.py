@@ -246,38 +246,38 @@ elif page == "📈 Vue Détaillée par Actif":
     
     st.markdown("""
     <style>
-    /* Durées (colonne 1) : Forcer le bleu sur tous les états */
-    div[data-testid="stHorizontalBlock"] > div:nth-child(1) .stButton > button,
-    div[data-testid="stHorizontalBlock"] > div:nth-child(1) .stButton > button:focus,
-    div[data-testid="stHorizontalBlock"] > div:nth-child(1) .stButton > button:active,
-    div[data-testid="stHorizontalBlock"] > div:nth-child(1) .stButton > button[kind="primary"],
-    div[data-testid="stHorizontalBlock"] > div:nth-child(1) .stButton > button[kind="secondary"] {
+    /* --- BOUTONS DE DURÉE (Bleu) --- */
+    /* Boutons secondaires et primaires de durée */
+    div[data-testid="column"] div[data-testid="column"] button {
         border: 2px solid #00D2FF !important;
         border-radius: 20px !important;
         background-color: transparent !important;
         color: #00D2FF !important;
     }
-    div[data-testid="stHorizontalBlock"] > div:nth-child(1) .stButton > button *,
-    div[data-testid="stHorizontalBlock"] > div:nth-child(1) .stButton > button p,
-    div[data-testid="stHorizontalBlock"] > div:nth-child(1) .stButton > button span {
+    div[data-testid="column"] div[data-testid="column"] button p,
+    div[data-testid="column"] div[data-testid="column"] button span {
         color: #00D2FF !important;
     }
+    /* Fond léger pour le bouton de durée actif (primary) */
+    div[data-testid="column"] div[data-testid="column"] button[kind="primary"] {
+        background-color: rgba(0, 210, 255, 0.15) !important;
+    }
     
-    /* Actifs (colonne 2) : Forcer l'orange sur tous les états */
-    div[data-testid="stHorizontalBlock"] > div:nth-child(2) .stButton > button,
-    div[data-testid="stHorizontalBlock"] > div:nth-child(2) .stButton > button:focus,
-    div[data-testid="stHorizontalBlock"] > div:nth-child(2) .stButton > button:active,
-    div[data-testid="stHorizontalBlock"] > div:nth-child(2) .stButton > button[kind="primary"],
-    div[data-testid="stHorizontalBlock"] > div:nth-child(2) .stButton > button[kind="secondary"] {
+    /* --- BOUTONS D'ACTIFS (Orange) --- */
+    /* Cible la colonne de droite (col_assets) */
+    div[data-testid="column"]:last-child button {
         border: 2px solid #FFA500 !important;
         border-radius: 20px !important;
         background-color: transparent !important;
         color: #FFA500 !important;
     }
-    div[data-testid="stHorizontalBlock"] > div:nth-child(2) .stButton > button *,
-    div[data-testid="stHorizontalBlock"] > div:nth-child(2) .stButton > button p,
-    div[data-testid="stHorizontalBlock"] > div:nth-child(2) .stButton > button span {
+    div[data-testid="column"]:last-child button p,
+    div[data-testid="column"]:last-child button span {
         color: #FFA500 !important;
+    }
+    /* Fond léger pour l'actif actif (primary) */
+    div[data-testid="column"]:last-child button[kind="primary"] {
+        background-color: rgba(255, 165, 0, 0.15) !important;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -313,15 +313,16 @@ elif page == "📈 Vue Détaillée par Actif":
         cols_duree = st.columns(6)
         durees = ["Semaine", "Mois", "Trimestre", "Semestre", "Au 1er J", "Année"]
         for i, d in enumerate(durees):
-            # Correction de la clé du bouton
-            if cols_duree[i].button(d, key=f"btn_dur_{d}", use_container_width=True):
+            btn_type = "primary" if st.session_state.selected_duree == d else "secondary"
+            if cols_duree[i].button(d, key=f"btn_dur_{d}", type=btn_type, use_container_width=True):
                 st.session_state.selected_duree = d
                 st.rerun()
 
     with col_assets:
         assets = ["S&P 500", "CAC 40", "VINCI", "SP5C", "AEME", "IWDA"]
         for a in assets:
-            if st.button(a, key=f"btn_ast_{a}", use_container_width=True):
+            btn_type_ast = "primary" if st.session_state.selected_asset == a else "secondary"
+            if st.button(a, key=f"btn_ast_{a}", type=btn_type_ast, use_container_width=True):
                 st.session_state.selected_asset = a
                 st.rerun()
 
