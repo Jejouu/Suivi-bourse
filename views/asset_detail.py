@@ -18,7 +18,7 @@ def get_asset_data(df, asset_name, duree):
     fin_ligne = 24 if duree in ["Semaine", "Mois"] else 105
     
     # Extraction et nettoyage
-    df_subset = df.iloc[2:fin_ligne, [col_date, col_val]].copy()
+    df_subset = df.iloc[1:fin_ligne, [col_date, col_val]].copy()
     df_subset.columns = ['Date', 'Close']
     df_subset['Close'] = pd.to_numeric(df_subset['Close'].astype(str).str.replace(',', '.'), errors='coerce')
     df_subset = df_subset.dropna()
