@@ -183,7 +183,7 @@ elif page == "📊 Dashboard Global":
             "titre": "📊 Plus-Value Latente",
             "hauteur": 300,
             "bargap": 0.4,
-            "largeur_barre": 0.2,
+            "largeur_barre": 0.3,
             "taille_police_texte": 14,
             "taille_police_ticker": 14,
             "couleur_ticker": "#F3B530",
