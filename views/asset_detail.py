@@ -12,21 +12,24 @@ def get_asset_data(df, asset_name, duree):
         "IWDA":    (21, 22) if duree in ["Semaine", "Mois"] else (35, 36)    # W / X ou AK / AL
     }
     
-    col_date, col_val = mapping_colonnes.get(asset_name, (11, 12))
+    col_date, col_val = mapping_colonnes.get(asset_name, (12, 13))
     
-    # Définition de la plage de lignes selon la durée
-    fin_ligne = 24 if duree in ["Semaine", "Mois"] else 105
-    
-    debut_lignes = {
-    "Semaine": 16,
-    "Mois": 2,
-    "Trimestre": 90,
-    "Semestre": 77,
-    "Au 1er J": 59,
-    "Année": 51
-    }
-    debut_ligne = debut_lignes.get(duree, 2)
-    
+    # Définition des plages de lignes selon la durée
+    if duree == "Semaine":
+        debut_ligne, fin_ligne = 16, 24
+    elif duree == "Mois":
+        debut_ligne, fin_ligne = 2, 24
+    elif duree == "Trimestre":
+        debut_ligne, fin_ligne = 90, 105
+    elif duree == "Semestre":
+        debut_ligne, fin_ligne = 77, 105
+    elif duree == "Au 1er J":
+        debut_ligne, fin_ligne = 59, 105
+    elif duree == "Année":
+        debut_ligne, fin_ligne = 51, 105
+    else:
+        debut_ligne, fin_ligne = 2, 24
+        
     # Extraction et nettoyage
     df_subset = df.iloc[debut_ligne:fin_ligne, [col_date, col_val]].copy()
     df_subset.columns = ['Date', 'Close']
@@ -34,8 +37,6 @@ def get_asset_data(df, asset_name, duree):
     df_subset = df_subset.dropna()
     
     return df_subset
-
-import plotly.graph_objects as go
 
 def tracer_graphique_evolution(df_subset, asset_name, duree):
     fig = go.Figure()
