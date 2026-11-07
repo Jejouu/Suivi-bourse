@@ -209,8 +209,8 @@ elif page == "📊 Dashboard Global":
 
         config_graphique_pie = {
             "titre": "🥧 Répartition des actifs",
-            "hauteur": 350,
-            "largeur": 350,
+            "hauteur": 250,
+            "largeur": 250,
             "couleurs": ["#F3B530", "#00FF7F", "#4169E1"],  # Couleurs personnalisées pour tes 3 parts
             "trou": 0.4,                                     # Taille du trou central (effet donut)
             "marge_haut": 50,
