@@ -246,26 +246,34 @@ elif page == "📈 Vue Détaillée par Actif":
     
     st.markdown("""
     <style>
-    /* Boutons de durée inactifs : contour et texte bleus */
-    div[data-testid="column"] div[data-testid="column"] button[kind="secondary"] {
+    /* --- 1. BOUTONS DE DURÉE (Bleu) --- */
+    div[data-testid="column"] div[data-testid="column"] button {
         border: 2px solid #00D2FF !important;
         border-radius: 20px !important;
         background-color: transparent !important;
         color: #00D2FF !important;
     }
-    div[data-testid="column"] div[data-testid="column"] button[kind="secondary"] * {
+    div[data-testid="column"] div[data-testid="column"] button p {
         color: #00D2FF !important;
+    }
+    /* Durée active (fond transparent à 0.35) */
+    div[data-testid="column"] div[data-testid="column"] button[kind="primary"] {
+        background-color: rgba(0, 210, 255, 0.35) !important;
     }
     
-    /* Bouton de durée actif : contour bleu, texte bleu et fond transparent à 0.35 */
-    div[data-testid="column"] div[data-testid="column"] button[kind="primary"] {
-        border: 2px solid #00D2FF !important;
+    /* --- 2. BOUTONS D'ACTIFS (Orange) --- */
+    div[data-testid="column"]:last-child button {
+        border: 2px solid #FFA500 !important;
         border-radius: 20px !important;
-        background-color: rgba(0, 210, 255, 0.35) !important;
-        color: #00D2FF !important;
+        background-color: transparent !important;
+        color: #FFA500 !important;
     }
-    div[data-testid="column"] div[data-testid="column"] button[kind="primary"] * {
-        color: #00D2FF !important;
+    div[data-testid="column"]:last-child button p {
+        color: #FFA500 !important;
+    }
+    /* Actif sélectionné (fond transparent à 0.35) */
+    div[data-testid="column"]:last-child button[kind="primary"] {
+        background-color: rgba(255, 165, 0, 0.35) !important;
     }
     </style>
     """, unsafe_allow_html=True)
