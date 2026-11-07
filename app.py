@@ -297,6 +297,16 @@ elif page == "📈 Vue Détaillée par Actif":
                     st.session_state.selected_asset = a
                     st.rerun()
 
+    val_initiale = df_filtre['Valeur'].iloc[0]
+    val_finale = df_filtre['Valeur'].iloc[-1]
+        
+    diff = val_finale - val_initiale
+    pct = (diff / val_initiale) * 100 if val_initiale != 0 else 0
+        
+    m1, m2 = st.columns(2)
+    m1.metric(label="Variation absolue", value=f"{val_finale:,.2f}", delta=f"{diff:+.2f}")
+    m2.metric(label="Pourcentage", value=f"{val_finale:,.2f}", delta=f"{pct:+.2f}%")
+
 elif page == "📝 Journal des Transactions":
     st.header("📝 Journal des Transactions")
     try:
