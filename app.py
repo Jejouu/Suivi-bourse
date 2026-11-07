@@ -160,7 +160,7 @@ elif page == "📊 Dashboard Global":
             "taille_police_texte": 14,
             "taille_police_ticker": 14,
             "couleur_ticker": "#F3B530",
-            "couleur_positif": "#00FF7F",
+            "couleur_positif": "#01d246",
             "couleur_negatif": "#ff4b4b",
             "couleur_neutre": "#808080",
             "marge_haut": 50,
@@ -211,7 +211,7 @@ elif page == "📊 Dashboard Global":
             "titre": "🥧 Répartition des actifs",
             "hauteur": 300,
             "largeur": 300,
-            "couleurs": ["#F3B530", "#00FF7F", "#4169E1"],  # Couleurs personnalisées pour tes 3 parts
+            "couleurs": ["#F3B530", "#01d246", "#4169E1"],  # Couleurs personnalisées pour tes 3 parts
             "trou": 0.4,                                     # Taille du trou central (effet donut)
             "marge_haut": 50,
             "marge_bas": 30,
