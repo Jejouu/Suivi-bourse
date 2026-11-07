@@ -313,6 +313,7 @@ elif page == "📈 Vue Détaillée par Actif":
                 if st.button(a, key=f"btn_ast_{a}", use_container_width=True):
                     st.session_state.selected_asset = a
                     st.rerun()
+    st.write([f"Durée: {d}" for d in durees] + [f"Actif: {a}" for a in assets])
 
 elif page == "📝 Journal des Transactions":
     st.header("📝 Journal des Transactions")
