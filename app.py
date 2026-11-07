@@ -299,58 +299,58 @@ elif page == "📈 Vue Détaillée par Actif":
     
     col_valeur = 'Valeur' if 'Valeur' in df_filtre.columns else df_filtre.select_dtypes(include='number').columns[-1]
 
-if not df_filtre.empty and col_valeur in df_filtre.columns:
-    val_initiale = df_filtre[col_valeur].iloc[0]
-    val_finale = df_filtre[col_valeur].iloc[-1]
+    if not df_filtre.empty and col_valeur in df_filtre.columns:
+        val_initiale = df_filtre[col_valeur].iloc[0]
+        val_finale = df_filtre[col_valeur].iloc[-1]
+            
+        diff = val_finale - val_initiale
+        pct = (diff / val_initiale) * 100 if val_initiale != 0 else 0
         
-    diff = val_finale - val_initiale
-    pct = (diff / val_initiale) * 100 if val_initiale != 0 else 0
+        color = "#00FF00" if diff >= 0 else "#FF4B4B"
+        arrow = "▲" if diff >= 0 else "▼"
+        sign = "+" if diff >= 0 else ""
     
-    color = "#00FF00" if diff >= 0 else "#FF4B4B"
-    arrow = "▲" if diff >= 0 else "▼"
-    sign = "+" if diff >= 0 else ""
-
-    st.markdown(f"""
-    <style>
-    .metric-container {{
-        display: flex;
-        gap: 15px;
-        margin-top: 15px;
-    }}
-    .metric-card {{
-        background-color: #2E3239;
-        border: 2px solid #383C4A;
-        border-radius: 15px;
-        padding: 15px 20px;
-        flex: 1;
-        font-family: sans-serif;
-    }}
-    .metric-title {{
-        color: #FFFFFF;
-        font-weight: bold;
-        font-size: 16px;
-        margin-bottom: 8px;
-    }}
-    .metric-value {{
-        color: {color};
-        font-weight: bold;
-        font-size: 24px;
-    }}
-    </style>
-
-    <div class="metric-container">
-        <div class="metric-card">
-            <div class="metric-title">Variation absolue</div>
-            <div class="metric-value">{arrow} {sign}{diff:,.2f}</div>
+        st.markdown(f"""
+        <style>
+        .metric-container {{
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }}
+        .metric-card {{
+            background-color: #2E3239;
+            border: 2px solid #383C4A;
+            border-radius: 15px;
+            padding: 15px 20px;
+            flex: 1;
+            font-family: sans-serif;
+        }}
+        .metric-title {{
+            color: #FFFFFF;
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }}
+        .metric-value {{
+            color: {color};
+            font-weight: bold;
+            font-size: 24px;
+        }}
+        </style>
+    
+        <div class="metric-container">
+            <div class="metric-card">
+                <div class="metric-title">Variation absolue</div>
+                <div class="metric-value">{arrow} {sign}{diff:,.2f}</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">Pourcentage</div>
+                <div class="metric-value">{arrow} {sign}{pct:.2f}%</div>
+            </div>
         </div>
-        <div class="metric-card">
-            <div class="metric-title">Pourcentage</div>
-            <div class="metric-value">{arrow} {sign}{pct:.2f}%</div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-else:
-    st.warning("Données insuffisantes pour afficher les métriques.")
+        """, unsafe_allow_html=True)
+    else:
+        st.warning("Données insuffisantes pour afficher les métriques.")
 
 elif page == "📝 Journal des Transactions":
     st.header("📝 Journal des Transactions")
