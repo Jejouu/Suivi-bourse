@@ -243,6 +243,14 @@ elif page == "📊 Dashboard Global":
     
 elif page == "📈 Vue Détaillée par Actif":
     st.header("📈 Vue Détaillée par Actif")
+    st.markdown("""
+    <style>
+    /* Style des boutons Durée (bleu) */
+    div[data-testid="column"] button {
+        border-radius: 20px !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
     try:
         df_holding = load_sheet_data("holding")
         df_valeurs = load_sheet_data("valeurs")
@@ -278,18 +286,31 @@ elif page == "📈 Vue Détaillée par Actif":
         if cols_duree[i].button(d, key=f"btn_dur_{d}"):
             st.session_state.selected_duree = d
     
-    # Ligne des 6 boutons d'assets
-    st.markdown("### Asset")
-    cols_asset = st.columns(6)
-    assets = ["S&P 500", "CAC 40", "VINCI", "SP5C", "AEME", "IWDA"]
-    for i, a in enumerate(assets):
-        if cols_asset[i].button(a, key=f"btn_ast_{a}"):
-            st.session_state.selected_asset = a
+    # Disposition principale : Graphique et colonnes d'actifs à droite
+    col_graph, col_assets = tracer_col_droite = st.columns([4, 1])
     
-    # Affichage du graphique avec l'état actuel
-    df_filtre = get_asset_data(df_donnees, st.session_state.selected_asset, st.session_state.selected_duree)
-    fig_ev = tracer_graphique_evolution(df_filtre, st.session_state.selected_asset, st.session_state.selected_duree)
-    st.plotly_chart(fig_ev, use_container_width=True)
+    with col_graph:
+        df_filtre = get_asset_data(df_donnees, st.session_state.selected_asset, st.session_state.selected_duree)
+        fig_ev = tracer_graphique_evolution(df_filtre, st.session_state.selected_asset, st.session_state.selected_duree)
+        st.plotly_chart(fig_ev, use_container_width=True)
+    
+        # 6 boutons de durée sous le graphique
+        st.markdown("### Durée")
+        cols_duree = st.columns(6)
+        durees = ["Semaine", "Mois", "Trimestre", "Semestre", "Au 1er J", "Année"]
+        for i, d in enumerate(durees):
+            # Utilisation de st.markdown avec du CSS personnalisé pour obtenir l'effet bordure bleue
+            if cols_duree[i].button(d, key=f"btn_dur_{d}use_container_width=True"):
+                st.session_state.selected_duree = d
+                st.rerun()
+
+    with col_assets:
+        st.markdown("### Asset")
+        assets = ["S&P 500", "CAC 40", "VINCI", "SP5C", "AEME", "IWDA"]
+        for a in assets:
+            if st.button(a, key=f"btn_ast_{a}", use_container_width=True):
+                st.session_state.selected_asset = a
+                st.rerun()
 
 elif page == "📝 Journal des Transactions":
     st.header("📝 Journal des Transactions")
