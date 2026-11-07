@@ -44,15 +44,23 @@ def tracer_graphique_evolution(df_subset, asset_name, duree):
     if not df_subset.empty:
         premiere_valeur = df_subset['Close'].iloc[0]
         derniere_valeur = df_subset['Close'].iloc[-1]
-        couleur_courbe = '#00FF7F' if derniere_valeur >= premiere_valeur else '#FF4B4B'
+        is_positive = derniere_valeur >= premiere_valeur
+        
+        # Couleurs de base
+        couleur_ligne = '#00FF7F' if is_positive else '#FF4B4B'
+        # Version rgba pour le remplissage sous la courbe (opacité de 0.3 près de la ligne à 0 tout en bas)
+        couleur_rgba = 'rgba(0, 255, 127, 0.3)' if is_positive else 'rgba(255, 75, 75, 0.3)'
     else:
-        couleur_courbe = '#00FF7F'
+        couleur_ligne = '#00FF7F'
+        couleur_rgba = 'rgba(0, 255, 127, 0.3)'
     
     fig.add_trace(go.Scatter(
         x=df_subset['Date'],
         y=df_subset['Close'],
         mode='lines',
-        line=dict(color=couleur_courbe, width=2, shape='spline'),  # Ajout de shape='spline'
+        line=dict(color=couleur_ligne, width=2, shape='spline'),
+        fill='tozeroy',
+        fillcolor=couleur_rgba,
         hoverinfo='x+y'
     ))
     
