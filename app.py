@@ -293,18 +293,16 @@ elif page == "📈 Vue Détaillée par Actif":
         cols_duree = st.columns(6)
         durees = ["Semaine", "Mois", "Trimestre", "Semestre", "Au 1er J", "Année"]
         for i, d in enumerate(durees):
-            btn_type = "primary" if st.session_state.selected_duree == d else "secondary"
-            if cols_duree[i].button(d, key=f"btn_dur_{d}", type=btn_type, use_container_width=True):
+            if cols_duree[i].button(d, key=f"btn_dur_{d}", use_container_width=True):
                 st.session_state.selected_duree = d
                 st.rerun()
-
-    with col_assets:
-        assets = ["S&P 500", "CAC 40", "VINCI", "SP5C", "AEME", "IWDA"]
-        for a in assets:
-            btn_type_ast = "primary" if st.session_state.selected_asset == a else "secondary"
-            if st.button(a, key=f"btn_ast_{a}", type=btn_type_ast, use_container_width=True):
-                st.session_state.selected_asset = a
-                st.rerun()
+        
+        with col_assets:
+            assets = ["S&P 500", "CAC 40", "VINCI", "SP5C", "AEME", "IWDA"]
+            for a in assets:
+                if st.button(a, key=f"btn_ast_{a}", use_container_width=True):
+                    st.session_state.selected_asset = a
+                    st.rerun()
 
 elif page == "📝 Journal des Transactions":
     st.header("📝 Journal des Transactions")
