@@ -322,7 +322,7 @@ elif page == "📈 Vue Détaillée par Actif":
             border: 2px solid #383C4A;
             border-radius: 15px;
             padding: 15px 20px;
-            flex: 1;
+            flex: 0 0 20%;
             font-family: sans-serif;
         }}
         .metric-title {{
