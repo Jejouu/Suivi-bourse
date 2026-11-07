@@ -246,38 +246,26 @@ elif page == "📈 Vue Détaillée par Actif":
     
     st.markdown("""
     <style>
-    /* --- BOUTONS DE DURÉE (Bleu) --- */
-    /* Boutons secondaires et primaires de durée */
-    div[data-testid="column"] div[data-testid="column"] button {
+    /* Boutons de durée inactifs (secondary) : contour et écriture bleus */
+    div[data-testid="column"] div[data-testid="column"] button[kind="secondary"] {
         border: 2px solid #00D2FF !important;
         border-radius: 20px !important;
         background-color: transparent !important;
         color: #00D2FF !important;
     }
-    div[data-testid="column"] div[data-testid="column"] button p,
-    div[data-testid="column"] div[data-testid="column"] button span {
+    div[data-testid="column"] div[data-testid="column"] button[kind="secondary"] * {
         color: #00D2FF !important;
     }
-    /* Fond léger pour le bouton de durée actif (primary) */
-    div[data-testid="column"] div[data-testid="column"] button[kind="primary"] {
-        background-color: rgba(0, 210, 255, 0.15) !important;
-    }
     
-    /* --- BOUTONS D'ACTIFS (Orange) --- */
-    /* Cible la colonne de droite (col_assets) */
-    div[data-testid="column"]:last-child button {
-        border: 2px solid #FFA500 !important;
+    /* Bouton de durée actif (primary) : contour, écriture bleus et fond transparent à 0.35 */
+    div[data-testid="column"] div[data-testid="column"] button[kind="primary"] {
+        border: 2px solid #00D2FF !important;
         border-radius: 20px !important;
-        background-color: transparent !important;
-        color: #FFA500 !important;
+        background-color: rgba(0, 210, 255, 0.35) !important;
+        color: #00D2FF !important;
     }
-    div[data-testid="column"]:last-child button p,
-    div[data-testid="column"]:last-child button span {
-        color: #FFA500 !important;
-    }
-    /* Fond léger pour l'actif actif (primary) */
-    div[data-testid="column"]:last-child button[kind="primary"] {
-        background-color: rgba(255, 165, 0, 0.15) !important;
+    div[data-testid="column"] div[data-testid="column"] button[kind="primary"] * {
+        color: #00D2FF !important;
     }
     </style>
     """, unsafe_allow_html=True)
