@@ -46,13 +46,23 @@ def tracer_graphique_evolution(df_subset, asset_name, duree):
         derniere_valeur = df_subset['Close'].iloc[-1]
         is_positive = derniere_valeur >= premiere_valeur
         
-        # Couleurs de base
         couleur_ligne = '#00FF7F' if is_positive else '#FF4B4B'
-        # Version rgba pour le remplissage sous la courbe (opacité de 0.3 près de la ligne à 0 tout en bas)
-        couleur_rgba = 'rgba(0, 255, 127, 0.3)' if is_positive else 'rgba(255, 75, 75, 0.3)'
+        
+        # Calcul du min pour positionner la borne inférieure de l'axe Y à -10%
+        val_min = df_subset['Close'].min()
+        val_max = df_subset['Close'].max()
+        marge = (val_max - val_min) * 0.1 if val_max != val_min else val_min * 0.05
+        y_min = val_min - marge
+        
+        # Dégradé vertical propre (opaque en haut, transparent en bas)
+        colorscale = [
+            [0.0, 'rgba(0, 0, 0, 0)'], 
+            [1.0, 'rgba(0, 255, 127, 0.35)'] if is_positive else [1.0, 'rgba(255, 75, 75, 0.35)']
+        ]
     else:
         couleur_ligne = '#00FF7F'
-        couleur_rgba = 'rgba(0, 255, 127, 0.3)'
+        y_min = 0
+        colorscale = [[0.0, 'rgba(0,0,0,0)'], [1.0, 'rgba(0, 255, 127, 0.35)']]
     
     fig.add_trace(go.Scatter(
         x=df_subset['Date'],
@@ -60,7 +70,7 @@ def tracer_graphique_evolution(df_subset, asset_name, duree):
         mode='lines',
         line=dict(color=couleur_ligne, width=2, shape='spline'),
         fill='tozeroy',
-        fillcolor=couleur_rgba,
+        fillcolor=colorscale[1][1],
         hoverinfo='x+y'
     ))
     
@@ -76,7 +86,11 @@ def tracer_graphique_evolution(df_subset, asset_name, duree):
         plot_bgcolor="rgba(0,0,0,0)",
         font=dict(color="white"),
         xaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.1)'),
-        yaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.1)'),
+        yaxis=dict(
+            showgrid=True, 
+            gridcolor='rgba(255,255,255,0.1)',
+            range=[y_min, None]  # Force l'axe à démarrer au min - 10% sans afficher 0
+        ),
         showlegend=False,
         height=350
     )
