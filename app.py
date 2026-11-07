@@ -246,20 +246,17 @@ elif page == "📈 Vue Détaillée par Actif":
     
     st.markdown("""
     <style>
-    /* Boutons de durée (colonne de gauche) : Bleu, même lorsqu'ils sont sélectionnés/actifs */
-    div[data-testid="stHorizontalBlock"] > div:nth-child(1) .stButton > button {
+    /* Forcer tous les boutons de la colonne de durée en bleu, même en état actif/focus */
+    div[data-testid="stHorizontalBlock"] > div:nth-child(1) .stButton > button,
+    div[data-testid="stHorizontalBlock"] > div:nth-child(1) .stButton > button:focus,
+    div[data-testid="stHorizontalBlock"] > div:nth-child(1) .stButton > button:active,
+    div[data-testid="stHorizontalBlock"] > div:nth-child(1) .stButton > button[data-baseweb="button"] {
         border: 2px solid #00D2FF !important;
         border-radius: 20px !important;
         background-color: transparent !important;
         color: #00D2FF !important;
     }
-    div[data-testid="stHorizontalBlock"] > div:nth-child(1) .stButton > button:focus,
-    div[data-testid="stHorizontalBlock"] > div:nth-child(1) .stButton > button:active {
-        border: 2px solid #00D2FF !important;
-        color: #00D2FF !important;
-        background-color: rgba(0, 210, 255, 0.1) !important;
-    }
-    div[data-testid="stHorizontalBlock"] > div:nth-child(1) .stButton > button p {
+    div[data-testid="stHorizontalBlock"] > div:nth-child(1) .stButton > button * {
         color: #00D2FF !important;
     }
     
@@ -270,13 +267,7 @@ elif page == "📈 Vue Détaillée par Actif":
         background-color: transparent !important;
         color: #FFA500 !important;
     }
-    div[data-testid="stHorizontalBlock"] > div:nth-child(2) .stButton > button:focus,
-    div[data-testid="stHorizontalBlock"] > div:nth-child(2) .stButton > button:active {
-        border: 2px solid #FFA500 !important;
-        color: #FFA500 !important;
-        background-color: rgba(255, 165, 0, 0.1) !important;
-    }
-    div[data-testid="stHorizontalBlock"] > div:nth-child(2) .stButton > button p {
+    div[data-testid="stHorizontalBlock"] > div:nth-child(2) .stButton > button * {
         color: #FFA500 !important;
     }
     </style>
