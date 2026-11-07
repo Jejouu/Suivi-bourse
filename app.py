@@ -76,7 +76,7 @@ if st.sidebar.button("🔄 Actualiser les données"):
 elif page == "📊 Dashboard Global":
     col1, col2, col3 = st.columns(2)
     
-    col1.st.header("📊 Dashboard Global du Portefeuille")
+    with col1:st.header("📊 Dashboard Global du Portefeuille")
 
     with col2:
         if st.button("🔄 Actualiser les données"):
