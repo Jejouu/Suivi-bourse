@@ -244,7 +244,15 @@ elif page == "📊 Dashboard Global":
         st.error(f"Une erreur est survenue sur le Dashboard Global : {e}")
     
 elif page == "📈 Vue Détaillée par Actif":
-    st.header("📈 Vue Détaillée par Actif")
+
+    col1, col2, col3 = st.columns([3,2,1])
+    
+    with col1:st.header("📈 Vue Détaillée par Actif")
+
+    with col3:
+        if st.button("🔄 Actualiser les données"):
+            st.cache_data.clear()
+            st.rerun()
     
     st.markdown("""
     <style>
