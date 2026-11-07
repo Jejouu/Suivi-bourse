@@ -144,7 +144,8 @@ def tracer_graphique_pv(df_pv_jour, config):
         yaxis_title="",
         plot_bgcolor="rgba(0,0,0,0)",
         paper_bgcolor="rgba(0,0,0,0)",
-        font=dict(color="white")
+        font=dict(color="white"),
+        height=config.get("hauteur")
     )
     
     st.plotly_chart(fig_pv, width="stretch")
@@ -189,6 +190,8 @@ def tracer_graphique_latente(df_latente, config):
     
     # Mise en page (Layout)
     fig_latente.update_layout(
+        height=config.get("hauteur"),
+        bargap=config.get("bargap", 0.2),
         title=dict(
             text=config["titre"], 
             font=dict(size=18, color="white"),
@@ -241,6 +244,8 @@ def tracer_graphique_pie(df_pie, config):
     
     # Mise en page transparente et adaptée au mode sombre
     fig.update_layout(
+        height=config.get("hauteur"),
+        width=config.get("largeur"),
         title=dict(
             text=config["titre"], 
             font=dict(size=18, color="white"),
