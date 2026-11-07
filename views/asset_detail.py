@@ -17,8 +17,18 @@ def get_asset_data(df, asset_name, duree):
     # Définition de la plage de lignes selon la durée
     fin_ligne = 24 if duree in ["Semaine", "Mois"] else 105
     
+    debut_lignes = {
+    "Semaine": 16,
+    "Mois": 2,
+    "Trimestre": 90,
+    "Semestre": 77,
+    "Au 1er J": 59,
+    "Année": 51
+    }
+    debut_ligne = debut_lignes.get(duree, 2)
+    
     # Extraction et nettoyage
-    df_subset = df.iloc[1:fin_ligne, [col_date, col_val]].copy()
+    df_subset = df.iloc[debut_ligne:fin_ligne, [col_date, col_val]].copy()
     df_subset.columns = ['Date', 'Close']
     df_subset['Close'] = pd.to_numeric(df_subset['Close'].astype(str).str.replace(',', '.'), errors='coerce')
     df_subset = df_subset.dropna()
