@@ -253,42 +253,6 @@ elif page == "📈 Vue Détaillée par Actif":
         if st.button("🔄 Actualiser les données"):
             st.cache_data.clear()
             st.rerun()
-    
-    st.markdown("""
-    <style>
-    /* --- Boutons de Durée (Bleu) --- */
-    button[aria-label="Durée: Semaine"],
-    button[aria-label="Durée: Mois"],
-    button[aria-label="Durée: Trimestre"],
-    button[aria-label="Durée: Semestre"],
-    button[aria-label="Durée: Au 1er J"],
-    button[aria-label="Durée: Année"] {
-        border: 2px solid #00D2FF !important;
-        border-radius: 20px !important;
-        background-color: transparent !important;
-        color: #00D2FF !important;
-    }
-    button[aria-label^="Durée:"] p {
-        color: #00D2FF !important;
-    }
-    
-    /* --- Boutons d'Actifs (Orange) --- */
-    button[aria-label="Actif: S&P 500"],
-    button[aria-label="Actif: CAC 40"],
-    button[aria-label="Actif: VINCI"],
-    button[aria-label="Actif: SP5C"],
-    button[aria-label="Actif: AEME"],
-    button[aria-label="Actif: IWDA"] {
-        border: 2px solid #FFA500 !important;
-        border-radius: 20px !important;
-        background-color: transparent !important;
-        color: #FFA500 !important;
-    }
-    button[aria-label^="Actif:"] p {
-        color: #FFA500 !important;
-    }
-    </style>
-    """, unsafe_allow_html=True)
 
     try:
         df_holding = load_sheet_data("holding")
@@ -321,17 +285,18 @@ elif page == "📈 Vue Détaillée par Actif":
         cols_duree = st.columns(6)
         durees = ["Semaine", "Mois", "Trimestre", "Semestre", "Au 1er J", "Année"]
         for i, d in enumerate(durees):
-            if cols_duree[i].button(d, key=f"btn_dur_{d}", use_container_width=True):
+            btn_type = "primary" if st.session_state.selected_duree == d else "secondary"
+            if cols_duree[i].button(d, key=f"btn_dur_{d}", type=btn_type, use_container_width=True):
                 st.session_state.selected_duree = d
                 st.rerun()
         
         with col_assets:
             assets = ["S&P 500", "CAC 40", "VINCI", "SP5C", "AEME", "IWDA"]
             for a in assets:
-                if st.button(a, key=f"btn_ast_{a}", use_container_width=True):
+                btn_type_ast = "primary" if st.session_state.selected_asset == a else "secondary"
+                if st.button(a, key=f"btn_ast_{a}", type=btn_type_ast, use_container_width=True):
                     st.session_state.selected_asset = a
                     st.rerun()
-    st.write([f"Durée: {d}" for d in durees] + [f"Actif: {a}" for a in assets])
 
 elif page == "📝 Journal des Transactions":
     st.header("📝 Journal des Transactions")
