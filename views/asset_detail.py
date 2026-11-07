@@ -51,7 +51,7 @@ def tracer_graphique_evolution(df_subset, asset_name, duree):
         # Bornes avec -10 % sur le minimum
         val_min = df_subset['Close'].min()
         val_max = df_subset['Close'].max()
-        y_min = val_min * 0.90
+        y_min = val_min * 0.98
         y_max = val_max * 1.02
         
         # Couleur de remplissage semi-transparente
