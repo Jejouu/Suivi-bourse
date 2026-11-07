@@ -74,7 +74,7 @@ if st.sidebar.button("🔄 Actualiser les données"):
 
 # --- Routage des pages avec isolation des erreurs ---
 elif page == "📊 Dashboard Global":
-    col1, col2, col3 = st.columns([2,1,1])
+    col1, col2, col3 = st.columns([2,2,1])
     
     with col1:st.header("📊 Dashboard Global du Portefeuille")
 
