@@ -250,6 +250,21 @@ elif page == "📊 Dashboard Global":
         
         if 'selected_vue_global' not in st.session_state:
             st.session_state.selected_vue_global = "Valeur & Investissement"
+
+        st.markdown("""
+        <style>
+        /* Cible le bouton primaire dans la zone des vues pour changer sa couleur (par exemple en vert ou autre) */
+        div[data-testid="column"] div.stButton > button[kind="primary"] {
+            background-color: #00FF00 !important;
+            border-color: #00FF00 !important;
+            color: #000000 !important;
+        }
+        div[data-testid="column"] div.stButton > button[kind="primary"]:hover {
+            background-color: #00DD00 !important;
+            border-color: #00DD00 !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
         
         col_v1, col_v2, col_spacer = st.columns([1, 1, 4])
         vues_global = ["Valeur & Investissement", "Plus-value"]
