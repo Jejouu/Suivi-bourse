@@ -250,9 +250,10 @@ elif page == "📊 Dashboard Global":
         df_hist[col_date] = pd.to_datetime(df_hist[col_date], format='mixed', dayfirst=True)
         df_hist = df_hist[df_hist[col_date] <= pd.Timestamp.today()]
         
+        # Conversion forcée en nombres (remplace les erreurs éventuelles par NaN)
+        valeur_portfolio = pd.to_numeric(df_hist[col_val].astype(str).str.replace(',', '.'), errors='coerce')
+        investissement = pd.to_numeric(df_hist[col_inv].astype(str).str.replace(',', '.'), errors='coerce')
         dates = df_hist[col_date]
-        valeur_portfolio = df_hist[col_val]
-        investissement = df_hist[col_inv]
         
         fig = go.Figure()
         
