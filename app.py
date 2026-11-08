@@ -248,10 +248,11 @@ elif page == "📊 Dashboard Global":
         if 'selected_duree_global' not in st.session_state:
             st.session_state.selected_duree_global = "Depuis le début"
         
-        if 'afficher_plus_value' not in st.session_state:
-            st.session_state.afficher_plus_value = False
-        
-        st.session_state.afficher_plus_value = st.checkbox("Afficher la plus-value nette", value=st.session_state.afficher_plus_value)
+        col_chk1, col_chk2 = st.columns(2)
+        with col_chk1:
+            afficher_valeur = st.checkbox("Valeur et investissement", value=True)
+        with col_chk2:
+            afficher_plus_value = st.checkbox("Plus-value nette", value=False)
         
         col_date = 'A' if 'A' in df_hist.columns else df_hist.columns[0]
         col_val = 'B' if 'B' in df_hist.columns else df_hist.columns[1]
@@ -289,16 +290,7 @@ elif page == "📊 Dashboard Global":
         
             fig = go.Figure()
         
-            if st.session_state.afficher_plus_value:
-                plus_value = valeur_portfolio - investissement
-                fig.add_trace(go.Scatter(
-                    x=dates,
-                    y=plus_value,
-                    mode='lines',
-                    name='Plus-value nette',
-                    line=dict(color='#00FF00', width=2)
-                ))
-            else:
+            if afficher_valeur:
                 fig.add_trace(go.Scatter(
                     x=dates,
                     y=valeur_portfolio,
@@ -314,6 +306,16 @@ elif page == "📊 Dashboard Global":
                     line=dict(color='#F3B530', width=2, dash='dash')
                 ))
         
+            if afficher_plus_value:
+                plus_value = valeur_portfolio - investissement
+                fig.add_trace(go.Scatter(
+                    x=dates,
+                    y=plus_value,
+                    mode='lines',
+                    name='Plus-value nette',
+                    line=dict(color='#00FF00', width=2)
+                ))
+        
             fig.update_layout(
                 template='plotly_dark',
                 margin=dict(l=10, r=10, t=30, b=10),
@@ -321,6 +323,77 @@ elif page == "📊 Dashboard Global":
             )
         
             st.plotly_chart(fig, use_container_width=True)
+        
+        with col_d:
+            durees_global = ["1 mois", "3 mois", "6 mois", "1 an", "Au 1er J", "Depuis le début"]
+            for d in durees_global:
+                btn_type = "primary" if st.session_state.selected_duree_global == d else "secondary"
+                if st.button(d, key=f"btn_global_{d}", type=btn_type, use_container_width=True):
+                    st.session_state.selected_duree_global = d
+                    st.rerun()
+        
+            if not df_hist_filtre.empty:
+                val_initiale = pd.to_numeric(str(df_hist_filtre[col_val].iloc[0]).replace(',', '.'), errors='coerce')
+                inv_initiale = pd.to_numeric(str(df_hist_filtre[col_inv].iloc[0]).replace(',', '.'), errors='coerce')
+                
+                val_finale = pd.to_numeric(str(df_hist_filtre[col_val].iloc[-1]).replace(',', '.'), errors='coerce')
+                inv_finale = pd.to_numeric(str(df_hist_filtre[col_inv].iloc[-1]).replace(',', '.'), errors='coerce')
+                
+                gain_initial = val_initiale - inv_initiale
+                gain_final = val_finale - inv_finale
+                
+                diff = gain_final - gain_initial
+                pct = (diff / val_initiale) * 100 if val_initiale != 0 else 0
+                
+                color = "#00FF00" if diff >= 0 else "#FF4B4B"
+                arrow = "▲" if diff >= 0 else "▼"
+                sign = "+" if diff >= 0 else ""
+        
+                st.markdown(f"""
+                <style>
+                .metric-card-global {{
+                    background-color: #2E3239;
+                    border: 2px solid #383C4A;
+                    border-radius: 15px;
+                    padding: 15px 20px;
+                    margin-top: 15px;
+                    font-family: sans-serif;
+                }}
+                .metric-title-global {{
+                    color: #FFFFFF;
+                    font-weight: bold;
+                    font-size: 15px;
+                    margin-bottom: 10px;
+                }}
+                .metric-row-global {{
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-top: 8px;
+                }}
+                .metric-label-global {{
+                    color: #A0A0A0;
+                    font-size: 13px;
+                }}
+                .metric-value-global {{
+                    color: {color};
+                    font-weight: bold;
+                    font-size: 18px;
+                }}
+                </style>
+        
+                <div class="metric-card-global">
+                    <div class="metric-title-global">Performance de la période</div>
+                    <div class="metric-row-global">
+                        <span class="metric-label-global">Variation absolue</span>
+                        <span class="metric-value-global">{arrow} {sign}{diff:,.2f}</span>
+                    </div>
+                    <div class="metric-row-global">
+                        <span class="metric-label-global">Pourcentage</span>
+                        <span class="metric-value-global">{arrow} {sign}{pct:.2f}%</span>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
         
         with col_d:
             durees_global = ["1 mois", "3 mois", "6 mois", "1 an", "Au 1er J", "Depuis le début"]
