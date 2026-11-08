@@ -243,16 +243,23 @@ elif page == "📊 Dashboard Global":
                 
         st.markdown("---")
 
-        st.subheader("Évolution du portefeuille")
+        st.subheader("📈 Évolution du portefeuille")
 
         if 'selected_duree_global' not in st.session_state:
             st.session_state.selected_duree_global = "Depuis le début"
         
-        col_chk1, col_chk2 = st.columns(2)
-        with col_chk1:
-            afficher_valeur = st.checkbox("Valeur et investissement", value=True, key="chk_valeur_global")
-        with col_chk2:
-            afficher_plus_value = st.checkbox("Plus-value nette", value=False, key="chk_plus_value_global")
+        if 'selected_vue_global' not in st.session_state:
+            st.session_state.selected_vue_global = "Valeur & Investissement"
+        
+        # Boutons de sélection de la vue (remplacent les cases à cocher)
+        col_v1, col_v2 = st.columns(2)
+        vues_global = ["Valeur & Investissement", "Plus-value"]
+        for i, v in enumerate(vues_global):
+            with [col_v1, col_v2][i]:
+                btn_type = "primary" if st.session_state.selected_vue_global == v else "secondary"
+                if st.button(v, key=f"btn_vue_global_{v}", type=btn_type, use_container_width=True):
+                    st.session_state.selected_vue_global = v
+                    st.rerun()
         
         col_date = 'A' if 'A' in df_hist.columns else df_hist.columns[0]
         col_val = 'B' if 'B' in df_hist.columns else df_hist.columns[1]
@@ -290,7 +297,7 @@ elif page == "📊 Dashboard Global":
         
             fig = go.Figure()
         
-            if afficher_valeur:
+            if st.session_state.selected_vue_global == "Valeur & Investissement":
                 fig.add_trace(go.Scatter(
                     x=dates,
                     y=valeur_portfolio,
@@ -305,8 +312,7 @@ elif page == "📊 Dashboard Global":
                     name='Investissement',
                     line=dict(color='#F3B530', width=2, dash='dash')
                 ))
-        
-            if afficher_plus_value:
+            else:
                 plus_value = valeur_portfolio - investissement
                 fig.add_trace(go.Scatter(
                     x=dates,
