@@ -275,6 +275,8 @@ elif page == "📊 Dashboard Global":
             margin=dict(l=10, r=10, t=30, b=10),
             legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
         )
+
+        dates = pd.to_datetime(df_hist[col_date], format='mixed', dayfirst=True)
         
         st.plotly_chart(fig, use_container_width=True)
         
