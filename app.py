@@ -243,13 +243,19 @@ elif page == "📊 Dashboard Global":
 
         afficher_investissement = st.checkbox("Afficher la courbe d'investissement", value=True)
         
+        if 'selected_duree_global' not in st.session_state:
+            st.session_state.selected_duree_global = "Depuis le début"
+        
+        # 1. Détection automatique des colonnes si nécessaire
         col_date = 'A' if 'A' in df_hist.columns else df_hist.columns[0]
         col_val = 'B' if 'B' in df_hist.columns else df_hist.columns[1]
         col_inv = 'J' if 'J' in df_hist.columns else df_hist.columns[min(9, len(df_hist.columns)-1)]
         
-        if 'selected_duree_global' not in st.session_state:
-            st.session_state.selected_duree_global = "Depuis le début"
-
+        # 2. Conversion sécurisée des dates et nettoyage
+        df_hist[col_date] = pd.to_datetime(df_hist[col_date], format='mixed', dayfirst=True)
+        today = pd.Timestamp.today()
+        df_hist = df_hist[(df_hist[col_date].notna()) & (df_hist[col_date] <= today)]
+        
         col_g, col_d = st.columns([5, 1])
         
         with col_d:
@@ -261,8 +267,6 @@ elif page == "📊 Dashboard Global":
                     st.rerun()
         
         with col_g:
-            today = pd.Timestamp.today()
-            
             if st.session_state.selected_duree_global == "1 mois":
                 target_date = today - pd.DateOffset(months=1)
             elif st.session_state.selected_duree_global == "3 mois":
