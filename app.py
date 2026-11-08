@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import plotly.graph_objects as go
 from Utils.loader import (
     load_sheet_data,
     clean_financial_column,
@@ -239,7 +240,40 @@ elif page == "📊 Dashboard Global":
                 tracer_graphique_pie(df_pie, config_graphique_pie)
             else:
                 st.info("Colonnes insuffisantes dans l'onglet holding pour afficher la répartition.")
-    
+
+        afficher_investissement = st.checkbox("Afficher la courbe d'investissement", value=True)
+        
+        dates = pd.to_datetime(df_hist['A'])
+        valeur_portfolio = df_hist['B']
+        investissement = df_hist['J']
+        
+        fig = go.Figure()
+        
+        fig.add_trace(go.Scatter(
+            x=dates,
+            y=valeur_portfolio,
+            mode='lines',
+            name='Valeur du portefeuille',
+            line=dict(color='#00D2FF', width=2)
+        ))
+        
+        if afficher_investissement:
+            fig.add_trace(go.Scatter(
+                x=dates,
+                y=investissement,
+                mode='lines',
+                name='Investissement',
+                line=dict(color='#A0A0A0', width=2, dash='dash')
+            ))
+        
+        fig.update_layout(
+            template='plotly_dark',
+            margin=dict(l=10, r=10, t=30, b=10),
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+        )
+        
+        st.plotly_chart(fig, use_container_width=True)
+        
     except Exception as e:
         st.error(f"Une erreur est survenue sur le Dashboard Global : {e}")
     
