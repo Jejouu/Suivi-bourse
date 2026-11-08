@@ -289,7 +289,7 @@ elif page == "📊 Dashboard Global":
                 y=valeur_portfolio,
                 mode='lines',
                 name='Valeur du portefeuille',
-                line=dict(color='#01d246', width=2)
+                line=dict(color='#4169E1', width=2)
             ))
         
             if afficher_investissement:
