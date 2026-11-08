@@ -265,7 +265,51 @@ elif page == "📊 Dashboard Global":
                 if st.button(d, key=f"btn_global_{d}", type=btn_type, use_container_width=True):
                     st.session_state.selected_duree_global = d
                     st.rerun()
+
+            if not df_hist_filtre.empty:
+                val_initiale = pd.to_numeric(str(df_hist_filtre[col_val].iloc[0]).replace(',', '.'), errors='coerce')
+                val_finale = pd.to_numeric(str(df_hist_filtre[col_val].iloc[-1]).replace(',', '.'), errors='coerce')
+                
+                diff = val_finale - val_initiale
+                pct = (diff / val_initiale) * 100 if val_initiale != 0 else 0
+                
+                color = "#00FF00" if diff >= 0 else "#FF4B4B"
+                arrow = "▲" if diff >= 0 else "▼"
+                sign = "+" if diff >= 0 else ""
         
+                st.markdown(f"""
+                <style>
+                .metric-card-global {{
+                    background-color: #2E3239;
+                    border: 2px solid #383C4A;
+                    border-radius: 15px;
+                    padding: 12px 15px;
+                    margin-top: 15px;
+                    font-family: sans-serif;
+                }}
+                .metric-title-global {{
+                    color: #FFFFFF;
+                    font-weight: bold;
+                    font-size: 14px;
+                    margin-bottom: 6px;
+                }}
+                .metric-value-global {{
+                    color: {color};
+                    font-weight: bold;
+                    font-size: 20px;
+                }}
+                </style>
+        
+                <div class="metric-card-global">
+                    <div class="metric-title-global">Variation absolue</div>
+                    <div class="metric-value-global">{arrow} {sign}{diff:,.2f}</div>
+                </div>
+                <div class="metric-card-global">
+                    <div class="metric-title-global">Pourcentage</div>
+                    <div class="metric-value-global">{arrow} {sign}{pct:.2f}%</div>
+                </div>
+                """, unsafe_allow_html=True)
+            
         with col_g:
             if st.session_state.selected_duree_global == "1 mois":
                 target_date = today - pd.DateOffset(months=1)
