@@ -242,6 +242,8 @@ elif page == "📊 Dashboard Global":
                 st.info("Colonnes insuffisantes dans l'onglet holding pour afficher la répartition.")
                 
         st.markdown("---")
+
+        st.subheader("📈 Evolution du porte-feuille")
         
         afficher_investissement = st.checkbox("Afficher la courbe d'investissement", value=True)
         
