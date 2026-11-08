@@ -27,7 +27,6 @@ from views.asset_detail import (
 
 def check_password():
     """Vérifie si le code d'accès est correct."""
-    # Tu peux changer le code ici ou le stocker dans st.secrets["PASSWORD"]
     CODE_SECRET = "1234"  
 
     if "password_correct" not in st.session_state:
@@ -36,7 +35,6 @@ def check_password():
     if st.session_state["password_correct"]:
         return True
 
-    # Interface de saisie du code
     st.header("🔒 Accès restreint")
     password = st.text_input("Veuillez entrer le code d'accès :", type="password")
     
@@ -50,7 +48,6 @@ def check_password():
     return False
 
 # --- APPLICATION PRINCIPALE ---
-# Si le code n'est pas validé, on stoppe l'exécution de la suite de la page
 if not check_password():
     st.stop()
 
@@ -73,16 +70,10 @@ if st.sidebar.button("🔄 Actualiser les données"):
     st.cache_data.clear()
     st.rerun()
 
-# --- Routage des pages avec isolation des erreurs ---
-elif page == "📊 Dashboard Global":
-    col1, col2, col3 = st.columns([3,2,1])
+# --- Routage des pages ---
+if page == "📊 Dashboard Global":
+    st.header("📊 Dashboard Global du Portefeuille")
     
-    with col1:st.header("📊 Dashboard Global du Portefeuille")
-
-    with col3:
-        if st.button("🔄 Actualiser les données"):
-            st.cache_data.clear()
-            st.rerun()
     try:
         # 1. Chargement des onglets nécessaires
         df_holding = load_sheet_data("holding")
@@ -95,7 +86,7 @@ elif page == "📊 Dashboard Global":
         # 2. Récupération des valeurs via les fonctions modulaires
         total_valeur = get_total_portfolio_value(df_holding)
 
-        total_col_g = clean_financial_column(df_holding.iloc[:, 6]).sum()
+        total_col_g = clean_financial_column(df_holding.iloc[:, 6]).sum() if df_holding.shape[1] > 6 else 0
         
         plus_value_nette = get_net_pnl(df_holding)
         pourcentage_pnl = (plus_value_nette / total_col_g * 100) if total_col_g != 0 else 0.0
@@ -117,7 +108,7 @@ elif page == "📊 Dashboard Global":
         """, unsafe_allow_html=True)
         
         with col2:
-            signe_pnl = "+" if plus_value_nette >  0 else ""
+            signe_pnl = "+" if plus_value_nette > 0 else ""
             signe_pct = "+" if pourcentage_pnl > 0 else ""
             valeur_formatee = f"{signe_pnl}{plus_value_nette:,.2f} € / {signe_pct}{pourcentage_pnl:.2f} %"
             metric_colored(
@@ -127,11 +118,11 @@ elif page == "📊 Dashboard Global":
             )
 
         with col3:
-            signe_pnl = "+" if plus_value_latente >  0 else ""
+            signe_pnl = "+" if plus_value_latente > 0 else ""
             signe_pct = "+" if pourcentage_lat > 0 else ""
             valeur_formatee_Lat = f"{signe_pnl}{plus_value_latente:,.2f} € / {signe_pct}{pourcentage_lat:.2f} %"
             metric_colored(
-                label="Plus-Value Latnte",
+                label="Plus-Value Latente",
                 value_str=valeur_formatee_Lat,
                 val_numeric=plus_value_latente
             )
@@ -139,25 +130,22 @@ elif page == "📊 Dashboard Global":
 
         # --- 2ème Ligne : Titre et Indicateurs de Risque ---
         st.subheader("🔍 Analyse")
-        col4, col5, col6 = st.columns([ 1, 1, 1])
+        col4, col5, col6 = st.columns([1, 1, 1])
         
         with col4:
             render_ratio_slider("Ratio de Sharpe", sharpe, min_val=-1.0, max_val=3.0, ratio_type="sharpe")
-            
         with col5:
             render_ratio_slider("Ratio de Sortino", sortino, min_val=0.0, max_val=5.0, ratio_type="sortino")
-            
         with col6:
             render_ratio_slider("Bêta (S&P 500)", beta, min_val=-1.0, max_val=2.0, ratio_type="beta")
 
         st.markdown("---")
 
-      # --- Section Graphique : Plus-Value du Jour par Actif (1/3 de la largeur) ---
+        # --- Section Graphique : Répartition et PV ---
         st.subheader("🧩 Répartition des actifs")
         
-        col_PL_jour, col_Rep, col_PL_Lat = st.columns([ 0.7, 1, 2])
+        col_PL_jour, col_Rep, col_PL_Lat = st.columns([0.7, 1, 2])
         
-        # --- Configuration globale du graphique ---
         config_graphique_pv = {
             "titre": "📈 Plus-Value du jour",
             "hauteur": 300,
@@ -178,8 +166,6 @@ elif page == "📊 Dashboard Global":
                     "Actif": df_holding.iloc[:, 0],
                     "PV_Jour": clean_financial_column(df_holding.iloc[:, 9])
                 }).dropna(subset=["Actif", "PV_Jour"])
-        
-                # Appel de la fonction centralisée avec la config
                 tracer_graphique_pv(df_pv_jour, config_graphique_pv)
             else:
                 st.info("Colonnes insuffisantes pour accéder à la colonne J.")
@@ -205,9 +191,8 @@ elif page == "📊 Dashboard Global":
             if not df_holding.empty and df_holding.shape[1] >= 8:
                 df_latente = pd.DataFrame({
                     "Actif": df_holding.iloc[:, 0],
-                    "PV_Latente": clean_financial_column(df_holding.iloc[:, 7])  # Colonne H (index 7)
+                    "PV_Latente": clean_financial_column(df_holding.iloc[:, 7])
                 }).dropna(subset=["Actif", "PV_Latente"])
-                
                 tracer_graphique_latente(df_latente, config_graphique_latente)
             else:
                 st.warning("Colonnes insuffisantes pour accéder à la colonne H.")
@@ -216,8 +201,8 @@ elif page == "📊 Dashboard Global":
             "titre": "🥧 Répartition des actifs",
             "hauteur": 300,
             "largeur": 300,
-            "couleurs": ["#F3B530", "#01d246", "#4169E1"],  # Couleurs personnalisées pour tes 3 parts
-            "trou": 0.4,                                     # Taille du trou central (effet donut)
+            "couleurs": ["#F3B530", "#01d246", "#4169E1"],
+            "trou": 0.4,
             "marge_haut": 50,
             "marge_bas": 30,
             "marge_gauche": 60,
@@ -226,23 +211,19 @@ elif page == "📊 Dashboard Global":
         
         with col_Rep:
             if not df_holding.empty and df_holding.shape[1] > 4:
-                import plotly.express as px
-                
                 df_pie = pd.DataFrame({
                     "Actif": df_holding.iloc[:, 0],
                     "Valeur": clean_financial_column(df_holding.iloc[:, 4])
                 }).dropna(subset=["Actif", "Valeur"])
                 
-                # Filtrer les valeurs strictement positives
                 df_pie = df_pie[df_pie["Valeur"] > 0]
-                
-                # Appel de la fonction centralisée
                 tracer_graphique_pie(df_pie, config_graphique_pie)
             else:
                 st.info("Colonnes insuffisantes dans l'onglet holding pour afficher la répartition.")
                 
         st.markdown("---")
 
+        # --- Section Évolution du portefeuille ---
         st.subheader("📈 Évolution du portefeuille")
 
         if 'selected_duree_global' not in st.session_state:
@@ -250,21 +231,6 @@ elif page == "📊 Dashboard Global":
         
         if 'selected_vue_global' not in st.session_state:
             st.session_state.selected_vue_global = "Valeur & Investissement"
-
-        st.markdown("""
-        <style>
-        /* Cible le bouton primaire dans la zone des vues pour changer sa couleur (par exemple en vert ou autre) */
-        div[data-testid="column"] div.stButton > button[kind="primary"] {
-            background-color: #00FF00 !important;
-            border-color: #00FF00 !important;
-            color: #000000 !important;
-        }
-        div[data-testid="column"] div.stButton > button[kind="primary"]:hover {
-            background-color: #00DD00 !important;
-            border-color: #00DD00 !important;
-        }
-        </style>
-        """, unsafe_allow_html=True)
         
         col_v1, col_v2, col_spacer = st.columns([1, 1, 4])
         vues_global = ["Valeur & Investissement", "Plus-value"]
@@ -313,27 +279,18 @@ elif page == "📊 Dashboard Global":
         
             if st.session_state.selected_vue_global == "Valeur & Investissement":
                 fig.add_trace(go.Scatter(
-                    x=dates,
-                    y=valeur_portfolio,
-                    mode='lines',
-                    name='Valeur du portefeuille',
-                    line=dict(color='#4169E1', width=2)
+                    x=dates, y=valeur_portfolio, mode='lines',
+                    name='Valeur du portefeuille', line=dict(color='#4169E1', width=2)
                 ))
                 fig.add_trace(go.Scatter(
-                    x=dates,
-                    y=investissement,
-                    mode='lines',
-                    name='Investissement',
-                    line=dict(color='#F3B530', width=2, dash='dash')
+                    x=dates, y=investissement, mode='lines',
+                    name='Investissement', line=dict(color='#F3B530', width=2, dash='dash')
                 ))
             else:
                 plus_value = valeur_portfolio - investissement
                 fig.add_trace(go.Scatter(
-                    x=dates,
-                    y=plus_value,
-                    mode='lines',
-                    name='Plus-value nette',
-                    line=dict(color='#00FF00', width=2)
+                    x=dates, y=plus_value, mode='lines',
+                    name='Plus-value nette', line=dict(color='#00FF00', width=2)
                 ))
         
             fig.update_layout(
@@ -355,7 +312,6 @@ elif page == "📊 Dashboard Global":
             if not df_hist_filtre.empty:
                 val_initiale = pd.to_numeric(str(df_hist_filtre[col_val].iloc[0]).replace(',', '.'), errors='coerce')
                 inv_initiale = pd.to_numeric(str(df_hist_filtre[col_inv].iloc[0]).replace(',', '.'), errors='coerce')
-                
                 val_finale = pd.to_numeric(str(df_hist_filtre[col_val].iloc[-1]).replace(',', '.'), errors='coerce')
                 inv_finale = pd.to_numeric(str(df_hist_filtre[col_inv].iloc[-1]).replace(',', '.'), errors='coerce')
                 
@@ -368,7 +324,7 @@ elif page == "📊 Dashboard Global":
                 color = "#00FF00" if diff >= 0 else "#FF4B4B"
                 arrow = "▲" if diff >= 0 else "▼"
                 sign = "+" if diff >= 0 else ""
-        
+
                 st.markdown(f"""
                 <style>
                 .metric-card-global {{
@@ -401,7 +357,7 @@ elif page == "📊 Dashboard Global":
                     font-size: 18px;
                 }}
                 </style>
-        
+
                 <div class="metric-card-global">
                     <div class="metric-title-global">Performance de la période</div>
                     <div class="metric-row-global">
@@ -414,20 +370,12 @@ elif page == "📊 Dashboard Global":
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
-        
+                
     except Exception as e:
         st.error(f"Une erreur est survenue sur le Dashboard Global : {e}")
     
 elif page == "📈 Vue Détaillée par Actif":
-
-    col1, col2, col3 = st.columns([3,2,1])
-    
-    with col1:st.header("📈 Vue Détaillée par Actif")
-
-    with col3:
-        if st.button("🔄 Actualiser les données"):
-            st.cache_data.clear()
-            st.rerun()
+    st.header("📈 Vue Détaillée par Actif")
 
     try:
         df_holding = load_sheet_data("holding")
@@ -531,9 +479,7 @@ elif page == "📝 Journal des Transactions":
     st.header("📝 Journal des Transactions")
     try:
         df_trans = load_sheet_data("transaction")
-        
         st.success("Historique des transactions chargé avec succès !")
         st.dataframe(df_trans)
-        
     except Exception as e:
         st.error(f"Une erreur est survenue sur le journal des transactions : {e}")
