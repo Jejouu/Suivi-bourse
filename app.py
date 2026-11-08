@@ -251,8 +251,7 @@ elif page == "📊 Dashboard Global":
         if 'selected_vue_global' not in st.session_state:
             st.session_state.selected_vue_global = "Valeur & Investissement"
         
-        # Boutons de sélection de la vue (remplacent les cases à cocher)
-        col_v1, col_v2 = st.columns(2)
+        col_v1, col_v2, col_spacer = st.columns([1, 1, 4])
         vues_global = ["Valeur & Investissement", "Plus-value"]
         for i, v in enumerate(vues_global):
             with [col_v1, col_v2][i]:
