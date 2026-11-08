@@ -258,7 +258,7 @@ elif page == "📊 Dashboard Global":
         today = pd.Timestamp.today()
         df_hist = df_hist[(df_hist[col_date].notna()) & (df_hist[col_date] <= today)]
         
-        col_g, col_d = st.columns([5, 1])
+        col_g, col_d = st.columns([4, 0.5])
             
         with col_g:
             if st.session_state.selected_duree_global == "1 mois":
