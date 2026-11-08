@@ -243,9 +243,13 @@ elif page == "📊 Dashboard Global":
 
         afficher_investissement = st.checkbox("Afficher la courbe d'investissement", value=True)
         
-        dates = pd.to_datetime(df_hist['A'])
-        valeur_portfolio = df_hist['B']
-        investissement = df_hist['J']
+        col_date = 'A' if 'A' in df_hist.columns else df_hist.columns[0]
+        col_val = 'B' if 'B' in df_hist.columns else df_hist.columns[1]
+        col_inv = 'J' if 'J' in df_hist.columns else df_hist.columns[min(9, len(df_hist.columns)-1)]
+        
+        dates = pd.to_datetime(df_hist[col_date])
+        valeur_portfolio = df_hist[col_val]
+        investissement = df_hist[col_inv]
         
         fig = go.Figure()
         
