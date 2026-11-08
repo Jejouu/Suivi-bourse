@@ -318,45 +318,64 @@ elif page == "📊 Dashboard Global":
 
             if not df_hist_filtre.empty:
                 val_initiale = pd.to_numeric(str(df_hist_filtre[col_val].iloc[0]).replace(',', '.'), errors='coerce')
-                val_finale = pd.to_numeric(str(df_hist_filtre[col_val].iloc[-1]).replace(',', '.'), errors='coerce')
+                inv_initiale = pd.to_numeric(str(df_hist_filtre[col_inv].iloc[0]).replace(',', '.'), errors='coerce')
                 
-                diff = val_finale - val_initiale
+                val_finale = pd.to_numeric(str(df_hist_filtre[col_val].iloc[-1]).replace(',', '.'), errors='coerce')
+                inv_finale = pd.to_numeric(str(df_hist_filtre[col_inv].iloc[-1]).replace(',', '.'), errors='coerce')
+                
+                gain_initial = val_initiale - inv_initiale
+                gain_final = val_finale - inv_finale
+                
+                diff = gain_final - gain_initial
                 pct = (diff / val_initiale) * 100 if val_initiale != 0 else 0
                 
                 color = "#00FF00" if diff >= 0 else "#FF4B4B"
                 arrow = "▲" if diff >= 0 else "▼"
                 sign = "+" if diff >= 0 else ""
-        
+            
                 st.markdown(f"""
                 <style>
                 .metric-card-global {{
                     background-color: #2E3239;
                     border: 2px solid #383C4A;
                     border-radius: 15px;
-                    padding: 12px 15px;
+                    padding: 15px 20px;
                     margin-top: 15px;
                     font-family: sans-serif;
                 }}
                 .metric-title-global {{
                     color: #FFFFFF;
                     font-weight: bold;
-                    font-size: 14px;
-                    margin-bottom: 6px;
+                    font-size: 15px;
+                    margin-bottom: 10px;
+                }}
+                .metric-row-global {{
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-top: 8px;
+                }}
+                .metric-label-global {{
+                    color: #A0A0A0;
+                    font-size: 13px;
                 }}
                 .metric-value-global {{
                     color: {color};
                     font-weight: bold;
-                    font-size: 20px;
+                    font-size: 18px;
                 }}
                 </style>
-        
+            
                 <div class="metric-card-global">
-                    <div class="metric-title-global">Variation absolue</div>
-                    <div class="metric-value-global">{arrow} {sign}{diff:,.2f}</div>
-                </div>
-                <div class="metric-card-global">
-                    <div class="metric-title-global">Pourcentage</div>
-                    <div class="metric-value-global">{arrow} {sign}{pct:.2f}%</div>
+                    <div class="metric-title-global">Performance de la période</div>
+                    <div class="metric-row-global">
+                        <span class="metric-label-global">Variation absolue</span>
+                        <span class="metric-value-global">{arrow} {sign}{diff:,.2f}</span>
+                    </div>
+                    <div class="metric-row-global">
+                        <span class="metric-label-global">Pourcentage</span>
+                        <span class="metric-value-global">{arrow} {sign}{pct:.2f}%</span>
+                    </div>
                 </div>
                 """, unsafe_allow_html=True)
         
