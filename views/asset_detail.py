@@ -24,7 +24,7 @@ def get_asset_data(df, asset_name, duree):
     elif duree == "Semestre":
         debut_ligne, fin_ligne = 77, 105
     elif duree == "Au 1er J":
-        debut_ligne, fin_ligne = 59, 105
+        debut_ligne, fin_ligne = 58, 105
     elif duree == "Année":
         debut_ligne, fin_ligne = 51, 105
     else:
