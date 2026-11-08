@@ -240,7 +240,9 @@ elif page == "📊 Dashboard Global":
                 tracer_graphique_pie(df_pie, config_graphique_pie)
             else:
                 st.info("Colonnes insuffisantes dans l'onglet holding pour afficher la répartition.")
-
+                
+        st.markdown("---")
+        
         afficher_investissement = st.checkbox("Afficher la courbe d'investissement", value=True)
         
         if 'selected_duree_global' not in st.session_state:
