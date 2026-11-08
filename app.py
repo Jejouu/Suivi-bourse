@@ -247,40 +247,71 @@ elif page == "📊 Dashboard Global":
         col_val = 'B' if 'B' in df_hist.columns else df_hist.columns[1]
         col_inv = 'J' if 'J' in df_hist.columns else df_hist.columns[min(9, len(df_hist.columns)-1)]
         
-        df_hist[col_date] = pd.to_datetime(df_hist[col_date], format='mixed', dayfirst=True)
-        df_hist = df_hist[df_hist[col_date] <= pd.Timestamp.today()]
+        if 'selected_duree_global' not in st.session_state:
+            st.session_state.selected_duree_global = "Depuis le début"
+
+        col_g, col_d = st.columns([5, 1])
         
-        # Conversion forcée en nombres (remplace les erreurs éventuelles par NaN)
-        valeur_portfolio = pd.to_numeric(df_hist[col_val].astype(str).str.replace(',', '.'), errors='coerce')
-        investissement = pd.to_numeric(df_hist[col_inv].astype(str).str.replace(',', '.'), errors='coerce')
-        dates = df_hist[col_date]
+        with col_d:
+            durees_global = ["1 mois", "3 mois", "6 mois", "1 an", "Au 1er J", "Depuis le début"]
+            for d in durees_global:
+                btn_type = "primary" if st.session_state.selected_duree_global == d else "secondary"
+                if st.button(d, key=f"btn_global_{d}", type=btn_type, use_container_width=True):
+                    st.session_state.selected_duree_global = d
+                    st.rerun()
         
-        fig = go.Figure()
+        with col_g:
+            today = pd.Timestamp.today()
+            
+            if st.session_state.selected_duree_global == "1 mois":
+                target_date = today - pd.DateOffset(months=1)
+            elif st.session_state.selected_duree_global == "3 mois":
+                target_date = today - pd.DateOffset(months=3)
+            elif st.session_state.selected_duree_global == "6 mois":
+                target_date = today - pd.DateOffset(months=6)
+            elif st.session_state.selected_duree_global == "1 an":
+                target_date = today - pd.DateOffset(years=1)
+            elif st.session_state.selected_duree_global == "Au 1er J":
+                target_date = pd.Timestamp(today.year, 1, 1)
+            else:
+                target_date = df_hist[col_date].min()
         
-        fig.add_trace(go.Scatter(
-            x=dates,
-            y=valeur_portfolio,
-            mode='lines',
-            name='Valeur du portefeuille',
-            line=dict(color='#00D2FF', width=2)
-        ))
+            min_dispo = df_hist[col_date].min()
+            if target_date < min_dispo:
+                target_date = min_dispo
         
-        if afficher_investissement:
+            df_hist_filtre = df_hist[(df_hist[col_date] >= target_date) & (df_hist[col_date] <= today)]
+        
+            dates = df_hist_filtre[col_date]
+            valeur_portfolio = pd.to_numeric(df_hist_filtre[col_val].astype(str).str.replace(',', '.'), errors='coerce')
+            investissement = pd.to_numeric(df_hist_filtre[col_inv].astype(str).str.replace(',', '.'), errors='coerce')
+        
+            fig = go.Figure()
+        
             fig.add_trace(go.Scatter(
                 x=dates,
-                y=investissement,
+                y=valeur_portfolio,
                 mode='lines',
-                name='Investissement',
-                line=dict(color='#A0A0A0', width=2, dash='dash')
+                name='Valeur du portefeuille',
+                line=dict(color='#00D2FF', width=2)
             ))
         
-        fig.update_layout(
-            template='plotly_dark',
-            margin=dict(l=10, r=10, t=30, b=10),
-            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
-        )
+            if afficher_investissement:
+                fig.add_trace(go.Scatter(
+                    x=dates,
+                    y=investissement,
+                    mode='lines',
+                    name='Investissement',
+                    line=dict(color='#A0A0A0', width=2, dash='dash')
+                ))
         
-        st.plotly_chart(fig, use_container_width=True)
+            fig.update_layout(
+                template='plotly_dark',
+                margin=dict(l=10, r=10, t=30, b=10),
+                legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+            )
+        
+            st.plotly_chart(fig, use_container_width=True)
         
     except Exception as e:
         st.error(f"Une erreur est survenue sur le Dashboard Global : {e}")
