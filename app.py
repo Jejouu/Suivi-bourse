@@ -243,25 +243,26 @@ elif page == "📊 Dashboard Global":
                 
         st.markdown("---")
 
-        st.subheader("📈 Evolution du porte-feuille")
-        
-        afficher_investissement = st.checkbox("Afficher la courbe d'investissement", value=True)
-        
+        st.subheader("📈 Évolution du portefeuille")
+
         if 'selected_duree_global' not in st.session_state:
             st.session_state.selected_duree_global = "Depuis le début"
         
-        # 1. Détection automatique des colonnes si nécessaire
+        if 'afficher_plus_value' not in st.session_state:
+            st.session_state.afficher_plus_value = False
+        
+        st.session_state.afficher_plus_value = st.checkbox("Afficher la plus-value nette", value=st.session_state.afficher_plus_value)
+        
         col_date = 'A' if 'A' in df_hist.columns else df_hist.columns[0]
         col_val = 'B' if 'B' in df_hist.columns else df_hist.columns[1]
         col_inv = 'J' if 'J' in df_hist.columns else df_hist.columns[min(9, len(df_hist.columns)-1)]
         
-        # 2. Conversion sécurisée des dates et nettoyage
         df_hist[col_date] = pd.to_datetime(df_hist[col_date], format='mixed', dayfirst=True)
         today = pd.Timestamp.today()
         df_hist = df_hist[(df_hist[col_date].notna()) & (df_hist[col_date] <= today)]
         
         col_g, col_d = st.columns([5, 1])
-            
+        
         with col_g:
             if st.session_state.selected_duree_global == "1 mois":
                 target_date = today - pd.DateOffset(months=1)
@@ -288,15 +289,23 @@ elif page == "📊 Dashboard Global":
         
             fig = go.Figure()
         
-            fig.add_trace(go.Scatter(
-                x=dates,
-                y=valeur_portfolio,
-                mode='lines',
-                name='Valeur du portefeuille',
-                line=dict(color='#4169E1', width=2)
-            ))
-        
-            if afficher_investissement:
+            if st.session_state.afficher_plus_value:
+                plus_value = valeur_portfolio - investissement
+                fig.add_trace(go.Scatter(
+                    x=dates,
+                    y=plus_value,
+                    mode='lines',
+                    name='Plus-value nette',
+                    line=dict(color='#00FF00', width=2)
+                ))
+            else:
+                fig.add_trace(go.Scatter(
+                    x=dates,
+                    y=valeur_portfolio,
+                    mode='lines',
+                    name='Valeur du portefeuille',
+                    line=dict(color='#4169E1', width=2)
+                ))
                 fig.add_trace(go.Scatter(
                     x=dates,
                     y=investissement,
@@ -312,6 +321,7 @@ elif page == "📊 Dashboard Global":
             )
         
             st.plotly_chart(fig, use_container_width=True)
+        
         with col_d:
             durees_global = ["1 mois", "3 mois", "6 mois", "1 an", "Au 1er J", "Depuis le début"]
             for d in durees_global:
@@ -319,7 +329,7 @@ elif page == "📊 Dashboard Global":
                 if st.button(d, key=f"btn_global_{d}", type=btn_type, use_container_width=True):
                     st.session_state.selected_duree_global = d
                     st.rerun()
-
+        
             if not df_hist_filtre.empty:
                 val_initiale = pd.to_numeric(str(df_hist_filtre[col_val].iloc[0]).replace(',', '.'), errors='coerce')
                 inv_initiale = pd.to_numeric(str(df_hist_filtre[col_inv].iloc[0]).replace(',', '.'), errors='coerce')
@@ -336,7 +346,7 @@ elif page == "📊 Dashboard Global":
                 color = "#00FF00" if diff >= 0 else "#FF4B4B"
                 arrow = "▲" if diff >= 0 else "▼"
                 sign = "+" if diff >= 0 else ""
-            
+        
                 st.markdown(f"""
                 <style>
                 .metric-card-global {{
@@ -369,7 +379,7 @@ elif page == "📊 Dashboard Global":
                     font-size: 18px;
                 }}
                 </style>
-            
+        
                 <div class="metric-card-global">
                     <div class="metric-title-global">Performance de la période</div>
                     <div class="metric-row-global">
