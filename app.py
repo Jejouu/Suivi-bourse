@@ -247,7 +247,7 @@ elif page == "📊 Dashboard Global":
         col_val = 'B' if 'B' in df_hist.columns else df_hist.columns[1]
         col_inv = 'J' if 'J' in df_hist.columns else df_hist.columns[min(9, len(df_hist.columns)-1)]
         
-        dates = pd.to_datetime(df_hist[col_date])
+        dates = pd.to_datetime(df_hist[col_date], format='mixed', dayfirst=True)
         valeur_portfolio = df_hist[col_val]
         investissement = df_hist[col_inv]
         
@@ -275,8 +275,6 @@ elif page == "📊 Dashboard Global":
             margin=dict(l=10, r=10, t=30, b=10),
             legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
         )
-
-        dates = pd.to_datetime(df_hist[col_date], format='mixed', dayfirst=True)
         
         st.plotly_chart(fig, use_container_width=True)
         
