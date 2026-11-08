@@ -247,7 +247,10 @@ elif page == "📊 Dashboard Global":
         col_val = 'B' if 'B' in df_hist.columns else df_hist.columns[1]
         col_inv = 'J' if 'J' in df_hist.columns else df_hist.columns[min(9, len(df_hist.columns)-1)]
         
-        dates = pd.to_datetime(df_hist[col_date], format='mixed', dayfirst=True)
+        df_hist[col_date] = pd.to_datetime(df_hist[col_date], format='mixed', dayfirst=True)
+        df_hist = df_hist[df_hist[col_date] <= pd.Timestamp.today()]
+        
+        dates = df_hist[col_date]
         valeur_portfolio = df_hist[col_val]
         investissement = df_hist[col_inv]
         
