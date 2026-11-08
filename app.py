@@ -243,16 +243,16 @@ elif page == "📊 Dashboard Global":
                 
         st.markdown("---")
 
-        st.subheader("📈 Évolution du portefeuille")
+        st.subheader("Évolution du portefeuille")
 
         if 'selected_duree_global' not in st.session_state:
             st.session_state.selected_duree_global = "Depuis le début"
         
         col_chk1, col_chk2 = st.columns(2)
         with col_chk1:
-            afficher_valeur = st.checkbox("Valeur et investissement", value=True)
+            afficher_valeur = st.checkbox("Valeur et investissement", value=True, key="chk_valeur_global")
         with col_chk2:
-            afficher_plus_value = st.checkbox("Plus-value nette", value=False)
+            afficher_plus_value = st.checkbox("Plus-value nette", value=False, key="chk_plus_value_global")
         
         col_date = 'A' if 'A' in df_hist.columns else df_hist.columns[0]
         col_val = 'B' if 'B' in df_hist.columns else df_hist.columns[1]
@@ -328,7 +328,7 @@ elif page == "📊 Dashboard Global":
             durees_global = ["1 mois", "3 mois", "6 mois", "1 an", "Au 1er J", "Depuis le début"]
             for d in durees_global:
                 btn_type = "primary" if st.session_state.selected_duree_global == d else "secondary"
-                if st.button(d, key=f"btn_global_{d}", type=btn_type, use_container_width=True):
+                if st.button(d, key=f"btn_global_duree_{d}", type=btn_type, use_container_width=True):
                     st.session_state.selected_duree_global = d
                     st.rerun()
         
