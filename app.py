@@ -439,8 +439,10 @@ elif page == "📈 Vue Détaillée par Actif":
     # --- Disposition : Encadré à gauche (col_card) et Graphique à droite (col_graph) ---
     col_card, col_graph, col_assets = st.columns([1.8, 3.5, 0.5])
 
+    import textwrap
+    
     with col_card:
-        st.markdown(f"""
+        st.markdown(textwrap.dedent(f"""
         <style>
         .asset-card {{
             background-color: #2E3239;
@@ -495,7 +497,7 @@ elif page == "📈 Vue Détaillée par Actif":
             gap: 15px;
         }}
         </style>
-
+    
         <div class="asset-card">
             <div class="asset-header">
                 <div class="asset-title">{st.session_state.selected_asset}</div>
@@ -511,7 +513,7 @@ elif page == "📈 Vue Détaillée par Actif":
             </div>
             
             <hr style="border-color: #383C4A; margin: 10px 0;">
-
+    
             <div class="asset-row">
                 <span class="asset-row-label">Open</span>
                 <div class="asset-row-vals">
@@ -519,7 +521,7 @@ elif page == "📈 Vue Détaillée par Actif":
                     <span style="color: {color_open};">{sign_open}{diff_open:,.2f}</span>
                 </div>
             </div>
-
+    
             <div class="asset-row">
                 <span class="asset-row-label">High</span>
                 <div class="asset-row-vals">
@@ -527,7 +529,7 @@ elif page == "📈 Vue Détaillée par Actif":
                     <span style="color: {color_high};">{sign_high}{diff_high:,.2f}</span>
                 </div>
             </div>
-
+    
             <div class="asset-row">
                 <span class="asset-row-label">Low</span>
                 <div class="asset-row-vals">
@@ -535,13 +537,13 @@ elif page == "📈 Vue Détaillée par Actif":
                     <span style="color: {color_low};">{sign_low}{diff_low:,.2f}</span>
                 </div>
             </div>
-
+    
             <div class="asset-row" style="margin-top: 15px;">
                 <span class="asset-row-label" style="color: #A0A0A0;">Previous Close</span>
                 <span style="color: #FFFFFF; font-weight: bold;">{clot_prec:,.2f}</span>
             </div>
         </div>
-        """, unsafe_allow_html=True)
+        """), unsafe_allow_html=True)
 
     with col_graph:
         df_filtre = get_asset_data(df_donnees, st.session_state.selected_asset, st.session_state.selected_duree)
