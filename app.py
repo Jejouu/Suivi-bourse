@@ -438,7 +438,7 @@ elif page == "📈 Vue Détaillée par Actif":
     sign_low = "+" if diff_low >= 0 else ""
 
     # --- Disposition : Encadré à gauche (col_card) et Graphique à droite (col_graph) ---
-    col_card, col_graph, col_assets = st.columns([1.8, 3.5, 0.5])
+    col_card, col_graph, col_assets = st.columns([1.8, 4, 0.5])
 
     import textwrap
     
