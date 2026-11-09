@@ -375,6 +375,7 @@ if page == "📊 Dashboard Global":
         st.error(f"Une erreur est survenue sur le Dashboard Global : {e}")
     
 elif page == "📈 Vue Détaillée par Actif":
+
     st.header("📈 Vue Détaillée par Actif")
 
     try:
@@ -396,9 +397,152 @@ elif page == "📈 Vue Détaillée par Actif":
         st.session_state.selected_asset = "S&P 500"
     if "selected_duree" not in st.session_state:
         st.session_state.selected_duree = "Semaine"
+
+    # --- Extraction des données de l'actif sélectionné depuis df_donnees ---
+    asset_row = df_donnees[df_donnees.iloc[:, 0] == st.session_state.selected_asset]
     
-    col_graph, col_assets = st.columns([4, 0.5])
+    prix_actuel, open_val, high_val, low_val, clot_prec = 0.0, 0.0, 0.0, 0.0, 0.0
+    var_pct, var_abs, date_maj = 0.0, 0.0, ""
+
+    if not asset_row.empty:
+        def clean_val(val):
+            try:
+                return float(str(val).replace(',', '.'))
+            except:
+                return 0.0
+
+        prix_actuel = clean_val(asset_row.iloc[0, 2])
+        open_val = clean_val(asset_row.iloc[0, 3])
+        high_val = clean_val(asset_row.iloc[0, 4])
+        low_val = clean_val(asset_row.iloc[0, 5])
+        clot_prec = clean_val(asset_row.iloc[0, 6])
+        var_pct = clean_val(asset_row.iloc[0, 7])
+        var_abs = clean_val(asset_row.iloc[0, 8])
+        date_maj = str(asset_row.iloc[0, 9])
+
+    # Couleurs dynamiques selon les variations
+    color_var = "#00FF00" if var_abs >= 0 else "#FF4B4B"
+    sign_var = "+" if var_abs >= 0 else ""
     
+    diff_open = prix_actuel - open_val if open_val > 0 else 0.0
+    color_open = "#00FF00" if diff_open >= 0 else "#FF4B4B"
+    sign_open = "+" if diff_open >= 0 else ""
+
+    diff_high = prix_actuel - high_val if high_val > 0 else 0.0
+    color_high = "#00FF00" if diff_high >= 0 else "#FF4B4B"
+    sign_high = "+" if diff_high >= 0 else ""
+
+    diff_low = prix_actuel - low_val if low_val > 0 else 0.0
+    color_low = "#00FF00" if diff_low >= 0 else "#FF4B4B"
+    sign_low = "+" if diff_low >= 0 else ""
+
+    # --- Disposition : Encadré à gauche (col_card) et Graphique à droite (col_graph) ---
+    col_card, col_graph, col_assets = st.columns([1.8, 3.5, 0.5])
+
+    with col_card:
+        st.markdown(f"""
+        <style>
+        .asset-card {{
+            background-color: #2E3239;
+            border: 2px solid #383C4A;
+            border-radius: 15px;
+            padding: 20px;
+            font-family: sans-serif;
+            color: #FFFFFF;
+            height: 100%;
+        }}
+        .asset-header {{
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }}
+        .asset-title {{
+            color: #F3B530;
+            font-weight: bold;
+            font-size: 22px;
+        }}
+        .asset-date {{
+            color: #A0A0A0;
+            font-size: 12px;
+            text-align: right;
+        }}
+        .asset-main-val {{
+            color: #00B0F0;
+            font-weight: bold;
+            font-size: 32px;
+            margin-bottom: 15px;
+        }}
+        .asset-sub-metrics {{
+            text-align: right;
+            font-weight: bold;
+            font-size: 15px;
+            color: {color_var};
+        }}
+        .asset-row {{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+            font-size: 14px;
+        }}
+        .asset-row-label {{
+            color: #FFFFFF;
+            font-weight: bold;
+        }}
+        .asset-row-vals {{
+            display: flex;
+            gap: 15px;
+        }}
+        </style>
+
+        <div class="asset-card">
+            <div class="asset-header">
+                <div class="asset-title">{st.session_state.selected_asset}</div>
+                <div class="asset-date">{date_maj}</div>
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                <div class="asset-main-val">{prix_actuel:,.2f}</div>
+                <div class="asset-sub-metrics">
+                    <div>{sign_var}{var_pct:.2f}%</div>
+                    <div>{sign_var}{var_abs:,.2f}</div>
+                </div>
+            </div>
+            
+            <hr style="border-color: #383C4A; margin: 10px 0;">
+
+            <div class="asset-row">
+                <span class="asset-row-label">Open</span>
+                <div class="asset-row-vals">
+                    <span style="color: #FFFFFF;">{open_val:,.2f}</span>
+                    <span style="color: {color_open};">{sign_open}{diff_open:,.2f}</span>
+                </div>
+            </div>
+
+            <div class="asset-row">
+                <span class="asset-row-label">High</span>
+                <div class="asset-row-vals">
+                    <span style="color: #FFFFFF;">{high_val:,.2f}</span>
+                    <span style="color: {color_high};">{sign_high}{diff_high:,.2f}</span>
+                </div>
+            </div>
+
+            <div class="asset-row">
+                <span class="asset-row-label">Low</span>
+                <div class="asset-row-vals">
+                    <span style="color: #FFFFFF;">{low_val:,.2f}</span>
+                    <span style="color: {color_low};">{sign_low}{diff_low:,.2f}</span>
+                </div>
+            </div>
+
+            <div class="asset-row" style="margin-top: 15px;">
+                <span class="asset-row-label" style="color: #A0A0A0;">Previous Close</span>
+                <span style="color: #FFFFFF; font-weight: bold;">{clot_prec:,.2f}</span>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
     with col_graph:
         df_filtre = get_asset_data(df_donnees, st.session_state.selected_asset, st.session_state.selected_duree)
         fig_ev = tracer_graphique_evolution(df_filtre, st.session_state.selected_asset, st.session_state.selected_duree)
@@ -420,6 +564,7 @@ elif page == "📈 Vue Détaillée par Actif":
                 st.session_state.selected_asset = a
                 st.rerun()
     
+    # --- Métriques en bas (Variation absolue et Pourcentage de la période du graphique) ---
     col_valeur = 'Valeur' if 'Valeur' in df_filtre.columns else df_filtre.select_dtypes(include='number').columns[-1]
 
     if not df_filtre.empty and col_valeur in df_filtre.columns:
