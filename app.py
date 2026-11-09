@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
+import streamlit.components.v1 as components
 from Utils.loader import (
     load_sheet_data,
     clean_financial_column,
@@ -441,8 +442,8 @@ elif page == "📈 Vue Détaillée par Actif":
 
     import textwrap
     
-    with col_card:
-        st.markdown(textwrap.dedent(f"""
+
+    html_card = textwrap.dedent(f"""
         <style>
         .asset-card {{
             background-color: #2E3239;
@@ -451,7 +452,8 @@ elif page == "📈 Vue Détaillée par Actif":
             padding: 20px;
             font-family: sans-serif;
             color: #FFFFFF;
-            height: 100%;
+            box-sizing: border-box;
+            width: 100%;
         }}
         .asset-header {{
             display: flex;
@@ -512,7 +514,7 @@ elif page == "📈 Vue Détaillée par Actif":
                 </div>
             </div>
             
-            <hr style="border-color: #383C4A; margin: 10px 0;">
+            <hr style="border-color: #383C4A; margin: 10px 0; border-top: 1px solid #383C4A;">
     
             <div class="asset-row">
                 <span class="asset-row-label">Open</span>
@@ -543,7 +545,10 @@ elif page == "📈 Vue Détaillée par Actif":
                 <span style="color: #FFFFFF; font-weight: bold;">{clot_prec:,.2f}</span>
             </div>
         </div>
-        """), unsafe_allow_html=True)
+    """)
+    
+    with col_card:
+        components.html(html_card, height=330, scrolling=False)
 
     with col_graph:
         df_filtre = get_asset_data(df_donnees, st.session_state.selected_asset, st.session_state.selected_duree)
