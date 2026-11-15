@@ -276,7 +276,104 @@ if page == "📊 Dashboard Global":
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
+
+        st.markdown("---")
+
+        # --- 2ème Ligne : Titre et Indicateurs de Risque ---
+        st.subheader("🔍 Analyse")
+        col4, col5, col6 = st.columns([1, 1, 1])
+        
+        with col4:
+            render_ratio_slider("Ratio de Sharpe", sharpe, min_val=-1.0, max_val=3.0, ratio_type="sharpe")
+        with col5:
+            render_ratio_slider("Ratio de Sortino", sortino, min_val=0.0, max_val=5.0, ratio_type="sortino")
+        with col6:
+            render_ratio_slider("Bêta (S&P 500)", beta, min_val=-1.0, max_val=2.0, ratio_type="beta")
+
+        st.markdown("---")
+        
+        # --- Section Graphique : Répartition et PV ---
+        st.subheader("🧩 Répartition des actifs")
+        
+        col_PL_jour, col_Rep, col_PL_Lat = st.columns([0.7, 1, 2])
+        
+        config_graphique_pv = {
+            "titre": "📈 Plus-Value du jour",
+            "hauteur": 300,
+            "largeur_barre": 0.25,
+            "taille_police_texte": 14,
+            "taille_police_ticker": 14,
+            "couleur_ticker": "#F3B530",
+            "couleur_positif": "#01d246",
+            "couleur_negatif": "#ff4b4b",
+            "couleur_neutre": "#808080",
+            "marge_haut": 50,
+            "marge_bas": 20
+        }
+
+        with col_PL_jour:
+            if not df_holding.empty and df_holding.shape[1] >= 10:
+                df_pv_jour = pd.DataFrame({
+                    "Actif": df_holding.iloc[:, 0],
+                    "PV_Jour": clean_financial_column(df_holding.iloc[:, 9])
+                }).dropna(subset=["Actif", "PV_Jour"])
+                tracer_graphique_pv(df_pv_jour, config_graphique_pv)
+            else:
+                st.info("Colonnes insuffisantes pour accéder à la colonne J.")
+
+        config_graphique_latente = {
+            "titre": "📊 Plus-Value Latente",
+            "hauteur": 300,
+            "bargap": 0.4,
+            "largeur_barre": 0.25,
+            "taille_police_texte": 14,
+            "taille_police_ticker": 14,
+            "couleur_ticker": "#F3B530",
+            "couleur_positif": "#00B0F0",
+            "couleur_negatif": "#00B0F0",
+            "couleur_neutre": "#808080",
+            "marge_haut": 40,
+            "marge_bas": 20,
+            "marge_gauche": 10,
+            "marge_droite": 50
+        }
+        
+        with col_PL_Lat:
+            if not df_holding.empty and df_holding.shape[1] >= 8:
+                df_latente = pd.DataFrame({
+                    "Actif": df_holding.iloc[:, 0],
+                    "PV_Latente": clean_financial_column(df_holding.iloc[:, 7])
+                }).dropna(subset=["Actif", "PV_Latente"])
+                tracer_graphique_latente(df_latente, config_graphique_latente)
+            else:
+                st.warning("Colonnes insuffisantes pour accéder à la colonne H.")
+
+        config_graphique_pie = {
+            "titre": "🥧 Répartition des actifs",
+            "hauteur": 300,
+            "largeur": 300,
+            "couleurs": ["#F3B530", "#01d246", "#4169E1"],
+            "trou": 0.4,
+            "marge_haut": 50,
+            "marge_bas": 30,
+            "marge_gauche": 60,
+            "marge_droite": 60
+        }
+        
+        with col_Rep:
+            if not df_holding.empty and df_holding.shape[1] > 4:
+                df_pie = pd.DataFrame({
+                    "Actif": df_holding.iloc[:, 0],
+                    "Valeur": clean_financial_column(df_holding.iloc[:, 4])
+                }).dropna(subset=["Actif", "Valeur"])
                 
+                df_pie = df_pie[df_pie["Valeur"] > 0]
+                tracer_graphique_pie(df_pie, config_graphique_pie)
+            else:
+                st.info("Colonnes insuffisantes dans l'onglet holding pour afficher la répartition.")
+                
+        st.markdown("---")    
+    
     except Exception as e:
         st.error(f"Une erreur est survenue sur le Dashboard Global : {e}")
     
@@ -534,100 +631,6 @@ elif page == "📈 Vue Détaillée par Actif":
 
         st.markdown("---")
         
-        # --- 2ème Ligne : Titre et Indicateurs de Risque ---
-        st.subheader("🔍 Analyse")
-        col4, col5, col6 = st.columns([1, 1, 1])
-        
-        with col4:
-            render_ratio_slider("Ratio de Sharpe", sharpe, min_val=-1.0, max_val=3.0, ratio_type="sharpe")
-        with col5:
-            render_ratio_slider("Ratio de Sortino", sortino, min_val=0.0, max_val=5.0, ratio_type="sortino")
-        with col6:
-            render_ratio_slider("Bêta (S&P 500)", beta, min_val=-1.0, max_val=2.0, ratio_type="beta")
-
-        st.markdown("---")
-
-        # --- Section Graphique : Répartition et PV ---
-        st.subheader("🧩 Répartition des actifs")
-        
-        col_PL_jour, col_Rep, col_PL_Lat = st.columns([0.7, 1, 2])
-        
-        config_graphique_pv = {
-            "titre": "📈 Plus-Value du jour",
-            "hauteur": 300,
-            "largeur_barre": 0.25,
-            "taille_police_texte": 14,
-            "taille_police_ticker": 14,
-            "couleur_ticker": "#F3B530",
-            "couleur_positif": "#01d246",
-            "couleur_negatif": "#ff4b4b",
-            "couleur_neutre": "#808080",
-            "marge_haut": 50,
-            "marge_bas": 20
-        }
-
-        with col_PL_jour:
-            if not df_holding.empty and df_holding.shape[1] >= 10:
-                df_pv_jour = pd.DataFrame({
-                    "Actif": df_holding.iloc[:, 0],
-                    "PV_Jour": clean_financial_column(df_holding.iloc[:, 9])
-                }).dropna(subset=["Actif", "PV_Jour"])
-                tracer_graphique_pv(df_pv_jour, config_graphique_pv)
-            else:
-                st.info("Colonnes insuffisantes pour accéder à la colonne J.")
-
-        config_graphique_latente = {
-            "titre": "📊 Plus-Value Latente",
-            "hauteur": 300,
-            "bargap": 0.4,
-            "largeur_barre": 0.25,
-            "taille_police_texte": 14,
-            "taille_police_ticker": 14,
-            "couleur_ticker": "#F3B530",
-            "couleur_positif": "#00B0F0",
-            "couleur_negatif": "#00B0F0",
-            "couleur_neutre": "#808080",
-            "marge_haut": 40,
-            "marge_bas": 20,
-            "marge_gauche": 10,
-            "marge_droite": 50
-        }
-        
-        with col_PL_Lat:
-            if not df_holding.empty and df_holding.shape[1] >= 8:
-                df_latente = pd.DataFrame({
-                    "Actif": df_holding.iloc[:, 0],
-                    "PV_Latente": clean_financial_column(df_holding.iloc[:, 7])
-                }).dropna(subset=["Actif", "PV_Latente"])
-                tracer_graphique_latente(df_latente, config_graphique_latente)
-            else:
-                st.warning("Colonnes insuffisantes pour accéder à la colonne H.")
-
-        config_graphique_pie = {
-            "titre": "🥧 Répartition des actifs",
-            "hauteur": 300,
-            "largeur": 300,
-            "couleurs": ["#F3B530", "#01d246", "#4169E1"],
-            "trou": 0.4,
-            "marge_haut": 50,
-            "marge_bas": 30,
-            "marge_gauche": 60,
-            "marge_droite": 60
-        }
-        
-        with col_Rep:
-            if not df_holding.empty and df_holding.shape[1] > 4:
-                df_pie = pd.DataFrame({
-                    "Actif": df_holding.iloc[:, 0],
-                    "Valeur": clean_financial_column(df_holding.iloc[:, 4])
-                }).dropna(subset=["Actif", "Valeur"])
-                
-                df_pie = df_pie[df_pie["Valeur"] > 0]
-                tracer_graphique_pie(df_pie, config_graphique_pie)
-            else:
-                st.info("Colonnes insuffisantes dans l'onglet holding pour afficher la répartition.")
-                
-        st.markdown("---")
 
 elif page == "📝 Journal des Transactions":
     st.header("📝 Journal des Transactions")
