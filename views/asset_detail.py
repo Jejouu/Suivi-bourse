@@ -35,6 +35,17 @@ def get_asset_data(df, asset_name, duree):
     df_subset.columns = ['Date', 'Close']
     df_subset['Close'] = pd.to_numeric(df_subset['Close'].astype(str).str.replace(',', '.'), errors='coerce')
     df_subset = df_subset.dropna()
+
+    # AJOUT DE LA VALEUR DU JOUR EN DIRECT SI DISPONIBLE
+    if prix_actuel and prix_actuel > 0 and date_maj:
+        # Extrait juste la date (ex: '18/11/2026') de date_maj (qui contient '18/11/2026 14:03:43')
+        date_courante = str(date_maj).split(' ')[0]
+        
+        # Vérifie si la date du jour n'est pas déjà présente dans le DataFrame pour éviter les doublons
+        if df_subset.empty or not (df_subset['Date'] == date_courante).any():
+            # Crée une nouvelle ligne pour le jour courant
+            new_row = pd.DataFrame({'Date': [date_courante], 'Close': [float(prix_actuel)]})
+            df_subset = pd.concat([df_subset, new_row], ignore_index=True)
     
     return df_subset
 
