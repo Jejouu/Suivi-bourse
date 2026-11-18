@@ -1,32 +1,38 @@
-import time
+import requests
 import streamlit as st
 import pandas as pd
 
-# ID unique de ton Google Sheet
-SHEET_ID = "1D4_pyAh-2wYrsjrqVJuF8K7Jn5FtC8hlnfJ6J3TSsSc"
+# Remplace par l'URL générée lors du déploiement de ton Apps Script
+WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwzF5FIEhFyefDF1cfvRLhUpyNyRzcUTbogVZZDvHxxuA-LSy0Dd4UQAdvTH4jsspiU/exec"
 
-# Dictionnaire centralisé des GIDs pour tes 5 onglets
-GIDS = {
-    "valeurs": "1782863735",
-    "donnees": "0",
-    "holding": "575574311",
-    "transaction": "1217721347",
-    "histporte": "773348969"
+# Correspondance entre les clés utilisées dans ton code Python et les noms exacts de tes onglets dans Google Sheets
+ONGLETS_NAMES = {
+    "valeurs": "Valeurs",
+    "donnees": "Donnees",
+    "holding": "holding",
+    "transaction": "Transaction",
+    "histporte": "HistPorte"
 }
 
 @st.cache_data(ttl=600)
 def load_sheet_data(onglet_name: str, update_counter: int = 0) -> pd.DataFrame:
     """
-    Charge un onglet Google Sheet au format CSV avec un paramètre de forçage du cache.
+    Charge un onglet Google Sheet au format JSON via l'API Web App Apps Script.
     """
-    gid = GIDS.get(onglet_name.lower())
-    if not gid:
-        raise ValueError(f"L'onglet '{onglet_name}' n'est pas répertorié dans les GIDs.")
+    nom_exact_onglet = ONGLETS_NAMES.get(onglet_name.lower())
+    if not nom_exact_onglet:
+        raise ValueError(f"L'onglet '{onglet_name}' n'est pas répertorié dans ONGLETS_NAMES.")
     
-    # L'argument update_counter force Streamlit à recréer une nouvelle entrée de cache si la valeur change
-    url = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/export?format=csv&gid={gid}"
-    return pd.read_csv(url, on_bad_lines='skip')
-
+    url = f"{WEB_APP_URL}?sheet={nom_exact_onglet}"
+    response = requests.get(url)
+    response.raise_for_status()
+    
+    data = response.json()
+    if not data:
+        return pd.DataFrame()
+        
+    return pd.DataFrame(data)
+    
 def clean_financial_column(series):
     """Nettoie une colonne financière (supprime €, espaces, gère les virgules) et la convertit en numérique."""
     if series is None:
