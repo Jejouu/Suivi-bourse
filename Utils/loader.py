@@ -1,3 +1,4 @@
+import time
 import streamlit as st
 import pandas as pd
 
@@ -14,16 +15,16 @@ GIDS = {
 }
 
 @st.cache_data(ttl=600)
-def load_sheet_data(onglet_name: str) -> pd.DataFrame:
+def load_sheet_data(onglet_name: str, cache_buster: float = 0) -> pd.DataFrame:
     """
     Charge un onglet Google Sheet au format CSV via son nom (clé du dictionnaire GIDS).
-    Mise en cache Streamlit de 10 minutes et gestion des lignes mal formées.
     """
     gid = GIDS.get(onglet_name.lower())
     if not gid:
         raise ValueError(f"L'onglet '{onglet_name}' n'est pas répertorié dans les GIDs.")
     
-    url = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/export?format=csv&gid={gid}"
+    # Ajout d'un paramètre dynamique pour contourner le cache HTTP de Google
+    url = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/export?format=csv&gid={gid}&t={int(time.time())}"
     return pd.read_csv(url, on_bad_lines='skip')
 
 def clean_financial_column(series):
