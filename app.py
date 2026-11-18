@@ -425,8 +425,8 @@ elif page == "📈 Vue Détaillée par Actif":
         high_val = clean_val(asset_row.iloc[0, 4])
         low_val = clean_val(asset_row.iloc[0, 5])
         clot_prec = clean_val(asset_row.iloc[0, 6])
-        var_pct = clean_val(asset_row.iloc[0, 7])
-        var_abs = clean_val(asset_row.iloc[0, 8])
+        var_abs = prix_actuel - clot_prec if clot_prec > 0 else 0.0
+        var_pct = (var_abs / clot_prec * 100) if clot_prec > 0 else 0.0
         date_maj = str(asset_row.iloc[0, 9])
 
     # Couleurs dynamiques selon les variations
