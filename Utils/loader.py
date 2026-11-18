@@ -7,17 +7,20 @@ WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwzF5FIEhFyefDF1cfvRLhUpy
 ONGLETS_NAMES = {
     "valeurs": "Valeurs",
     "donnees": "Donnees",
-    "holding": "holding",
+    "holding": "Holding",
     "transaction": "Transaction",
-    "histporte": "HistPorte"
+    "histporte": "Histporte"
 }
 
 @st.cache_data(ttl=600)
 def load_sheet_data(onglet_name: str, update_counter: int = 0) -> pd.DataFrame:
     """
-    Charge un onglet Google Sheet via la Web App Apps Script (format matrice 2D).
+    Charge chaque onglet Google Sheet selon sa structure spécifique :
+    - 'donnees' et 'valeurs' : matrice brute avec la 1ère ligne en en-tête pour préserver les indexations (iloc).
+    - 'holding', 'transaction', 'histporte' : tableaux structurés avec noms de colonnes et nettoyage des lignes vides.
     """
-    nom_exact_onglet = ONGLETS_NAMES.get(onglet_name.lower())
+    key = onglet_name.lower()
+    nom_exact_onglet = ONGLETS_NAMES.get(key)
     if not nom_exact_onglet:
         raise ValueError(f"L'onglet '{onglet_name}' n'est pas répertorié dans ONGLETS_NAMES.")
     
@@ -29,8 +32,23 @@ def load_sheet_data(onglet_name: str, update_counter: int = 0) -> pd.DataFrame:
     if not data:
         return pd.DataFrame()
         
-    # Transforme la liste de listes en DataFrame Pandas (sans en-tête forcé pour garder les index numériques 0, 1, 2...)
-    return pd.DataFrame(data)
+    # 1. Onglets à structure matricielle ou clé/valeur sans en-tête standard
+    # On reproduit exactement pd.read_csv() : ligne 0 en colonnes, ligne 1 en index 0
+    if key in ["donnees", "valeurs"]:
+        if len(data) <= 1:
+            return pd.DataFrame(data)
+        return pd.DataFrame(data[1:], columns=data[0])
+    
+    # 2. Onglets tabulaires classiques (Holding, Transaction, Histporte)
+    if len(data) <= 1:
+        return pd.DataFrame()
+        
+    df = pd.DataFrame(data[1:], columns=data[0])
+    
+    # Supprime les lignes entièrement vides (notamment les 990 lignes vides de l'onglet Transaction)
+    df = df.replace("", pd.NA).dropna(how="all").fillna("")
+    
+    return df
     
 def clean_financial_column(series):
     """Nettoie une colonne financière (supprime €, espaces, gère les virgules) et la convertit en numérique."""
