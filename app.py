@@ -83,8 +83,8 @@ if page == "📊 Dashboard Global":
     
     try:
         # 1. Chargement des onglets nécessaires
-        df_holding = load_sheet_data("holding")
-        df_hist = load_sheet_data("histporte")
+        df_holding = load_sheet_data("holding", update_counter=st.session_state.refresh_counter)
+        df_hist = load_sheet_data("histporte", update_counter=st.session_state.refresh_counter)
 
         # 5. Affichage du tableau brut 'Holding' dans un expander
         with st.expander("Holding"):
@@ -388,9 +388,9 @@ elif page == "📈 Vue Détaillée par Actif":
     st.header("📈 Vue Détaillée par Actif")
 
     try:
-        df_holding = load_sheet_data("holding")
-        df_valeurs = load_sheet_data("valeurs")
-        df_donnees = load_sheet_data("donnees")
+        df_holding = load_sheet_data("holding", update_counter=st.session_state.refresh_counter)
+        df_valeurs = load_sheet_data("valeurs", update_counter=st.session_state.refresh_counter)
+        df_donnees = load_sheet_data("donnees", update_counter=st.session_state.refresh_counter)
         
         df_donnees = df_donnees.replace(r'^\s*$', pd.NA, regex=True)
         df_donnees_propre = df_donnees.dropna(how='all').dropna(how='all', axis=1)
@@ -641,7 +641,7 @@ elif page == "📈 Vue Détaillée par Actif":
 elif page == "📝 Journal des Transactions":
     st.header("📝 Journal des Transactions")
     try:
-        df_trans = load_sheet_data("transaction")
+        df_trans = load_sheet_data("transaction", update_counter=st.session_state.refresh_counter)
         st.success("Historique des transactions chargé avec succès !")
         st.dataframe(df_trans)
     except Exception as e:
