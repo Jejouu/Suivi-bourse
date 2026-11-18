@@ -12,12 +12,28 @@ ONGLETS_NAMES = {
     "histporte": "Histporte"
 }
 
+def _make_unique_headers(headers: list) -> list:
+    """Rend chaque nom de colonne unique et remplace les en-têtes vides (ex: Col_0, Valeur_1)."""
+    seen = {}
+    unique_headers = []
+    for i, h in enumerate(headers):
+        h_str = str(h).strip()
+        if not h_str:
+            h_str = f"Col_{i}"
+        if h_str in seen:
+            seen[h_str] += 1
+            h_str = f"{h_str}_{seen[h_str]}"
+        else:
+            seen[h_str] = 0
+        unique_headers.append(h_str)
+    return unique_headers
+
 @st.cache_data(ttl=600)
 def load_sheet_data(onglet_name: str, update_counter: int = 0) -> pd.DataFrame:
     """
     Charge chaque onglet Google Sheet selon sa structure spécifique :
-    - 'donnees' et 'valeurs' : matrice brute avec la 1ère ligne en en-tête pour préserver les indexations (iloc).
-    - 'holding', 'transaction', 'histporte' : tableaux structurés avec noms de colonnes et nettoyage des lignes vides.
+    - 'donnees' et 'valeurs' : matrice avec la 1ère ligne en en-tête unique pour préserver les indexations (iloc).
+    - 'holding', 'transaction', 'histporte' : tableaux structurés avec noms de colonnes uniques et nettoyage des lignes vides.
     """
     key = onglet_name.lower()
     nom_exact_onglet = ONGLETS_NAMES.get(key)
@@ -32,22 +48,23 @@ def load_sheet_data(onglet_name: str, update_counter: int = 0) -> pd.DataFrame:
     if not data:
         return pd.DataFrame()
         
-    # 1. Onglets à structure matricielle ou clé/valeur sans en-tête standard
-    # On reproduit exactement pd.read_csv() : ligne 0 en colonnes, ligne 1 en index 0
+    if len(data) <= 1:
+        return pd.DataFrame(data)
+        
+    # Dédoublonnage systématique des en-têtes (évite l'erreur Duplicate column names sur Donnees et Histporte)
+    headers = _make_unique_headers(data[0])
+    
+    # 1. Onglets à structure matricielle ou clé/valeur
     if key in ["donnees", "valeurs"]:
-        if len(data) <= 1:
-            return pd.DataFrame(data)
-        return pd.DataFrame(data[1:], columns=data[0])
+        return pd.DataFrame(data[1:], columns=headers)
     
     # 2. Onglets tabulaires classiques (Holding, Transaction, Histporte)
-    if len(data) <= 1:
-        return pd.DataFrame()
-        
-    df = pd.DataFrame(data[1:], columns=data[0])
+    df = pd.DataFrame(data[1:], columns=headers)
     
-    # Supprime les lignes entièrement vides (notamment les 990 lignes vides de l'onglet Transaction)
+    # Supprime les lignes entièrement vides (notamment les lignes vides de l'onglet Transaction)
     df = df.replace("", pd.NA).dropna(how="all").fillna("")
     
+    return df
     return df
     
 def clean_financial_column(series):
