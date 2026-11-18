@@ -559,7 +559,15 @@ elif page == "📈 Vue Détaillée par Actif":
         components.html(html_card, height=330, scrolling=False)
 
     with col_graph:
-        df_filtre = get_asset_data(df_donnees, st.session_state.selected_asset, st.session_state.selected_duree)
+        # 1. Tu récupères d'abord les infos de la carte (asset_row) pour avoir prix_actuel et date_maj
+        asset_row = df_donnees[df_donnees.iloc[:, 0] == st.session_state.selected_asset]
+        prix_actuel = clean_val(asset_row.iloc[0, 2]) if not asset_row.empty else 0.0
+        date_maj = str(asset_row.iloc[0, 9]) if not asset_row.empty else ""
+    
+        # 2. Tu appelles get_asset_data en lui injectant ces valeurs du jour
+        df_filtre = get_asset_data(df_donnees, st.session_state.selected_asset, st.session_state.selected_duree, prix_actuel, date_maj)
+        
+        # 3. Tu traces ton graphique normalement
         fig_ev = tracer_graphique_evolution(df_filtre, st.session_state.selected_asset, st.session_state.selected_duree)
         st.plotly_chart(fig_ev, use_container_width=True)
         
