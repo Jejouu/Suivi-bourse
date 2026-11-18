@@ -53,6 +53,15 @@ if not check_password():
     st.stop()
 
 # --- Configuration de la page ---
+
+if 'refresh_counter' not in st.session_state:
+    st.session_state.refresh_counter = 0
+
+if st.sidebar.button("🔄 Actualiser les données"):
+    st.session_state.refresh_counter += 1
+    st.cache_data.clear()
+    st.rerun()
+
 st.set_page_config(
     page_title="Mon Suivi Boursier",
     page_icon="📈",
