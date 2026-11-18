@@ -2,10 +2,8 @@ import requests
 import streamlit as st
 import pandas as pd
 
-# Remplace par l'URL générée lors du déploiement de ton Apps Script
 WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwzF5FIEhFyefDF1cfvRLhUpyNyRzcUTbogVZZDvHxxuA-LSy0Dd4UQAdvTH4jsspiU/exec"
 
-# Correspondance entre les clés utilisées dans ton code Python et les noms exacts de tes onglets dans Google Sheets
 ONGLETS_NAMES = {
     "valeurs": "Valeurs",
     "donnees": "Donnees",
@@ -17,7 +15,7 @@ ONGLETS_NAMES = {
 @st.cache_data(ttl=600)
 def load_sheet_data(onglet_name: str, update_counter: int = 0) -> pd.DataFrame:
     """
-    Charge un onglet Google Sheet au format JSON via l'API Web App Apps Script.
+    Charge un onglet Google Sheet via la Web App Apps Script (format matrice 2D).
     """
     nom_exact_onglet = ONGLETS_NAMES.get(onglet_name.lower())
     if not nom_exact_onglet:
@@ -31,6 +29,7 @@ def load_sheet_data(onglet_name: str, update_counter: int = 0) -> pd.DataFrame:
     if not data:
         return pd.DataFrame()
         
+    # Transforme la liste de listes en DataFrame Pandas (sans en-tête forcé pour garder les index numériques 0, 1, 2...)
     return pd.DataFrame(data)
     
 def clean_financial_column(series):
